@@ -12,6 +12,7 @@ import {
 import { useWireframe } from '../../context/WireframeContext';
 import { Button, SegmentedControl } from '../../design-system';
 import type { DeviceType } from '../../design-system';
+import logoImg from '../../assets/logo_image.png';
 import './AppHeader.css';
 
 export const AppHeader: React.FC = () => {
@@ -45,7 +46,7 @@ export const AppHeader: React.FC = () => {
       {/* Brand & Breadcrumb */}
       <div className="app-header__left">
         <div className="app-header__brand">
-          <div className="app-header__logo">B</div>
+          <img src={logoImg} alt="Nexlink Blink Logo" className="app-header__logo" />
           <div className="app-header__title-box">
             <span className="app-header__title">Nexlink Blink</span>
             <div className="app-header__breadcrumb">

@@ -31,15 +31,11 @@
 .app-header__logo {
   width: 36px;
   height: 36px;
-  background: linear-gradient(135deg, var(--color-primary) 0%, #d81467 100%);
   border-radius: var(--radius-md);
-  display: grid;
-  place-items: center;
-  color: #fff;
-  font-weight: var(--font-weight-extrabold);
-  font-size: 1.15rem;
-  box-shadow: var(--shadow-primary);
+  object-fit: contain;
+  box-shadow: 0 2px 8px rgba(239, 34, 123, 0.25);
   flex-shrink: 0;
+  display: block;
 }
 
 .app-header__title-box {
