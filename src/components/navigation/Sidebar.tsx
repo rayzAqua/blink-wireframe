@@ -170,17 +170,22 @@ export const Sidebar: React.FC = () => {
                   {group.items.map((init) => {
                     const isCardOpen = isSearching || isAllExpanded || openInitiativeId === init.id;
                     const isSelected = activeInitiative.id === init.id;
+                    const flowIndex = initiatives.findIndex((i) => i.id === init.id) + 1;
+                    const formattedIndex = String(flowIndex).padStart(2, '0');
 
                     return (
                       <div key={init.id} className="wireframe-sidebar__init-card">
-                        {/* Flow Item - Displays only the flow title and chevron */}
+                        {/* Flow Item - Displays numbered index and flow title */}
                         <button
                           type="button"
                           className={`wireframe-sidebar__init-item ${isSelected ? 'wireframe-sidebar__init-item--active' : ''}`}
                           onClick={() => handleInitiativeToggle(init.id, group.key)}
-                          title={init.title}
+                          title={`Luồng ${formattedIndex}: ${init.title}`}
                         >
-                          <span className="wireframe-sidebar__init-title">{init.title}</span>
+                          <div className="wireframe-sidebar__init-title-group">
+                            <span className="wireframe-sidebar__init-index">{formattedIndex}</span>
+                            <span className="wireframe-sidebar__init-title">{init.title}</span>
+                          </div>
                           <ChevronRight
                             size={14}
                             className={`wireframe-sidebar__init-chevron ${isCardOpen ? 'wireframe-sidebar__init-chevron--open' : ''}`}
