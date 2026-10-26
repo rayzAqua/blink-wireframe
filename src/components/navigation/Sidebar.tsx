@@ -10,7 +10,6 @@ import {
   ChevronsUpDown,
 } from 'lucide-react';
 import { useWireframe } from '../../context/WireframeContext';
-import { Badge } from '../../design-system';
 import './Sidebar.css';
 
 export const Sidebar: React.FC = () => {
@@ -24,7 +23,7 @@ export const Sidebar: React.FC = () => {
     setSearchQuery,
   } = useWireframe();
 
-  // Accordion state: only 1 domain group and 1 initiative open at a time
+  // Accordion state: only 1 domain group and 1 flow/initiative open at a time
   const [openGroupKey, setOpenGroupKey] = useState<string | null>(activeInitiative.category);
   const [openInitiativeId, setOpenInitiativeId] = useState<string | null>(activeInitiative.id);
   const [isAllExpanded, setIsAllExpanded] = useState<boolean>(false);
@@ -56,7 +55,7 @@ export const Sidebar: React.FC = () => {
     },
   ];
 
-  // Accordion toggle for Domain Groups: opens this group and closes others
+  // Accordion toggle for Domain Groups
   const handleGroupToggle = (groupKey: string) => {
     if (isAllExpanded) {
       setIsAllExpanded(false);
@@ -66,7 +65,7 @@ export const Sidebar: React.FC = () => {
     setOpenGroupKey((prev) => (prev === groupKey ? null : groupKey));
   };
 
-  // Accordion toggle for Initiatives: opens this card and closes others
+  // Accordion toggle for Flows/Initiatives
   const handleInitiativeToggle = (initId: string, groupKey: string) => {
     if (openInitiativeId === initId) {
       // Toggle to close currently open card
@@ -105,33 +104,13 @@ export const Sidebar: React.FC = () => {
     }),
   }));
 
-  const getEnvBadgeVariant = (env: string) => {
-    switch (env) {
-      case 'FLUTTER_APP': return 'env-flutter';
-      case 'REACT_PWA': return 'env-react';
-      case 'WEB_PUBLIC': return 'env-public';
-      case 'ADMIN_UI': return 'env-admin';
-      default: return 'env-transition';
-    }
-  };
-
-  const getEnvShortLabel = (env: string) => {
-    switch (env) {
-      case 'FLUTTER_APP': return 'APP';
-      case 'REACT_PWA': return 'PWA';
-      case 'WEB_PUBLIC': return 'WEB';
-      case 'ADMIN_UI': return 'ADM';
-      default: return 'LNK';
-    }
-  };
-
   return (
     <aside className="wireframe-sidebar">
       {/* Sidebar Header: Compact title & accordion controls */}
       <div className="wireframe-sidebar__header">
         <div className="wireframe-sidebar__header-left">
           <FolderTree size={14} style={{ color: 'var(--color-primary)' }} />
-          <span className="wireframe-sidebar__header-title">Danh Mục Nghiệp Vụ</span>
+          <span className="wireframe-sidebar__header-title">Danh Sách Luồng</span>
         </div>
         <button
           type="button"
@@ -145,7 +124,7 @@ export const Sidebar: React.FC = () => {
         </button>
       </div>
 
-      {/* Search Bar - Flush & zero top margin */}
+      {/* Search Bar */}
       <div className="wireframe-sidebar__search">
         <div className="wireframe-sidebar__search-inner">
           <Search size={14} style={{ color: 'var(--color-text-muted)', flexShrink: 0 }} />
@@ -153,76 +132,65 @@ export const Sidebar: React.FC = () => {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Tìm nghiệp vụ hoặc mã màn (OWN-01...)"
+            placeholder="Tìm tên luồng nghiệp vụ..."
             className="wireframe-sidebar__search-input"
           />
         </div>
       </div>
 
-      {/* Grouped Initiative & Screen Tree */}
+      {/* Grouped Flows & Screen Tree */}
       <div className="wireframe-sidebar__content">
         {filteredGroups.map((group) => {
           if (group.items.length === 0) return null;
           const isSearching = !!searchQuery.trim();
-          // A group is open if searching, all expanded, or is the single open group
           const isGroupOpen = isSearching || isAllExpanded || openGroupKey === group.key;
 
           return (
             <div key={group.key} className="wireframe-sidebar__group">
-              {/* Collapsible Group Header Button */}
+              {/* Group Category Header */}
               <button
                 type="button"
                 className={`wireframe-sidebar__group-title ${isGroupOpen ? 'wireframe-sidebar__group-title--open' : ''}`}
                 onClick={() => handleGroupToggle(group.key)}
-                title="Nhấn để đóng/mở nhóm nghiệp vụ này"
+                title="Nhấn để đóng/mở nhóm luồng này"
               >
                 <span className="wireframe-sidebar__group-label">
                   <span className="wireframe-sidebar__group-icon">{group.icon}</span>
                   <span>{group.label}</span>
                 </span>
-                <span className="wireframe-sidebar__group-meta">
-                  <span className="wireframe-sidebar__group-count">{group.items.length}</span>
-                  <ChevronRight
-                    size={13}
-                    className={`wireframe-sidebar__group-chevron ${isGroupOpen ? 'wireframe-sidebar__group-chevron--open' : ''}`}
-                  />
-                </span>
+                <ChevronRight
+                  size={13}
+                  className={`wireframe-sidebar__group-chevron ${isGroupOpen ? 'wireframe-sidebar__group-chevron--open' : ''}`}
+                />
               </button>
 
-              {/* Group Initiatives (Accordion items) */}
+              {/* Flows under group (Clean & minimal) */}
               {isGroupOpen && (
                 <div className="wireframe-sidebar__init-list">
                   {group.items.map((init) => {
-                    // An initiative card is open if searching, all expanded, or is the single open initiative
                     const isCardOpen = isSearching || isAllExpanded || openInitiativeId === init.id;
                     const isSelected = activeInitiative.id === init.id;
 
                     return (
                       <div key={init.id} className="wireframe-sidebar__init-card">
-                        {/* Initiative Card Header Button */}
+                        {/* Flow Item - Displays only the flow title and chevron */}
                         <button
                           type="button"
                           className={`wireframe-sidebar__init-item ${isSelected ? 'wireframe-sidebar__init-item--active' : ''}`}
                           onClick={() => handleInitiativeToggle(init.id, group.key)}
+                          title={init.title}
                         >
-                          <div className="wireframe-sidebar__init-row">
-                            <span className="wireframe-sidebar__init-title">{init.title}</span>
-                            <ChevronRight
-                              size={14}
-                              className={`wireframe-sidebar__init-chevron ${isCardOpen ? 'wireframe-sidebar__init-chevron--open' : ''}`}
-                              style={{
-                                color: isSelected ? 'var(--color-primary)' : 'var(--color-text-subtle)',
-                              }}
-                            />
-                          </div>
-                          <div className="wireframe-sidebar__init-meta">
-                            <span>{init.screens.length} màn hình</span>
-                            <span>•</span>
-                            <span>{init.id}</span>
-                          </div>
+                          <span className="wireframe-sidebar__init-title">{init.title}</span>
+                          <ChevronRight
+                            size={14}
+                            className={`wireframe-sidebar__init-chevron ${isCardOpen ? 'wireframe-sidebar__init-chevron--open' : ''}`}
+                            style={{
+                              color: isSelected ? 'var(--color-primary)' : 'var(--color-text-subtle)',
+                            }}
+                          />
                         </button>
 
-                        {/* Screens under initiative - Collapsible sub-tree */}
+                        {/* Screens under flow - Collapsible sub-tree */}
                         {isCardOpen && (
                           <div className="wireframe-sidebar__screens">
                             {init.screens.map((screen) => {
@@ -240,17 +208,12 @@ export const Sidebar: React.FC = () => {
                                       selectInitiative(init.id);
                                     }
                                   }}
+                                  title={`${screen.id} • ${screen.title}`}
                                 >
                                   <span className="wireframe-sidebar__screen-code">{screen.id}</span>
                                   <span className="wireframe-sidebar__screen-title">
                                     {screen.title}
                                   </span>
-                                  <Badge
-                                    variant={getEnvBadgeVariant(screen.environment) as any}
-                                    style={{ fontSize: '9px', padding: '1px 4px' }}
-                                  >
-                                    {getEnvShortLabel(screen.environment)}
-                                  </Badge>
                                 </button>
                               );
                             })}
