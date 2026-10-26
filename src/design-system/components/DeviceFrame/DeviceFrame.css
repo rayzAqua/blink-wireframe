@@ -1,0 +1,256 @@
+/* ==========================================================================
+   DEVICE FRAME SIMULATOR (MOBILE APP, MOBILE BROWSER & DESKTOP ADMIN)
+   ========================================================================== */
+
+.device-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  position: relative;
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   1. COMMON MOBILE PHONE CHASSIS (Used for both Mobile App & Mobile Browser)
+   -------------------------------------------------------------------------- */
+.device-phone {
+  width: 375px;
+  height: 812px;
+  max-width: 100%;
+  background-color: var(--color-surface);
+  border-radius: 48px;
+  box-shadow: 0 0 0 10px #1e293b, 0 0 0 12px #334155, var(--shadow-device);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 4px solid #0f172a;
+}
+
+/* Dynamic Island / Notch */
+.device-phone__notch {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110px;
+  height: 28px;
+  background-color: #000;
+  border-radius: 20px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 12px;
+}
+
+.device-phone__camera {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #1a1a2e;
+  border: 1px solid #2e2e48;
+}
+
+/* Status Bar */
+.device-phone__status-bar {
+  height: 44px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-main);
+  z-index: 40;
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border-subtle);
+  user-select: none;
+}
+
+.device-phone__status-icons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Phone Screen Content */
+.device-phone__screen {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  background-color: var(--color-bg-app);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Home Indicator */
+.device-phone__home-bar {
+  height: 24px;
+  background-color: var(--color-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid var(--color-border-subtle);
+  z-index: 40;
+}
+
+.device-phone__home-indicator {
+  width: 134px;
+  height: 5px;
+  background-color: var(--color-text-main);
+  border-radius: var(--radius-full);
+  opacity: 0.3;
+}
+
+/* --------------------------------------------------------------------------
+   2. MOBILE BROWSER SPECIFICS (Mobile Safari / Chrome UI on Phone)
+   -------------------------------------------------------------------------- */
+.device-mobile-browser__top-bar {
+  padding: 6px 14px 10px;
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 30;
+}
+
+.device-mobile-browser__url-pill {
+  flex: 1;
+  height: 32px;
+  background-color: var(--color-surface-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 10px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--color-text-main);
+  font-weight: var(--font-weight-medium);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.device-mobile-browser__url-pill svg {
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.device-mobile-browser__url-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.device-mobile-browser__action-icon {
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.device-mobile-browser__bottom-bar {
+  height: 44px;
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 16px;
+  color: var(--color-primary);
+  z-index: 30;
+}
+
+.device-mobile-browser__nav-btn {
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   3. DESKTOP ADMIN UI FRAME (Dedicated for Blink Admin UI)
+   -------------------------------------------------------------------------- */
+.device-frame--admin {
+  width: 100%;
+  max-width: 1100px;
+  min-height: 700px;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.device-admin__header {
+  height: 46px;
+  background-color: var(--color-surface-subtle);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-4);
+  gap: var(--space-3);
+  user-select: none;
+}
+
+.device-admin__dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.device-admin__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.device-admin__dot--red { background-color: #ef4444; }
+.device-admin__dot--yellow { background-color: #f59e0b; }
+.device-admin__dot--green { background-color: #10b981; }
+
+.device-admin__url-bar {
+  flex: 1;
+  max-width: 520px;
+  margin: 0 auto;
+  height: 28px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  gap: var(--space-2);
+}
+
+.device-admin__url-bar svg {
+  color: var(--color-primary);
+}
+
+.device-admin__title {
+  font-size: 12px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+}
+
+.device-admin__screen {
+  flex: 1;
+  overflow-y: auto;
+  background-color: var(--color-bg-app);
+}

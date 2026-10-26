@@ -1,0 +1,16 @@
+.wireframe-layout {
+  height: 100vh;
+  max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg-app);
+  overflow: hidden;
+}
+
+.wireframe-layout__body {
+  display: flex;
+  flex: 1;
+  height: calc(100vh - 65px);
+  position: relative;
+  overflow: hidden;
+}
