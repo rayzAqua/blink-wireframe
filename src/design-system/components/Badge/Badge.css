@@ -1,0 +1,88 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+/* Status variants */
+.badge--primary {
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary-700);
+  border-color: var(--color-primary-border);
+}
+
+.badge--success {
+  background-color: var(--color-success-subtle);
+  color: #065f46;
+  border-color: var(--color-success-border);
+}
+
+.badge--warning {
+  background-color: var(--color-warning-subtle);
+  color: #92400e;
+  border-color: var(--color-warning-border);
+}
+
+.badge--danger {
+  background-color: var(--color-danger-subtle);
+  color: #991b1b;
+  border-color: var(--color-danger-border);
+}
+
+.badge--info {
+  background-color: var(--color-info-subtle);
+  color: #075985;
+  border-color: var(--color-info-border);
+}
+
+.badge--neutral {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text-muted);
+  border-color: var(--color-border);
+}
+
+/* Environment Badges specific to Wireframe specifications */
+.badge--env-flutter {
+  background-color: var(--env-flutter-bg);
+  color: var(--env-flutter-text);
+  border-color: var(--env-flutter-border);
+}
+
+.badge--env-react {
+  background-color: var(--env-react-bg);
+  color: var(--env-react-text);
+  border-color: var(--env-react-border);
+}
+
+.badge--env-public {
+  background-color: var(--env-public-bg);
+  color: var(--env-public-text);
+  border-color: var(--env-public-border);
+}
+
+.badge--env-admin {
+  background-color: var(--env-admin-bg);
+  color: var(--env-admin-text);
+  border-color: var(--env-admin-border);
+}
+
+.badge--env-transition {
+  background-color: var(--env-transition-bg);
+  color: var(--env-transition-text);
+  border-color: var(--env-transition-border);
+}
+
+.badge__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: currentColor;
+}
