@@ -189,9 +189,6 @@ export const Sidebar: React.FC = () => {
                           <ChevronRight
                             size={14}
                             className={`wireframe-sidebar__init-chevron ${isCardOpen ? 'wireframe-sidebar__init-chevron--open' : ''}`}
-                            style={{
-                              color: isSelected ? 'var(--color-primary)' : 'var(--color-text-subtle)',
-                            }}
                           />
                         </button>
 
