@@ -1,3 +1,8 @@
+/* ==========================================================================
+   WIREFRAME LAYOUT STYLES
+   Responsive 3-Column Studio Layout
+   ========================================================================== */
+
 .wireframe-layout {
   height: 100vh;
   max-height: 100vh;
@@ -5,6 +10,7 @@
   flex-direction: column;
   background-color: var(--color-bg-app);
   overflow: hidden;
+  position: relative;
 }
 
 .wireframe-layout__body {
@@ -13,4 +19,40 @@
   height: calc(100vh - 65px);
   position: relative;
   overflow: hidden;
+}
+
+/* Mobile Drawer Backdrop */
+.wireframe-layout__backdrop {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .wireframe-layout__backdrop--visible {
+    display: block;
+    position: fixed;
+    top: 65px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--color-overlay);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 80;
+    animation: fade-in 0.2s ease-out;
+  }
+}
+
+@media (max-width: 767px) {
+  .wireframe-layout__body {
+    height: calc(100vh - 58px);
+  }
+
+  .wireframe-layout__backdrop--visible {
+    top: 58px;
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

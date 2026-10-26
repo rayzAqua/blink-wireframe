@@ -17,8 +17,12 @@ interface WireframeContextValue {
   toggleTheme: () => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
+  isSidebarOpen: boolean;
+  setIsSidebarOpen: (open: boolean) => void;
+  toggleSidebar: () => void;
   isSpecOpen: boolean;
   setIsSpecOpen: (open: boolean) => void;
+  toggleSpec: () => void;
   viewMode: 'wireframes' | 'design-system';
   setViewMode: (mode: 'wireframes' | 'design-system') => void;
 }
@@ -32,8 +36,39 @@ export const WireframeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [manualDeviceType, setManualDeviceType] = useState<DeviceType>('mobile');
   const [isAutoDevice, setIsAutoDevice] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [isSpecOpen, setIsSpecOpen] = useState<boolean>(true);
+  
+  // Responsive sidebar & spec panel initial states
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth >= 1024;
+    }
+    return true;
+  });
+
+  const [isSpecOpen, setIsSpecOpen] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth >= 1280;
+    }
+    return true;
+  });
+
   const [viewMode, setViewMode] = useState<'wireframes' | 'design-system'>('wireframes');
+
+  // Handle screen resize to adapt layout automatically
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 1024) {
+        setIsSidebarOpen(false);
+      }
+      if (width < 1280) {
+        setIsSpecOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Sync theme
   useEffect(() => {
@@ -42,6 +77,14 @@ export const WireframeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+  };
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen((prev) => !prev);
+  };
+
+  const toggleSpec = () => {
+    setIsSpecOpen((prev) => !prev);
   };
 
   // Find active initiative
@@ -78,6 +121,10 @@ export const WireframeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
   const selectScreen = (screenId: string) => {
     setSelectedScreenId(screenId);
+    // On small screens, close sidebar when a screen is selected to view the canvas
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      setIsSidebarOpen(false);
+    }
   };
 
   const handleSetDeviceType = (dev: DeviceType) => {
@@ -101,8 +148,12 @@ export const WireframeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         toggleTheme,
         searchQuery,
         setSearchQuery,
+        isSidebarOpen,
+        setIsSidebarOpen,
+        toggleSidebar,
         isSpecOpen,
         setIsSpecOpen,
+        toggleSpec,
         viewMode,
         setViewMode,
       }}

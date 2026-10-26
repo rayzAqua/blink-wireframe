@@ -37,9 +37,10 @@ export function SegmentedControl<T extends string = string>({
             aria-selected={isActive}
             className={`segmented-control__item ${isActive ? 'segmented-control__item--active' : ''}`}
             onClick={() => onChange(opt.value)}
+            title={typeof opt.label === 'string' ? opt.label : undefined}
           >
-            {opt.icon && <span>{opt.icon}</span>}
-            <span>{opt.label}</span>
+            {opt.icon && <span className="segmented-control__icon">{opt.icon}</span>}
+            <span className="segmented-control__label">{opt.label}</span>
           </button>
         );
       })}

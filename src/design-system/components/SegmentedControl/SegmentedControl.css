@@ -7,6 +7,7 @@
   padding: 3px;
   gap: 2px;
   user-select: none;
+  max-width: 100%;
 }
 
 .segmented-control__item {
@@ -24,6 +25,12 @@
   cursor: pointer;
   transition: all var(--transition-fast);
   white-space: nowrap;
+}
+
+.segmented-control__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .segmented-control__item:hover:not(.segmented-control__item--active) {
@@ -44,4 +51,14 @@
 
 .segmented-control--full .segmented-control__item {
   flex: 1;
+}
+
+/* Responsive: Collapse text labels on narrow viewports */
+@media (max-width: 860px) {
+  .segmented-control__label {
+    display: none;
+  }
+  .segmented-control__item {
+    padding: 0.35rem 0.55rem;
+  }
 }

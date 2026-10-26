@@ -9,13 +9,14 @@ import {
   AlertCircle,
   ShieldAlert,
   FolderGit2,
+  X,
 } from 'lucide-react';
 import { useWireframe } from '../../context/WireframeContext';
 import { Badge } from '../../design-system';
 import './ScreenSpecPanel.css';
 
 export const ScreenSpecPanel: React.FC = () => {
-  const { activeInitiative, activeScreen, isSpecOpen } = useWireframe();
+  const { activeInitiative, activeScreen, isSpecOpen, setIsSpecOpen } = useWireframe();
 
   if (!isSpecOpen) return null;
 
@@ -35,13 +36,24 @@ export const ScreenSpecPanel: React.FC = () => {
   };
 
   return (
-    <aside className="spec-panel">
+    <aside className="spec-panel" aria-label="Bảng thông số wireframe">
       <div className="spec-panel__header">
         <div className="spec-panel__title">
           <FileText size={16} style={{ color: 'var(--color-primary)' }} />
           <span>Thông Số Wireframe</span>
         </div>
-        <span className="spec-pill">{activeScreen.id}</span>
+        <div className="spec-panel__header-actions">
+          <span className="spec-pill">{activeScreen.id}</span>
+          <button
+            type="button"
+            className="spec-panel__close-btn"
+            onClick={() => setIsSpecOpen(false)}
+            title="Đóng bảng thông số"
+            aria-label="Đóng bảng thông số"
+          >
+            <X size={15} />
+          </button>
+        </div>
       </div>
 
       <div className="spec-panel__content">

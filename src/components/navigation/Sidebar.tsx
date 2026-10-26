@@ -8,6 +8,7 @@ import {
   FolderTree,
   FoldVertical,
   ChevronsUpDown,
+  X,
 } from 'lucide-react';
 import { useWireframe } from '../../context/WireframeContext';
 import './Sidebar.css';
@@ -21,6 +22,8 @@ export const Sidebar: React.FC = () => {
     selectScreen,
     searchQuery,
     setSearchQuery,
+    isSidebarOpen,
+    setIsSidebarOpen,
   } = useWireframe();
 
   // Accordion state: only 1 domain group and 1 flow/initiative open at a time
@@ -105,23 +108,37 @@ export const Sidebar: React.FC = () => {
   }));
 
   return (
-    <aside className="wireframe-sidebar">
+    <aside
+      className={`wireframe-sidebar ${isSidebarOpen ? 'wireframe-sidebar--open' : 'wireframe-sidebar--closed'}`}
+      aria-label="Danh mục luồng nghiệp vụ"
+    >
       {/* Sidebar Header: Compact title & accordion controls */}
       <div className="wireframe-sidebar__header">
         <div className="wireframe-sidebar__header-left">
           <FolderTree size={14} style={{ color: 'var(--color-primary)' }} />
           <span className="wireframe-sidebar__header-title">Danh Sách Luồng</span>
         </div>
-        <button
-          type="button"
-          className="wireframe-sidebar__action-btn"
-          onClick={handleToggleAll}
-          title={isAllExpanded ? 'Thu gọn tất cả' : 'Mở rộng tất cả'}
-          aria-label={isAllExpanded ? 'Thu gọn tất cả' : 'Mở rộng tất cả'}
-        >
-          {isAllExpanded ? <FoldVertical size={13} /> : <ChevronsUpDown size={13} />}
-          <span>{isAllExpanded ? 'Thu gọn' : 'Tất cả'}</span>
-        </button>
+        <div className="wireframe-sidebar__header-right">
+          <button
+            type="button"
+            className="wireframe-sidebar__action-btn"
+            onClick={handleToggleAll}
+            title={isAllExpanded ? 'Thu gọn tất cả' : 'Mở rộng tất cả'}
+            aria-label={isAllExpanded ? 'Thu gọn tất cả' : 'Mở rộng tất cả'}
+          >
+            {isAllExpanded ? <FoldVertical size={13} /> : <ChevronsUpDown size={13} />}
+            <span>{isAllExpanded ? 'Thu gọn' : 'Tất cả'}</span>
+          </button>
+          <button
+            type="button"
+            className="wireframe-sidebar__close-btn"
+            onClick={() => setIsSidebarOpen(false)}
+            title="Đóng thanh điều hướng"
+            aria-label="Đóng thanh điều hướng"
+          >
+            <X size={15} />
+          </button>
+        </div>
       </div>
 
       {/* Search Bar */}

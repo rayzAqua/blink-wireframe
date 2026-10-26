@@ -1,3 +1,8 @@
+/* ==========================================================================
+   APP HEADER STYLES
+   Fully Responsive Navigation Bar
+   ========================================================================== */
+
 .app-header {
   height: 65px;
   position: sticky;
@@ -11,14 +16,43 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-4);
+  gap: var(--space-3);
   user-select: none;
 }
 
 .app-header__left {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-3);
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+.app-header__toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-subtle);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.app-header__toggle-btn:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--color-primary);
+  border-color: var(--color-primary-border);
+}
+
+.app-header__toggle-btn--active {
+  color: var(--color-primary);
+  border-color: var(--color-primary-border);
+  background-color: var(--color-primary-subtle);
 }
 
 .app-header__brand {
@@ -26,6 +60,7 @@
   align-items: center;
   gap: var(--space-3);
   text-decoration: none;
+  min-width: 0;
 }
 
 .app-header__logo {
@@ -41,6 +76,7 @@
 .app-header__title-box {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .app-header__title {
@@ -48,6 +84,7 @@
   font-weight: var(--font-weight-bold);
   color: var(--color-text-main);
   line-height: 1.2;
+  white-space: nowrap;
 }
 
 .app-header__breadcrumb {
@@ -56,16 +93,129 @@
   display: flex;
   align-items: center;
   gap: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.app-header__bc-category {
+  color: var(--color-text-subtle);
+}
+
+.app-header__bc-init {
+  color: var(--color-primary);
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+
+.app-header__bc-screen {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  background-color: var(--color-border-subtle);
+  color: var(--color-text-main);
 }
 
 .app-header__center {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .app-header__right {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.app-header__icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-subtle);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.app-header__icon-btn:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--color-primary);
+  border-color: var(--color-primary-border);
+}
+
+.app-header__btn-icon-only {
+  display: none;
+}
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+
+/* Laptop / Desktop vừa (1024px - 1279px) */
+@media (max-width: 1279px) {
+  .app-header__bc-category,
+  .app-header__bc-sep:first-of-type {
+    display: none;
+  }
+}
+
+/* Tablet (768px - 1023px) */
+@media (max-width: 1023px) {
+  .app-header {
+    padding: 0 var(--space-3);
+  }
+
+  .app-header__bc-init,
+  .app-header__bc-sep {
+    display: none;
+  }
+}
+
+/* Mobile lớn (< 768px) */
+@media (max-width: 767px) {
+  .app-header {
+    padding: 0 10px;
+    gap: 6px;
+    height: 58px;
+  }
+
+  .app-header__title {
+    font-size: 14px;
+  }
+
+  .app-header__logo {
+    width: 30px;
+    height: 30px;
+  }
+
+  .app-header__breadcrumb {
+    display: none;
+  }
+
+  .app-header__btn-viewmode .app-header__btn-text,
+  .app-header__btn-specs .app-header__btn-text {
+    display: none;
+  }
+
+  .app-header__btn-icon-only {
+    display: inline-block;
+  }
+}
+
+/* Mobile nhỏ (< 480px) */
+@media (max-width: 480px) {
+  .app-header__title {
+    display: none;
+  }
 }

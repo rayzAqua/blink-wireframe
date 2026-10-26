@@ -1,6 +1,6 @@
 /* ==========================================================================
    WIREFRAME SIDEBAR STYLES
-   Minimalist, Flow-Focused Navigation
+   Minimalist, Flow-Focused Navigation with Responsive Drawer Mode
    ========================================================================== */
 
 .wireframe-sidebar {
@@ -15,6 +15,20 @@
   user-select: none;
   margin: 0;
   padding: 0;
+  transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              margin-left 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.2s ease;
+}
+
+/* Desktop Collapsed State */
+@media (min-width: 1024px) {
+  .wireframe-sidebar--closed {
+    width: 0;
+    margin-left: -300px;
+    border-right: none;
+    opacity: 0;
+    pointer-events: none;
+  }
 }
 
 /* Sidebar Top Header */
@@ -34,6 +48,12 @@
   display: flex;
   align-items: center;
   gap: 6px;
+}
+
+.wireframe-sidebar__header-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .wireframe-sidebar__header-title {
@@ -63,6 +83,26 @@
   background: var(--color-surface-hover);
   color: var(--color-primary);
   border-color: var(--color-primary-border);
+}
+
+.wireframe-sidebar__close-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-subtle);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.wireframe-sidebar__close-btn:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--color-danger);
+  border-color: var(--color-border);
 }
 
 /* Flush Search Bar */
@@ -362,6 +402,7 @@
   background-color: var(--color-border-subtle);
   color: var(--color-text-muted);
   flex-shrink: 0;
+  transition: all var(--transition-fast);
 }
 
 .wireframe-sidebar__screen-item--active .wireframe-sidebar__screen-code {
@@ -374,4 +415,45 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* ==========================================================================
+   RESPONSIVE DRAWER MODE FOR TABLET & MOBILE (< 1024px)
+   ========================================================================== */
+@media (max-width: 1023px) {
+  .wireframe-sidebar {
+    position: fixed;
+    top: 65px;
+    left: 0;
+    bottom: 0;
+    height: calc(100vh - 65px);
+    width: 320px;
+    max-width: 85vw;
+    z-index: 90;
+    box-shadow: none;
+    transform: translateX(-100%);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+  }
+
+  .wireframe-sidebar--open {
+    transform: translateX(0);
+    box-shadow: var(--shadow-xl);
+  }
+
+  .wireframe-sidebar--closed {
+    transform: translateX(-100%);
+  }
+
+  .wireframe-sidebar__close-btn {
+    display: inline-flex;
+  }
+}
+
+@media (max-width: 767px) {
+  .wireframe-sidebar {
+    top: 58px;
+    height: calc(100vh - 58px);
+    width: 290px;
+    max-width: 88vw;
+  }
 }

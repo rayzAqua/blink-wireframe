@@ -254,3 +254,39 @@
   overflow-y: auto;
   background-color: var(--color-bg-app);
 }
+
+/* ==========================================================================
+   RESPONSIVE DEVICE SIMULATOR BREAKPOINTS
+   ========================================================================== */
+@media (max-width: 767px) {
+  .device-container {
+    padding: var(--space-3) var(--space-1);
+  }
+
+  .device-admin__url-bar {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .device-phone {
+    width: 100%;
+    max-width: 350px;
+    height: min(780px, calc(100vh - 160px));
+    border-radius: 36px;
+    box-shadow: 0 0 0 6px #1e293b, var(--shadow-lg);
+    border: 2px solid #0f172a;
+  }
+
+  .device-phone__notch {
+    width: 90px;
+    height: 24px;
+    top: 8px;
+  }
+
+  .device-phone__status-bar {
+    height: 40px;
+    padding: 0 16px;
+    font-size: 11px;
+  }
+}
