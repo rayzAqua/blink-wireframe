@@ -11,12 +11,13 @@ import {
   FolderGit2,
   X,
 } from 'lucide-react';
-import { useWireframe } from '../workspace';
+import { useSelection, useWorkspace } from '../workspace';
 import { Badge } from '../../shared/ui';
 import './ScreenSpecPanel.css';
 
 export const ScreenSpecPanel: React.FC = () => {
-  const { activeInitiative, activeScreen, isSpecOpen, setIsSpecOpen } = useWireframe();
+  const { activeFlow, activeScreen } = useSelection();
+  const { isSpecOpen, setIsSpecOpen } = useWorkspace();
 
   if (!isSpecOpen) return null;
 
@@ -181,7 +182,7 @@ export const ScreenSpecPanel: React.FC = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: 'var(--color-text-subtle)' }}>
             <FolderGit2 size={13} />
             <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-              {activeInitiative.source}
+              {activeFlow.source}
             </span>
           </div>
         </div>

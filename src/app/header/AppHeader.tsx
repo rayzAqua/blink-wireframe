@@ -11,7 +11,7 @@ import {
   PanelRightOpen,
   Sparkles,
 } from 'lucide-react';
-import { useWireframe } from '../../features/workspace';
+import { useSelection, useWorkspace } from '../../features/workspace';
 import { ROLES } from '../../content/roles';
 import { Button, SegmentedControl } from '../../shared/ui';
 import type { DeviceType } from '../../shared/ui';
@@ -19,13 +19,9 @@ import logoImg from '../../shared/assets/logo_image.png';
 import './AppHeader.css';
 
 export const AppHeader: React.FC = () => {
+  const { activeFlow, activeScreen, deviceType, setDeviceType, isAutoDevice, setIsAutoDevice } =
+    useSelection();
   const {
-    activeInitiative,
-    activeScreen,
-    deviceType,
-    setDeviceType,
-    isAutoDevice,
-    setIsAutoDevice,
     theme,
     toggleTheme,
     isSidebarOpen,
@@ -34,7 +30,7 @@ export const AppHeader: React.FC = () => {
     toggleSpec,
     viewMode,
     setViewMode,
-  } = useWireframe();
+  } = useWorkspace();
 
   const handleDeviceChange = (val: string) => {
     if (val === 'auto') {
@@ -68,9 +64,9 @@ export const AppHeader: React.FC = () => {
             <span className="app-header__title">Nexlink Blink</span>
             {viewMode === 'wireframes' && (
               <div className="app-header__breadcrumb">
-                <span className="app-header__bc-category">{ROLES.find((r) => r.id === activeInitiative.role)?.label}</span>
+                <span className="app-header__bc-category">{ROLES.find((r) => r.id === activeFlow.role)?.label}</span>
                 <span className="app-header__bc-sep">/</span>
-                <span className="app-header__bc-init">{activeInitiative.title}</span>
+                <span className="app-header__bc-init">{activeFlow.title}</span>
                 <span className="app-header__bc-sep">/</span>
                 <code className="app-header__bc-screen">{activeScreen.id}</code>
               </div>

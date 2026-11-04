@@ -9,34 +9,26 @@ import {
   ChevronsUpDown,
   X,
 } from 'lucide-react';
-import { useWireframe } from '../workspace';
+import { useSelection, useWorkspace } from '../workspace';
 import { ROLES } from '../../content/roles';
 import type { RoleId } from '../../domain/types';
 import './Sidebar.css';
 
 export const Sidebar: React.FC = () => {
-  const {
-    initiatives,
-    activeInitiative,
-    activeScreen,
-    selectInitiative,
-    selectScreen,
-    searchQuery,
-    setSearchQuery,
-    isSidebarOpen,
-    setIsSidebarOpen,
-  } = useWireframe();
+  const { flows, activeFlow, activeScreen, selectFlow, selectScreen } = useSelection();
+  const { isSidebarOpen, setIsSidebarOpen } = useWorkspace();
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   // Accordion state: only 1 domain group and 1 flow/initiative open at a time
-  const [openGroupKey, setOpenGroupKey] = useState<string | null>(activeInitiative.role);
-  const [openInitiativeId, setOpenInitiativeId] = useState<string | null>(activeInitiative.id);
+  const [openGroupKey, setOpenGroupKey] = useState<string | null>(activeFlow.role);
+  const [openInitiativeId, setOpenInitiativeId] = useState<string | null>(activeFlow.id);
   const [isAllExpanded, setIsAllExpanded] = useState<boolean>(false);
 
-  // Sync open states when activeInitiative changes
+  // Sync open states when activeFlow changes
   useEffect(() => {
-    setOpenGroupKey(activeInitiative.role);
-    setOpenInitiativeId(activeInitiative.id);
-  }, [activeInitiative.id, activeInitiative.role]);
+    setOpenGroupKey(activeFlow.role);
+    setOpenInitiativeId(activeFlow.id);
+  }, [activeFlow.id, activeFlow.role]);
 
   const ROLE_ICONS: Record<RoleId, React.ReactNode> = {
     'karaoke-owner': <Building2 size={14} />,
@@ -47,7 +39,7 @@ export const Sidebar: React.FC = () => {
     key: role.id,
     label: role.label,
     icon: ROLE_ICONS[role.id],
-    items: initiatives.filter((i) => i.role === role.id),
+    items: flows.filter((i) => i.role === role.id),
   }));
 
   // Accordion toggle for Domain Groups
@@ -69,7 +61,7 @@ export const Sidebar: React.FC = () => {
       // Open this card and close any other open card
       setOpenInitiativeId(initId);
       setOpenGroupKey(groupKey);
-      selectInitiative(initId);
+      selectFlow(initId);
     }
   };
 
@@ -178,8 +170,8 @@ export const Sidebar: React.FC = () => {
                 <div className="wireframe-sidebar__init-list">
                   {group.items.map((init) => {
                     const isCardOpen = isSearching || isAllExpanded || openInitiativeId === init.id;
-                    const isSelected = activeInitiative.id === init.id;
-                    const flowIndex = initiatives.findIndex((i) => i.id === init.id) + 1;
+                    const isSelected = activeFlow.id === init.id;
+                    const flowIndex = flows.findIndex((i) => i.id === init.id) + 1;
                     const formattedIndex = String(flowIndex).padStart(2, '0');
 
                     return (
@@ -216,7 +208,7 @@ export const Sidebar: React.FC = () => {
                                     if (openInitiativeId !== init.id) {
                                       setOpenInitiativeId(init.id);
                                       setOpenGroupKey(group.key);
-                                      selectInitiative(init.id);
+                                      selectFlow(init.id);
                                     }
                                   }}
                                   title={`${screen.id} • ${screen.title}`}

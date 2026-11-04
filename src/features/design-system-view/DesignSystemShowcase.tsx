@@ -35,10 +35,10 @@ import {
   EmptyState,
   Table,
 } from '../../shared/ui';
-import { useWireframe } from '../workspace';
+import { useWorkspace } from '../workspace';
 
 export const DesignSystemShowcase: React.FC = () => {
-  const { setViewMode } = useWireframe();
+  const { setViewMode } = useWorkspace();
   const [buttonLoading, setButtonLoading] = useState(false);
   const [switchOn, setSwitchOn] = useState(true);
   const [checked, setChecked] = useState(true);

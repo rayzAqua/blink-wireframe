@@ -4,7 +4,7 @@ import {
   CheckCircle2,
   ExternalLink,
 } from 'lucide-react';
-import { useWireframe } from '../workspace';
+import { useSelection } from '../workspace';
 import {
   DeviceFrame,
   Button,
@@ -19,7 +19,7 @@ import {
 import './WireframeScreenViewer.css';
 
 export const WireframeScreenViewer: React.FC = () => {
-  const { activeInitiative, activeScreen, deviceType, selectScreen } = useWireframe();
+  const { activeFlow, activeScreen, deviceType, selectScreen } = useSelection();
 
   const [inputValues, setInputValues] = useState<Record<string, string>>({});
   const [activeModal, setActiveModal] = useState<string | null>(null);
@@ -46,12 +46,12 @@ export const WireframeScreenViewer: React.FC = () => {
   // Determine URL to display in Browser/Admin frame
   const getSimulatedUrl = () => {
     if (activeScreen.environment === 'ADMIN_UI') {
-      return `https://admin.blink.nexlink.vn/${activeInitiative.id}`;
+      return `https://admin.blink.nexlink.vn/${activeFlow.id}`;
     }
     if (activeScreen.environment === 'WEB_PUBLIC') {
       return `blink.nexlink.vn/invite/branch-karaoke#token-3days`;
     }
-    return `blink.nexlink.vn/${activeInitiative.id}/${activeScreen.id.toLowerCase()}`;
+    return `blink.nexlink.vn/${activeFlow.id}/${activeScreen.id.toLowerCase()}`;
   };
 
   // --------------------------------------------------------------------------
@@ -170,7 +170,7 @@ export const WireframeScreenViewer: React.FC = () => {
           <Card>
             <CardHeader>
               <h4>Danh Sách Dữ Liệu Quản Trị Hệ Thống</h4>
-              <Badge variant="primary">{activeInitiative.title}</Badge>
+              <Badge variant="primary">{activeFlow.title}</Badge>
             </CardHeader>
             <CardBody>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>

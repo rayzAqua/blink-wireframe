@@ -3,11 +3,11 @@ import { AppHeader } from './header/AppHeader';
 import { Sidebar } from '../features/navigation';
 import { WireframeScreenViewer } from '../features/viewer';
 import { ScreenSpecPanel } from '../features/inspector';
-import { useWireframe } from '../features/workspace';
+import { useWorkspace } from '../features/workspace';
 import './WireframeLayout.css';
 
 export const WireframeLayout: React.FC = () => {
-  const { isSidebarOpen, setIsSidebarOpen } = useWireframe();
+  const { isSidebarOpen, setIsSidebarOpen } = useWorkspace();
 
   return (
     <div className="wireframe-layout">

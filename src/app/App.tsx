@@ -1,12 +1,12 @@
 import React from 'react';
-import { WireframeProvider, useWireframe } from '../features/workspace';
+import { SelectionProvider, WorkspaceProvider, useWorkspace } from '../features/workspace';
 import { WireframeLayout } from './WireframeLayout';
 import { AppHeader } from './header/AppHeader';
 import { DesignSystemShowcase } from '../features/design-system-view';
 import './App.css';
 
 const AppContent: React.FC = () => {
-  const { viewMode } = useWireframe();
+  const { viewMode } = useWorkspace();
 
   if (viewMode === 'design-system') {
     return (
@@ -22,9 +22,11 @@ const AppContent: React.FC = () => {
 
 export function App() {
   return (
-    <WireframeProvider>
-      <AppContent />
-    </WireframeProvider>
+    <WorkspaceProvider>
+      <SelectionProvider>
+        <AppContent />
+      </SelectionProvider>
+    </WorkspaceProvider>
   );
 }
 
