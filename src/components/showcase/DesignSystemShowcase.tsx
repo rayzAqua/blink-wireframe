@@ -5,6 +5,10 @@ import {
   Send,
   Phone,
   ArrowRight,
+  Building2,
+  Users,
+  Bell,
+  Inbox,
 } from 'lucide-react';
 import {
   Button,
@@ -15,12 +19,33 @@ import {
   Input,
   Textarea,
   Select,
+  ListGroup,
+  ListRow,
+  Alert,
+  Toast,
+  Avatar,
+  BottomSheet,
+  Switch,
+  Checkbox,
+  RadioGroup,
+  Tabs,
+  Stepper,
+  Progress,
+  Skeleton,
+  EmptyState,
+  Table,
 } from '../../design-system';
 import { useWireframe } from '../../context/WireframeContext';
 
 export const DesignSystemShowcase: React.FC = () => {
   const { setViewMode } = useWireframe();
   const [buttonLoading, setButtonLoading] = useState(false);
+  const [switchOn, setSwitchOn] = useState(true);
+  const [checked, setChecked] = useState(true);
+  const [radio, setRadio] = useState('month');
+  const [tab, setTab] = useState('active');
+  const [toastOpen, setToastOpen] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(false);
 
   return (
     <div className="showcase-content" style={{ padding: '32px 24px', maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
@@ -28,24 +53,24 @@ export const DesignSystemShowcase: React.FC = () => {
       <section style={{ marginBottom: '40px' }}>
         <h2 className="section-title">
           <Palette size={24} style={{ color: 'var(--color-primary)' }} />
-          Primary Color — #EF227B (Blink Brand)
+          Primary Color — Slate #334155 (xám than trung tính)
         </h2>
         <p className="section-desc">
-          Thang màu chủ đạo từ sắc độ 50 đến 950 được tinh chỉnh riêng cho nhận diện thương hiệu Blink.
+          Màu chủ đạo trung tính để màu trạng thái và màu môi trường nổi bật. Ở chế độ tối, nút chính đảo sang nền sáng.
         </p>
 
         <div className="color-grid">
           {[
-            { name: 'Primary 50', token: '--color-primary-50', hex: '#fdf2f7', lightText: false },
-            { name: 'Primary 100', token: '--color-primary-100', hex: '#fce7f2', lightText: false },
-            { name: 'Primary 200', token: '--color-primary-200', hex: '#fbcfe5', lightText: false },
-            { name: 'Primary 300', token: '--color-primary-300', hex: '#f9a8cf', lightText: false },
-            { name: 'Primary 400', token: '--color-primary-400', hex: '#f472af', lightText: true },
-            { name: 'Primary 500 (Core)', token: '--color-primary-500', hex: '#EF227B', lightText: true, isCore: true },
-            { name: 'Primary 600', token: '--color-primary-600', hex: '#d81467', lightText: true },
-            { name: 'Primary 700', token: '--color-primary-700', hex: '#b50b52', lightText: true },
-            { name: 'Primary 800', token: '--color-primary-800', hex: '#960d45', lightText: true },
-            { name: 'Primary 900', token: '--color-primary-900', hex: '#7d103d', lightText: true },
+            { name: 'Primary 50', token: '--color-primary-50', hex: '#f8fafc', lightText: false },
+            { name: 'Primary 100', token: '--color-primary-100', hex: '#f1f5f9', lightText: false },
+            { name: 'Primary 200', token: '--color-primary-200', hex: '#e2e8f0', lightText: false },
+            { name: 'Primary 300', token: '--color-primary-300', hex: '#cbd5e1', lightText: false },
+            { name: 'Primary 400', token: '--color-primary-400', hex: '#94a3b8', lightText: true },
+            { name: 'Primary 500', token: '--color-primary-500', hex: '#475569', lightText: true },
+            { name: 'Primary 600', token: '--color-primary-600', hex: '#3d4a5e', lightText: true },
+            { name: 'Primary 700 (Core)', token: '--color-primary-700', hex: '#334155', lightText: true, isCore: true },
+            { name: 'Primary 800', token: '--color-primary-800', hex: '#1e293b', lightText: true },
+            { name: 'Primary 900', token: '--color-primary-900', hex: '#0f172a', lightText: true },
           ].map((item) => (
             <div key={item.name} className="color-card">
               <div
@@ -112,7 +137,7 @@ export const DesignSystemShowcase: React.FC = () => {
           <Card highlightPrimary>
             <CardHeader>
               <h3>Nút Thao Tác (Button System)</h3>
-              <Badge variant="primary">#EF227B</Badge>
+              <Badge variant="primary">#334155</Badge>
             </CardHeader>
             <CardBody className="demo-group">
               <div className="demo-row">
@@ -181,7 +206,118 @@ export const DesignSystemShowcase: React.FC = () => {
         </div>
       </section>
 
-      {/* 5. BACK TO WIREFRAME VIEWER CALLOUT */}
+      {/* 5. EXTENDED COMPONENTS */}
+      <section style={{ marginBottom: '40px' }}>
+        <h2 className="section-title">Thành Phần Bổ Sung</h2>
+        <p className="section-desc">
+          Các mẫu giao diện thường gặp trong wireframe: dòng menu, thông báo, bảng chọn, điều khiển chọn, điều hướng, tiến trình, trạng thái tải và rỗng, bảng dữ liệu.
+        </p>
+        <div className="demo-grid">
+          <Card>
+            <CardHeader><h3>Dòng menu & Avatar</h3></CardHeader>
+            <CardBody className="demo-group">
+              <div className="demo-row">
+                <Avatar name="Nguyễn An" size="sm" />
+                <Avatar name="Lê Hiếu" status="online" />
+                <Avatar name="Quán Karaoke" shape="rounded" size="lg" status="busy" />
+              </div>
+              <ListGroup label="Vận hành quán">
+                <ListRow icon={<Building2 size={18} />} title="Thiết lập quán hát" onClick={() => setSheetOpen(true)} />
+                <ListRow icon={<Users size={18} />} title="Quản lý nhân sự" description="Mời, phân quyền, kết thúc" onClick={() => undefined} />
+                <ListRow icon={<Bell size={18} />} title="Quà tặng" trailing={<Badge variant="neutral">Sắp có</Badge>} onClick={() => setToastOpen(true)} />
+              </ListGroup>
+            </CardBody>
+          </Card>
+
+          <Card>
+            <CardHeader><h3>Thông báo</h3></CardHeader>
+            <CardBody className="demo-group">
+              <Alert variant="warning" title="Blink cần bạn cập nhật thông tin cơ sở" action={<Button size="sm" variant="secondary">Cập nhật hồ sơ</Button>}>
+                Hồ sơ cần bổ sung địa chỉ chi nhánh.
+              </Alert>
+              <Alert variant="danger" title="Cơ sở đang bị hạn chế">Một số thiết lập đang bị khoá.</Alert>
+              <Alert variant="success">Đã lưu thay đổi.</Alert>
+              <Alert variant="info" onClose={() => undefined}>Lời mời có hiệu lực 3 ngày.</Alert>
+              <div className="demo-row">
+                <Button variant="secondary" onClick={() => setToastOpen(true)}>Hiện toast "Sắp có"</Button>
+                <Button variant="secondary" onClick={() => setSheetOpen(true)}>Mở bottom sheet</Button>
+              </div>
+            </CardBody>
+          </Card>
+
+          <Card>
+            <CardHeader><h3>Điều khiển chọn</h3></CardHeader>
+            <CardBody className="demo-group">
+              <Switch checked={switchOn} onChange={setSwitchOn} label="Nhận đặt phòng" description="Phòng sẽ hiện trong danh sách chọn phòng" />
+              <Checkbox checked={checked} onChange={setChecked} label="Cho phép mở phòng khi chờ xác nhận" />
+              <RadioGroup
+                name="plan-term"
+                value={radio}
+                onChange={setRadio}
+                options={[
+                  { value: 'month', label: 'Theo tháng' },
+                  { value: 'year', label: 'Theo năm', description: 'Có thể trả góp 12 kỳ' },
+                ]}
+              />
+            </CardBody>
+          </Card>
+
+          <Card>
+            <CardHeader><h3>Điều hướng & Tiến trình</h3></CardHeader>
+            <CardBody className="demo-group">
+              <Tabs
+                value={tab}
+                onChange={setTab}
+                items={[
+                  { value: 'active', label: 'Đang làm', count: 8 },
+                  { value: 'paused', label: 'Tạm dừng', count: 1 },
+                  { value: 'ended', label: 'Đã nghỉ' },
+                ]}
+              />
+              <Stepper current={1} steps={[{ label: 'Chọn gói' }, { label: 'Thông tin' }, { label: 'Phòng' }, { label: 'Xong' }]} />
+              <Progress label="Nhân sự đã dùng" value={60} showValue />
+              <Skeleton variant="text" lines={3} />
+            </CardBody>
+          </Card>
+        </div>
+
+        <div style={{ marginTop: '24px' }}>
+          <Card>
+            <CardHeader><h3>Bảng dữ liệu & Trạng thái rỗng</h3></CardHeader>
+            <CardBody className="demo-group">
+              <Table
+                rowKey={(r) => r.code}
+                columns={[
+                  { key: 'code', header: 'Mã' },
+                  { key: 'name', header: 'Nhân sự' },
+                  { key: 'role', header: 'Vai trò' },
+                  { key: 'status', header: 'Trạng thái', render: (r) => <Badge variant={r.status === 'Đang làm' ? 'success' : 'neutral'}>{r.status}</Badge> },
+                ]}
+                rows={[
+                  { code: 'NV-001', name: 'Nguyễn An', role: 'Manager', status: 'Đang làm' },
+                  { code: 'NV-002', name: 'Lê Hiếu', role: 'Booking', status: 'Tạm dừng' },
+                ]}
+              />
+              <EmptyState
+                icon={<Inbox size={28} />}
+                title="Chưa có nhân sự"
+                description="Mời nhân sự đầu tiên để bắt đầu vận hành chi nhánh."
+                action={<Button size="sm">Mời nhân sự</Button>}
+              />
+            </CardBody>
+          </Card>
+        </div>
+      </section>
+
+      <Toast isOpen={toastOpen} message="Sắp có" onClose={() => setToastOpen(false)} />
+      <BottomSheet isOpen={sheetOpen} onClose={() => setSheetOpen(false)} title="Chọn chi nhánh">
+        <ListGroup>
+          <ListRow icon={<Avatar name="Chi nhánh 1" shape="rounded" size="sm" />} title="Chi nhánh Quận 1" description="Đang hoạt động" onClick={() => setSheetOpen(false)} />
+          <ListRow icon={<Avatar name="Chi nhánh 2" shape="rounded" size="sm" />} title="Chi nhánh Quận 7" trailing={<Badge variant="warning">Hạn chế</Badge>} onClick={() => setSheetOpen(false)} />
+        </ListGroup>
+      </BottomSheet>
+
+      {/* 6. BACK TO WIREFRAME VIEWER CALLOUT */}
       <Card variant="glass" highlightPrimary>
         <CardBody style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '24px', flexWrap: 'wrap', gap: '16px' }}>
           <div>

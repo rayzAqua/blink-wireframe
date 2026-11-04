@@ -141,7 +141,7 @@
 
 /* Device Preview Section */
 .device-preview-wrapper {
-  background: radial-gradient(circle at 50% 0%, rgba(239, 34, 123, 0.08) 0%, transparent 60%),
+  background: radial-gradient(circle at 50% 0%, var(--color-primary-glow) 0%, transparent 60%),
               var(--color-bg-canvas);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-2xl);

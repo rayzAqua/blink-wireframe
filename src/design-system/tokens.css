@@ -1,6 +1,7 @@
 /**
  * Nexlink Blink Design System Tokens
- * Primary Brand Color: #EF227B (Blink Pink)
+ * Primary: slate (neutral ink) so status and environment colours carry the meaning.
+ * The Blink pink (#EF227B) is kept only in the logo image.
  */
 
 :root {
@@ -8,27 +9,27 @@
      1. COLOR PALETTE
      ========================================================================== */
 
-  /* Primary Brand: #EF227B (Blink Magenta / Pink) */
-  --color-primary-50: #fdf2f7;
-  --color-primary-100: #fce7f2;
-  --color-primary-200: #fbcfe5;
-  --color-primary-300: #f9a8cf;
-  --color-primary-400: #f472af;
-  --color-primary-500: #EF227B; /* Core Brand */
-  --color-primary-600: #d81467;
-  --color-primary-700: #b50b52;
-  --color-primary-800: #960d45;
-  --color-primary-900: #7d103d;
-  --color-primary-950: #4c0220;
+  /* Primary: Slate (neutral ink, #334155 as core) */
+  --color-primary-50: #f8fafc;
+  --color-primary-100: #f1f5f9;
+  --color-primary-200: #e2e8f0;
+  --color-primary-300: #cbd5e1;
+  --color-primary-400: #94a3b8;
+  --color-primary-500: #475569;
+  --color-primary-600: #3d4a5e;
+  --color-primary-700: #334155; /* Core */
+  --color-primary-800: #1e293b;
+  --color-primary-900: #0f172a;
+  --color-primary-950: #020617;
 
   /* Primary Semantic Aliases */
-  --color-primary: var(--color-primary-500);
-  --color-primary-hover: var(--color-primary-600);
-  --color-primary-active: var(--color-primary-700);
-  --color-primary-subtle: var(--color-primary-50);
-  --color-primary-border: var(--color-primary-200);
+  --color-primary: var(--color-primary-700);
+  --color-primary-hover: var(--color-primary-800);
+  --color-primary-active: var(--color-primary-900);
+  --color-primary-subtle: var(--color-primary-100);
+  --color-primary-border: var(--color-primary-300);
   --color-primary-contrast: #ffffff;
-  --color-primary-glow: rgba(239, 34, 123, 0.28);
+  --color-primary-glow: rgba(51, 65, 85, 0.28);
 
   /* Status Colors */
   --color-success: #10b981;
@@ -152,7 +153,7 @@
   --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
   --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
   --shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.09), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
-  --shadow-primary: 0 8px 20px -4px rgba(239, 34, 123, 0.3);
+  --shadow-primary: 0 8px 20px -4px rgba(51, 65, 85, 0.3);
   --shadow-device: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
 
   /* ==========================================================================
@@ -162,15 +163,22 @@
   --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-smooth: 300ms cubic-bezier(0.16, 1, 0.3, 1);
 
-  --focus-ring: 0 0 0 3px rgba(239, 34, 123, 0.35);
+  --focus-ring: 0 0 0 3px rgba(51, 65, 85, 0.35);
 }
 
 /* ==========================================================================
    DARK MODE PALETTE
    ========================================================================== */
 [data-theme='dark'] {
-  --color-primary-subtle: rgba(239, 34, 123, 0.15);
-  --color-primary-border: rgba(239, 34, 123, 0.35);
+  /* Slate primary inverts: light button on dark surface */
+  --color-primary: #e2e8f0;
+  --color-primary-hover: #f8fafc;
+  --color-primary-active: #cbd5e1;
+  --color-primary-contrast: #0f172a;
+  --color-primary-subtle: rgba(226, 232, 240, 0.1);
+  --color-primary-border: rgba(226, 232, 240, 0.28);
+  --color-primary-glow: rgba(226, 232, 240, 0.25);
+  --focus-ring: 0 0 0 3px rgba(226, 232, 240, 0.4);
 
   --color-bg-app: #090d16;
   --color-bg-canvas: #060910;
@@ -218,6 +226,6 @@
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.45);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.55);
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.65);
-  --shadow-primary: 0 8px 24px -4px rgba(239, 34, 123, 0.4);
+  --shadow-primary: 0 8px 24px -4px rgba(226, 232, 240, 0.18);
   --shadow-device: 0 25px 50px -12px rgba(0, 0, 0, 0.85);
 }

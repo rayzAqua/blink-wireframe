@@ -51,7 +51,7 @@
   width: 100%;
 }
 
-/* Primary Variant (#EF227B) */
+/* Primary Variant */
 .btn--primary {
   background-color: var(--color-primary);
   color: var(--color-primary-contrast);
