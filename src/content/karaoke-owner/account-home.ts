@@ -38,7 +38,11 @@ const menu: Block[] = [
         title: 'Thu ngân',
         goto: 'cashier-terminal-authentication/CSH-01',
       },
-      { icon: 'wallet', title: 'Gói nhân sự', chevron: true },
+      {
+        icon: 'wallet',
+        title: 'Gói nhân sự',
+        goto: 'subscriptions-owner-management/SUB-01',
+      },
       { icon: 'handshake', title: 'Cộng tác viên', chevron: true },
       { icon: 'qr-code', title: 'QR phòng', badge: 'Sắp có', goto: 'ACC-03' },
     ],
