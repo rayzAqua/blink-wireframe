@@ -16,6 +16,7 @@ import {
   Textarea,
   Modal,
 } from '../../shared/ui';
+import { BlocksRenderer } from './blocks/BlocksRenderer';
 import { CUSTOM_MOCKUPS } from './custom-mockups';
 import './WireframeScreenViewer.css';
 
@@ -40,6 +41,10 @@ export const WireframeScreenViewer: React.FC = () => {
   // RENDER DYNAMIC MOCKUP BASED ON SCREEN SPECIFICATION
   // --------------------------------------------------------------------------
   const renderScreenMockup = () => {
+    if (activeScreen.layout) {
+      return <BlocksRenderer blocks={activeScreen.layout} flow={activeFlow} screen={activeScreen} />;
+    }
+
     const Custom = CUSTOM_MOCKUPS[activeScreen.id];
     if (Custom) return <Custom selectScreen={selectScreen} />;
 
