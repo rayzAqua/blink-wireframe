@@ -1,40 +1,40 @@
-import type { Flow } from '../domain/types.ts';
-import { subscriptionsOwnerManagement } from './karaoke-owner/subscriptions-owner-management.ts';
-import { karaokeOperationsReporting } from './karaoke-owner/karaoke-operations-reporting.ts';
-import { bookingTagging } from './karaoke-owner/booking-tagging.ts';
-import { karaokeRoomAvailability } from './karaoke-owner/karaoke-room-availability.ts';
-import { accountHome } from './karaoke-owner/account-home.ts';
-import { karaokePartnerRegistration } from './karaoke-owner/karaoke-partner-registration.ts';
-import { karaokeBranchCreation } from './karaoke-owner/karaoke-branch-creation.ts';
-import { karaokeFloors } from './karaoke-owner/karaoke-floors.ts';
-import { karaokeRoomManagement } from './karaoke-owner/karaoke-room-management.ts';
-import { karaokeManagerAppointments } from './karaoke-owner/karaoke-manager-appointments.ts';
-import { karaokeStaffOnboarding } from './karaoke-owner/karaoke-staff-onboarding.ts';
-import { karaokeStaffManagement } from './karaoke-owner/karaoke-staff-management.ts';
-import { karaokeRolePermissions } from './karaoke-owner/karaoke-role-permissions.ts';
-import { karaokeStaffPermissions } from './karaoke-owner/karaoke-staff-permissions.ts';
-import { cashierTerminalAuthentication } from './karaoke-owner/cashier-terminal-authentication.ts';
-import { subscriptions } from './blink-admin/subscriptions.ts';
-import { authAdminSettings } from './blink-admin/auth-admin-settings.ts';
-import { authPolicyRollout } from './blink-admin/auth-policy-rollout.ts';
-import { appReleaseNotifications } from './blink-admin/app-release-notifications.ts';
-import { adminAudit } from './blink-admin/admin-audit.ts';
+import type { Flow } from "../domain/types.ts";
+import { subscriptionsOwnerManagement } from "./karaoke-owner/subscriptions-owner-management.ts";
+import { karaokeOperationsReporting } from "./karaoke-owner/karaoke-operations-reporting.ts";
+import { bookingTagging } from "./karaoke-owner/booking-tagging.ts";
+import { karaokeRoomAvailability } from "./karaoke-owner/karaoke-room-availability.ts";
+import { accountHome } from "./karaoke-owner/account-home.ts";
+import { karaokePartnerRegistration } from "./karaoke-owner/karaoke-partner-registration.ts";
+import { karaokeBranchCreation } from "./karaoke-owner/karaoke-branch-creation.ts";
+import { karaokeFloors } from "./karaoke-owner/karaoke-floors.ts";
+import { karaokeRoomManagement } from "./karaoke-owner/karaoke-room-management.ts";
+import { karaokeManagerAppointments } from "./karaoke-owner/karaoke-manager-appointments.ts";
+import { karaokeStaffOnboarding } from "./karaoke-owner/karaoke-staff-onboarding.ts";
+import { karaokeStaffManagement } from "./karaoke-owner/karaoke-staff-management.ts";
+import { karaokeRolePermissions } from "./karaoke-owner/karaoke-role-permissions.ts";
+import { karaokeStaffPermissions } from "./karaoke-owner/karaoke-staff-permissions.ts";
+import { cashierTerminalAuthentication } from "./karaoke-owner/cashier-terminal-authentication.ts";
+import { subscriptions } from "./blink-admin/subscriptions.ts";
+import { authAdminSettings } from "./blink-admin/auth-admin-settings.ts";
+import { authPolicyRollout } from "./blink-admin/auth-policy-rollout.ts";
+import { appReleaseNotifications } from "./blink-admin/app-release-notifications.ts";
+import { adminAudit } from "./blink-admin/admin-audit.ts";
 
-/** All flows, in sidebar order. */
+/** All flows, in sidebar order: by role, then section, then the order below. */
 export const CATALOG: Flow[] = [
-  accountHome,
   karaokePartnerRegistration,
-  karaokeBranchCreation,
-  subscriptionsOwnerManagement,
+  accountHome,
+  karaokeRoomManagement,
   karaokeFloors,
   karaokeRoomAvailability,
   bookingTagging,
-  karaokeRoomManagement,
-  karaokeManagerAppointments,
   karaokeStaffOnboarding,
   karaokeStaffManagement,
   karaokeRolePermissions,
   karaokeStaffPermissions,
+  karaokeManagerAppointments,
+  karaokeBranchCreation,
+  subscriptionsOwnerManagement,
   cashierTerminalAuthentication,
   karaokeOperationsReporting,
   subscriptions,

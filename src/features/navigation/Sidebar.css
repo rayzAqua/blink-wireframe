@@ -478,3 +478,13 @@
   flex-direction: column;
   min-width: 0;
 }
+
+.wireframe-sidebar__section {
+  margin: var(--space-3) 0 var(--space-1);
+  padding: 0 var(--space-2);
+  font-size: 0.6875rem;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}

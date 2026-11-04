@@ -47,19 +47,22 @@ parameter properties). `dist/` and `node_modules/` are git-ignored.
 src/
 ├── app/                   # entry (main.tsx, App.tsx), global CSS, WireframeLayout, header/
 ├── content/               # wireframe data
-│   ├── roles.ts           # role ids, labels and sidebar order
+│   ├── roles.ts, sections.ts  # role and sidebar section ids, labels, order
 │   ├── index.ts           # CATALOG: every flow, in sidebar order
-│   ├── karaoke-owner/     # one <flow>.ts per flow
+│   ├── helpers.ts         # inApp(), bar(), buttons() for writing layouts
+│   ├── karaoke-owner/     # one <flow>.ts per flow; plan-catalog.ts holds the plan figures
 │   └── blink-admin/
 ├── domain/
-│   ├── types.ts           # Flow, Screen, Role, EnvironmentId
-│   ├── environments.ts    # ENVIRONMENTS: badge, label, device frame and address per environment
+│   ├── types.ts           # Flow, Screen, Block, Role, EnvironmentId
+│   ├── icons.ts           # ICON_NAMES: icons a layout block may use
+│   ├── environments.ts    # ENVIRONMENTS: badge, label, device frame, address, access per environment
 │   └── validate.ts        # validateCatalog(): pure content checks
 ├── features/
 │   ├── workspace/         # SelectionProvider (flow, screen, device), WorkspaceProvider (theme,
 │   │                      #   sidebar, inspector, view mode) and their hooks
 │   ├── navigation/        # Sidebar: roles, flows, screens, search
-│   ├── viewer/            # WireframeScreenViewer; custom-mockups/ for hand-built screens
+│   ├── viewer/            # WireframeScreenViewer; blocks/ draws layouts; custom-mockups/ for
+│   │                      #   hand-built screens
 │   ├── inspector/         # ScreenSpecPanel
 │   └── design-system-view/# DesignSystemShowcase
 └── shared/
@@ -80,35 +83,58 @@ catalog. If the catalog is empty it renders a message instead of its children. C
 state with `useSelection()` and `useWorkspace()`. `selectScreen` ignores ids that are not a
 screen of the active flow, so a free-text `nextScreen` does nothing when clicked.
 
-**Rendering.** `WireframeScreenViewer` builds a generic mockup from the fields of the active
-`Screen` (`visibleData`, `userInput`, `primaryAction`, `nextScreen`, and so on). A screen with an
-entry in `CUSTOM_MOCKUPS` (`features/viewer/custom-mockups`, keyed by screen id) renders that
-component instead. `domain/environments.ts` decides the badge, the device frame
-(`mobile`, `browser`, `admin`) and the simulated address for each environment.
+**Rendering.** `WireframeScreenViewer` picks, in this order: the screen's `layout` (drawn by
+`features/viewer/blocks/BlocksRenderer`), an entry in `CUSTOM_MOCKUPS`
+(`features/viewer/custom-mockups`, keyed by screen id), or the generic mockup built from the text
+fields (`visibleData`, `userInput`, `primaryAction`, ...). Owner flows use layouts; other roles
+use the generic mockup. `domain/environments.ts` decides the badge, the device frame
+(`mobile`, `browser`, `admin`), the simulated address and the access kind of each environment.
 
-**Navigation.** The sidebar groups flows by `role`, in the order of `content/roles.ts`.
-Adding a role means adding its id to `RoleId` in `domain/types.ts`, an entry in `ROLES`, and
-an icon in `ROLE_ICONS` in `Sidebar.tsx`.
+**Layouts and blocks.** A layout is a list of blocks (`Block` in `domain/types.ts`): `appBar`,
+`hero`, `heading`, `text`, `keyValue`, `listGroup`, `field`, `tabs`, `stepper`, `progress`,
+`cardList`, `table`, `alert`, `empty`, `skeleton`, `actions`, and the overlays `bottomSheet`,
+`modal`, `toast` (drawn open, inside the device frame). Tappable blocks take `goto`: a screen id of
+the same flow, or `flow-id/screen-id` for another flow. Icons are names from `ICON_NAMES`;
+`blocks/icons.ts` maps each to a lucide icon (a missing mapping is a type error). To add an icon,
+add the name to `ICON_NAMES` and the mapping. To add a block type, extend `Block`, `validate.ts`
+(`BLOCK_TYPES`, `blockRefs`) and `BlockView.tsx`.
+
+**Public link versus app.** Every screen shows whether it is a public link page or an in-app
+screen. It is derived from `environment`: `WEB_PUBLIC` is a public link, `TRANSITION` is the step
+from a link into the app, everything else is in the app. The sidebar marks public and transition
+screens with an icon and counts public screens per flow; the inspector has a "Truy cập" row. The
+validator rejects a public screen that leads (`nextScreen`, `goto`) straight to an in-app screen:
+the step must go through a `TRANSITION` screen.
+
+**Navigation.** The sidebar groups flows by `role`, in the order of `content/roles.ts`, and
+inside a role by `section` (`content/sections.ts`). Adding a role means adding its id to `RoleId`
+in `domain/types.ts`, an entry in `ROLES`, and an icon in `ROLE_ICONS` in `Sidebar.tsx`. Adding a
+section means adding its id to `SectionId` and an entry in `SECTIONS`.
 
 ## Adding or changing a wireframe
 
-1. Add or edit `src/content/<role>/<flow-id>.ts`; it exports a `Flow`. New flows are also
-   imported and listed in `src/content/index.ts` (the order there is the sidebar order).
-   Fill every required field of the flow and of each screen (`id`, `title`, `environment`,
-   `actor`, `entryPoint`, `objective`, `visibleData`, `primaryAction`). `source` is the path of
-   the matching document under `docs/wireframes/`.
+1. Add or edit `src/content/<role>/<flow-id>.ts`; it exports a `Flow` with `role`, optional
+   `section` and `source` (the matching document under `docs/wireframes/`). New flows are also
+   imported and listed in `src/content/index.ts`; the order there is the sidebar order.
+   Each screen needs `id`, `title`, `environment`, `actor`, `entryPoint`, `objective`,
+   `visibleData`, `primaryAction`; add `layout` to draw it as a wireframe (use `helpers.ts`).
 2. Use screen ids that are unique inside the flow and keep the prefix style already used
-   there (for example `REG-01`, `OWN-01`, `PUB-01`). `nextScreen` is either a screen id of the
-   same flow or free text naming a destination outside the flow (for example
-   `Trang chủ cơ sở`); a value shaped like an id must exist. An arrow written in
-   `primaryAction` or `secondaryActions` (`→ PRM-03`) must point to an existing screen.
-3. Write the descriptive text in Vietnamese, in user-facing language: no API routes,
+   there (for example `REG-01`, `OWN-01`, `PUB-01`). `nextScreen` is a screen id, a
+   `flow-id/screen-id`, or free text naming a destination outside the flow (for example
+   `Trang chủ cơ sở`); every id-shaped part must exist. An arrow written in `primaryAction` or
+   `secondaryActions` (`→ PRM-03`) must point to a screen of the same flow; write cross-flow
+   hints without an arrow.
+3. Set `environment` to say where the screen runs: `FLUTTER_APP` or `REACT_PWA` (in the app),
+   `WEB_PUBLIC` (a page opened from a link before login) or `TRANSITION` (link into the app).
+4. Write the descriptive text in Vietnamese, in user-facing language: no API routes,
    database names or raw backend status names (this matches the backend wireframe rules).
-4. Take content from the matching document in `docs/wireframes/<role>/` or from the
-   backend repository, not from memory.
-5. Run `npm run check:content`. It checks the rules above and that every `source` file exists,
-   prints one line per error (flow, screen id, message) and exits non-zero on failure. In
-   development the same errors are logged to the browser console at startup.
+5. Take content from the matching document in `docs/wireframes/<role>/` or from the
+   backend repository, not from memory. Plan names, prices and limits come from
+   `content/karaoke-owner/plan-catalog.ts`.
+6. Run `npm run check:content`. It checks the rules above, block types, icon names, `goto`
+   targets, the public-link rule and that every `source` file exists, prints one line per error
+   (flow, screen id, message) and exits non-zero on failure. In development the same errors are
+   logged to the browser console at startup.
 
 Reuse the design-system components and the CSS variables in
 `src/shared/ui/tokens.css` instead of adding new colours or one-off styles. Styles are plain CSS
@@ -143,12 +169,15 @@ component.
 
 ## Known gaps
 
-- Only 15 flows are in the catalog, while `docs/wireframes/` holds about 40 documents. Most
-  roles (staff, cashier, collaborator, restaurant, common) are not in the app yet.
-- Some screens named in the documents are missing from the data: `ONB-02` (staff onboarding),
-  `PRM-07` (staff permissions), `REL-02` and `MNT-02` (app releases). The flows that point to
-  them say so in their action text instead of linking.
-- Only `PUB-01` has a hand-built mockup; every other screen uses the generic one.
+- Only the Owner Karaoke flows (15 flows, 154 screens with the Admin ones) are drawn as layouts and
+  cover their documents. The other roles (staff, cashier, collaborator, restaurant, common) are not
+  in the app yet; the Blink Admin flows still use the generic mockup.
+- The three Admin screens of `subscriptions-owner-management` (`ADM-01` to `ADM-03`) use the
+  generic admin mockup, not layouts.
+- `karaoke-role-permissions.md` and `karaoke-staff-permissions.md` still describe an Owner option to
+  lock a blocked permission. The business rules no longer have it, so the wireframes do not draw it;
+  update those documents in the backend repository.
+- `CUSTOM_MOCKUPS` is empty; no screen needs a hand-built mockup now.
 
 ## Git
 

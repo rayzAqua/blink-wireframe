@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useSelection, useWorkspace } from "../workspace";
 import { ROLES } from "../../content/roles";
+import { SECTIONS } from "../../content/sections";
 import { ENVIRONMENTS } from "../../domain/environments";
 import type { Flow, RoleId, Screen } from "../../domain/types";
 import "./Sidebar.css";
@@ -216,7 +217,7 @@ export const Sidebar: React.FC = () => {
               {/* Flows under group (Clean & minimal) */}
               {isGroupOpen && (
                 <div className="wireframe-sidebar__init-list">
-                  {group.items.map((init) => {
+                  {group.items.map((init, itemIndex) => {
                     const isCardOpen =
                       isSearching ||
                       isAllExpanded ||
@@ -226,11 +227,22 @@ export const Sidebar: React.FC = () => {
                       flows.findIndex((i) => i.id === init.id) + 1;
                     const formattedIndex = String(flowIndex).padStart(2, "0");
 
+                    const sectionLabel =
+                      init.section &&
+                      init.section !== group.items[itemIndex - 1]?.section
+                        ? SECTIONS.find((sec) => sec.id === init.section)?.label
+                        : undefined;
+
                     return (
                       <div
                         key={init.id}
                         className="wireframe-sidebar__init-card"
                       >
+                        {sectionLabel && (
+                          <div className="wireframe-sidebar__section">
+                            {sectionLabel}
+                          </div>
+                        )}
                         {/* Flow Item - Displays numbered index and flow title */}
                         <button
                           type="button"
