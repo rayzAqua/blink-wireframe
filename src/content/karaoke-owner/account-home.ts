@@ -74,7 +74,7 @@ const menu: Block[] = [
     type: 'listGroup',
     label: 'Tài khoản',
     rows: [
-      { icon: 'user', title: 'Cập nhật thông tin tài khoản', chevron: true },
+      { icon: 'user', title: 'Cập nhật thông tin tài khoản', goto: 'ACC-12' },
       { icon: 'lock', title: 'Phương thức đăng nhập', chevron: true },
       { icon: 'log-out', title: 'Đăng xuất', tone: 'danger', goto: 'ACC-04' },
     ],
@@ -82,6 +82,14 @@ const menu: Block[] = [
 ];
 
 const appBar: Block = { type: 'appBar', title: 'Tài khoản', actions: ['bell'] };
+
+/** The Owner's own account: avatar and full name; tapping opens the account update screen. */
+const profile: Block = {
+  type: 'profile',
+  name: 'Nguyễn Văn Owner',
+  subtitle: 'Chủ cơ sở · chạm để cập nhật thông tin tài khoản',
+  goto: 'ACC-12',
+};
 
 const common = {
   environment: 'FLUTTER_APP' as const,
@@ -97,6 +105,7 @@ const screens: Screen[] = [
     objective:
       'Xem thông tin chi nhánh đang chọn, đổi chi nhánh và mở các chức năng vận hành, kinh doanh, cài đặt và tài khoản.',
     visibleData: [
+      'Thông tin tài khoản của Owner: avatar và họ và tên (chạm để cập nhật)',
       'Ảnh bìa, logo, tên cơ sở, tích xanh hậu kiểm, nhãn tên gói',
       'Địa chỉ, hotline, giờ mở cửa, trạng thái vận hành',
       'Bốn nhóm nút: Vận hành quán, Khách hàng và kinh doanh, Cài đặt, Tài khoản',
@@ -108,7 +117,7 @@ const screens: Screen[] = [
       'Đăng xuất → ACC-04',
     ],
     nextScreen: 'ACC-10',
-    layout: [appBar, hero(), ...menu],
+    layout: [appBar, profile, hero(), ...menu],
   },
   {
     ...common,
@@ -130,6 +139,7 @@ const screens: Screen[] = [
     ],
     layout: [
       appBar,
+      profile,
       hero(),
       {
         type: 'bottomSheet',
@@ -190,7 +200,13 @@ const screens: Screen[] = [
     ],
     primaryAction: 'Thông báo tự tắt → ACC-01',
     nextScreen: 'ACC-01',
-    layout: [appBar, hero(), ...menu, { type: 'toast', text: 'Sắp có' }],
+    layout: [
+      appBar,
+      profile,
+      hero(),
+      ...menu,
+      { type: 'toast', text: 'Sắp có' },
+    ],
   },
   {
     ...common,
@@ -211,6 +227,7 @@ const screens: Screen[] = [
     ],
     layout: [
       appBar,
+      profile,
       hero(),
       ...menu,
       {
@@ -242,7 +259,7 @@ const screens: Screen[] = [
     ],
     primaryAction: 'Tải xong → ACC-01',
     nextScreen: 'ACC-01',
-    layout: [appBar, { type: 'skeleton', lines: 3 }, menu[2], menu[3]],
+    layout: [appBar, profile, { type: 'skeleton', lines: 3 }, menu[2], menu[3]],
   },
   {
     ...common,
@@ -260,6 +277,7 @@ const screens: Screen[] = [
     nextScreen: 'ACC-05',
     layout: [
       appBar,
+      profile,
       {
         type: 'alert',
         variant: 'danger',
@@ -292,6 +310,7 @@ const screens: Screen[] = [
     ],
     layout: [
       appBar,
+      profile,
       {
         type: 'alert',
         variant: 'warning',
@@ -320,6 +339,7 @@ const screens: Screen[] = [
     nextScreen: 'ACC-10',
     layout: [
       appBar,
+      profile,
       {
         type: 'alert',
         variant: 'danger',
@@ -346,6 +366,7 @@ const screens: Screen[] = [
     nextScreen: 'ACC-02',
     layout: [
       appBar,
+      profile,
       {
         type: 'alert',
         variant: 'neutral',
@@ -534,6 +555,89 @@ const screens: Screen[] = [
             chevron: true,
           },
           { icon: 'landmark', title: 'Tài khoản ngân hàng', goto: 'ACC-10' },
+        ],
+      },
+    ],
+  },
+  {
+    ...common,
+    id: 'ACC-12',
+    title: 'Cập nhật thông tin tài khoản',
+    entryPoint:
+      'Chạm phần thông tin tài khoản (avatar và họ tên) ở đầu màn Tài khoản, hoặc dòng Cập nhật thông tin tài khoản',
+    objective:
+      'Xem và sửa hồ sơ cá nhân của Owner: avatar, họ và tên, ngày sinh, giới tính, biệt danh, email; mở xác minh danh tính CCCD.',
+    visibleData: [
+      'Avatar và họ và tên',
+      'Ngày sinh, giới tính (Nam hoặc Nữ; có thể để trống)',
+      'Biệt danh, email',
+      'Trạng thái xác minh danh tính CCCD',
+    ],
+    userInput: [
+      'Avatar',
+      'Họ và tên',
+      'Ngày sinh',
+      'Giới tính',
+      'Biệt danh',
+      'Email',
+    ],
+    primaryAction: 'Lưu → ACC-01',
+    secondaryActions: ['Huỷ → ACC-01'],
+    nextScreen: 'ACC-01',
+    errorsOrOutcomes: [
+      'Sau khi tài khoản đã có số định danh, họ tên, ngày sinh và giới tính chỉ đổi được bằng cách quét lại CCCD',
+      'Thay đổi thật các thông tin đã xác minh sẽ gỡ tích xanh danh tính cá nhân',
+    ],
+    layout: [
+      { type: 'appBar', title: 'Thông tin tài khoản', back: true },
+      {
+        type: 'profile',
+        name: 'Nguyễn Văn Owner',
+        subtitle: 'Chạm để đổi ảnh đại diện',
+        verified: true,
+      },
+      {
+        type: 'field',
+        kind: 'input',
+        label: 'Họ và tên',
+        value: 'Nguyễn Văn Owner',
+      },
+      { type: 'field', kind: 'input', label: 'Ngày sinh', value: '15/06/1985' },
+      {
+        type: 'field',
+        kind: 'select',
+        label: 'Giới tính',
+        value: 'Nam',
+        options: ['Nam', 'Nữ'],
+      },
+      { type: 'field', kind: 'input', label: 'Biệt danh', value: 'Anh Owner' },
+      {
+        type: 'field',
+        kind: 'input',
+        label: 'Email',
+        value: 'owner@example.com',
+      },
+      {
+        type: 'listGroup',
+        rows: [
+          {
+            icon: 'badge-check',
+            title: 'Xác minh danh tính CCCD',
+            description: 'Đã xác minh',
+            chevron: true,
+          },
+        ],
+      },
+      {
+        type: 'alert',
+        variant: 'info',
+        text: 'Họ tên, ngày sinh và giới tính của tài khoản đã xác minh chỉ đổi được bằng cách quét lại CCCD. Thay đổi thật sẽ gỡ tích xanh danh tính.',
+      },
+      {
+        type: 'actions',
+        buttons: [
+          { label: 'Lưu', goto: 'ACC-01' },
+          { label: 'Huỷ', variant: 'secondary', goto: 'ACC-01' },
         ],
       },
     ],

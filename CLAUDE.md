@@ -91,7 +91,7 @@ use the generic mockup. `domain/environments.ts` decides the badge, the device f
 (`mobile`, `browser`, `admin`), the simulated address and the access kind of each environment.
 
 **Layouts and blocks.** A layout is a list of blocks (`Block` in `domain/types.ts`): `appBar`,
-`hero`, `heading`, `text`, `keyValue`, `listGroup`, `field`, `tabs`, `stepper`, `progress`,
+`hero`, `profile` (avatar and name of a person, tappable), `heading`, `text`, `keyValue`, `listGroup`, `field`, `tabs`, `stepper`, `progress`,
 `cardList`, `table`, `alert`, `empty`, `skeleton`, `actions`, and the overlays `bottomSheet`,
 `modal`, `toast` (drawn open, inside the device frame). Tappable blocks take `goto`: a screen id of
 the same flow, or `flow-id/screen-id` for another flow. Icons are names from `ICON_NAMES`;
@@ -177,6 +177,9 @@ component.
 - `karaoke-role-permissions.md` and `karaoke-staff-permissions.md` still describe an Owner option to
   lock a blocked permission. The business rules no longer have it, so the wireframes do not draw it;
   update those documents in the backend repository.
+- `account-home.md` in `docs/wireframes/` does not describe the Owner account card (avatar and full
+  name at the top of the Account screen, opening the account update screen `ACC-12`). The wireframe
+  has it; update the document in the backend repository.
 - `CUSTOM_MOCKUPS` is empty; no screen needs a hand-built mockup now.
 
 ## Git

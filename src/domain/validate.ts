@@ -13,6 +13,7 @@ const NEXT_TARGET = new RegExp(`(?:([a-z0-9-]+)/)?(${ID_PATTERN})`, 'g');
 
 const BLOCK_TYPES = new Set([
   'appBar',
+  'profile',
   'hero',
   'heading',
   'text',
@@ -169,6 +170,7 @@ function blockRefs(block: Block): { gotos: string[]; icons: string[] } {
       block.actions?.forEach(icon);
       break;
     case 'hero':
+    case 'profile':
     case 'alert':
       goto(block.goto);
       break;

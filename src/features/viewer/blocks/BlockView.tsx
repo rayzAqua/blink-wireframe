@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import {
   Alert,
   Avatar,
@@ -126,6 +126,40 @@ export function BlockView({
         </button>
       ) : (
         <div className="blocks__hero">{content}</div>
+      );
+    }
+    case 'profile': {
+      const content = (
+        <>
+          <Avatar name={block.name} size="lg" />
+          <span className="blocks__profile-text">
+            <strong>
+              {block.name}
+              {block.verified && (
+                <span className="blocks__tick" title="Đã xác minh danh tính">
+                  ✔
+                </span>
+              )}
+            </strong>
+            {block.subtitle && (
+              <span className="blocks__muted">{block.subtitle}</span>
+            )}
+          </span>
+          {block.goto && (
+            <ChevronRight size={18} className="blocks__profile-chevron" />
+          )}
+        </>
+      );
+      return block.goto ? (
+        <button
+          type="button"
+          className="blocks__profile blocks__profile--tap"
+          onClick={() => ctx.go(block.goto as string)}
+        >
+          {content}
+        </button>
+      ) : (
+        <div className="blocks__profile">{content}</div>
       );
     }
     case 'heading':

@@ -89,6 +89,13 @@ export type Block =
       logo?: boolean;
       goto?: string;
     }
+  | {
+      type: 'profile';
+      name: string;
+      subtitle?: string;
+      verified?: boolean;
+      goto?: string;
+    }
   | { type: 'heading'; text: string }
   | { type: 'text'; text: string; muted?: boolean }
   | { type: 'keyValue'; rows: { label: string; value: string }[] }
