@@ -1,4 +1,6 @@
 import type { Flow } from '../domain/types.ts';
+import { bookingTagging } from './karaoke-owner/booking-tagging.ts';
+import { karaokeRoomAvailability } from './karaoke-owner/karaoke-room-availability.ts';
 import { accountHome } from './karaoke-owner/account-home.ts';
 import { karaokePartnerRegistration } from './karaoke-owner/karaoke-partner-registration.ts';
 import { karaokeBranchCreation } from './karaoke-owner/karaoke-branch-creation.ts';
@@ -22,6 +24,8 @@ export const CATALOG: Flow[] = [
   karaokePartnerRegistration,
   karaokeBranchCreation,
   karaokeFloors,
+  karaokeRoomAvailability,
+  bookingTagging,
   karaokeRoomManagement,
   karaokeManagerAppointments,
   karaokeStaffOnboarding,

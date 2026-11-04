@@ -516,7 +516,7 @@ const screens: Screen[] = [
             icon: 'tag',
             title: 'Nhãn đơn',
             description: 'Tạo, sửa, ngừng dùng nhãn',
-            chevron: true,
+            goto: 'booking-tagging/TAG-01',
           },
           {
             icon: 'percent',
