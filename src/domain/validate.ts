@@ -10,6 +10,7 @@ export interface ContentError {
 const ID_PATTERN = '[A-Z]{2,6}-[A-Z0-9]+';
 const ARROW_TARGET = new RegExp(`→\\s*(${ID_PATTERN})`, 'g');
 const ID_TOKEN = new RegExp(ID_PATTERN, 'g');
+const NEXT_TARGET = new RegExp(`(?:([a-z0-9-]+)/)?(${ID_PATTERN})`, 'g');
 
 const BLOCK_TYPES = new Set([
   'appBar',
@@ -34,6 +35,14 @@ const BLOCK_TYPES = new Set([
 ]);
 
 type Add = (flowId: string, message: string, screenId?: string) => void;
+
+/** Targets named in a nextScreen value: `ID` (same flow) or `flow-id/ID` (another flow). */
+function nextScreenTargets(value?: string): string[] {
+  const targets: string[] = [];
+  for (const m of value?.matchAll(NEXT_TARGET) ?? [])
+    targets.push(m[1] ? `${m[1]}/${m[2]}` : m[2]);
+  return targets;
+}
 
 const isBlank = (value: string | undefined): boolean =>
   value === undefined || value.trim() === '';
@@ -73,7 +82,7 @@ export function validateCatalog(flows: Flow[], roles: Role[]): ContentError[] {
     }
 
     for (const screen of flow.screens) {
-      checkScreen(flow, screen, screenIds, add);
+      checkScreen(flow, screen, screenIds, flowsById, add);
       checkLayout(flow, screen, flowsById, add);
       checkPublicExits(flow, screen, flowsById, add);
     }
@@ -85,6 +94,7 @@ function checkScreen(
   flow: Flow,
   screen: Screen,
   screenIds: Set<string>,
+  flowsById: Map<string, Flow>,
   add: Add,
 ): void {
   for (const field of [
@@ -100,14 +110,14 @@ function checkScreen(
   if (screen.visibleData.length === 0)
     add(flow.id, 'empty visibleData', screen.id);
 
-  // nextScreen is a screen id of this flow, or free text naming a destination outside the flow
-  // (for example "Trang chủ cơ sở"). Every id-shaped token in it must exist, so
+  // nextScreen is a screen id (or `flow-id/screen-id`), or free text naming a destination outside
+  // the flow (for example "Trang chủ cơ sở"). Every id-shaped token in it must exist, so
   // "REC-02 hoặc REC-04" is checked too.
-  for (const token of screen.nextScreen?.match(ID_TOKEN) ?? []) {
-    if (!screenIds.has(token)) {
+  for (const target of nextScreenTargets(screen.nextScreen)) {
+    if (!resolveTarget(flow, target, flowsById)) {
       add(
         flow.id,
-        `nextScreen "${screen.nextScreen}" refers to missing screen ${token}`,
+        `nextScreen "${screen.nextScreen}" refers to missing screen ${target}`,
         screen.id,
       );
     }

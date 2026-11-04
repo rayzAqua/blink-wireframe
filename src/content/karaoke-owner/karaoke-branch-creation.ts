@@ -139,7 +139,7 @@ const screens: Screen[] = [
         variant: 'info',
         text: 'Chi nhánh có gói riêng, không kế thừa gói của chi nhánh khác. Gói có giá gửi yêu cầu sau khi tạo; hiện chỉ BASIC chọn được ngay.',
       },
-      planCards('BR-04'),
+      planCards('BR-04', ['BASIC']),
       {
         type: 'field',
         kind: 'radio',

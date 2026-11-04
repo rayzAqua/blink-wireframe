@@ -1,5 +1,6 @@
 import type { Flow } from '../domain/types.ts';
 import { subscriptionsOwnerManagement } from './karaoke-owner/subscriptions-owner-management.ts';
+import { karaokeOperationsReporting } from './karaoke-owner/karaoke-operations-reporting.ts';
 import { bookingTagging } from './karaoke-owner/booking-tagging.ts';
 import { karaokeRoomAvailability } from './karaoke-owner/karaoke-room-availability.ts';
 import { accountHome } from './karaoke-owner/account-home.ts';
@@ -35,6 +36,7 @@ export const CATALOG: Flow[] = [
   karaokeRolePermissions,
   karaokeStaffPermissions,
   cashierTerminalAuthentication,
+  karaokeOperationsReporting,
   subscriptions,
   authAdminSettings,
   authPolicyRollout,

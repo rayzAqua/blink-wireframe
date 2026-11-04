@@ -47,15 +47,24 @@ export const PLANS: PlanFact[] = [
   },
 ];
 
-/** One card per plan with the monthly price, the yearly price, the staff limit and Max360. */
-export function planCards(goto: string): Block {
+/**
+ * One card per plan with the monthly price, the yearly price, the staff limit and Max360.
+ * Only plans named in `selectable` can be tapped (they lead to `goto`).
+ */
+export function planCards(
+  goto: string,
+  selectable: readonly string[] = PLANS.map((p) => p.name),
+): Block {
   return {
     type: 'cardList',
     items: PLANS.map((plan) => ({
       icon: 'wallet' as const,
       title: plan.name,
       subtitle: `Theo tháng: ${plan.monthly} · Theo năm: ${plan.yearly} · ${plan.staff} · ${plan.max360 ? 'Có Max360' : 'Không Max360'}`,
-      goto,
+      goto: selectable.includes(plan.name) ? goto : undefined,
+      badge: selectable.includes(plan.name)
+        ? undefined
+        : 'Gửi yêu cầu sau khi tạo',
     })),
   };
 }
