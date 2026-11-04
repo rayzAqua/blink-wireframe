@@ -34,7 +34,7 @@ import {
   Skeleton,
   EmptyState,
   Table,
-} from '../../design-system';
+} from '../../shared/ui';
 import { useWireframe } from '../../context/WireframeContext';
 
 export const DesignSystemShowcase: React.FC = () => {

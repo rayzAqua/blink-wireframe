@@ -15,7 +15,7 @@ import {
   Input,
   Textarea,
   Modal,
-} from '../../design-system';
+} from '../../shared/ui';
 import './WireframeScreenViewer.css';
 
 export const WireframeScreenViewer: React.FC = () => {

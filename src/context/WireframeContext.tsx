@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import type { Flow, Screen } from '../domain/types';
 import { CATALOG } from '../content';
-import type { DeviceType } from '../design-system';
+import type { DeviceType } from '../shared/ui';
 
 interface WireframeContextValue {
   initiatives: Flow[];

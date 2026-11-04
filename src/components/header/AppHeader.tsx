@@ -13,9 +13,9 @@ import {
 } from 'lucide-react';
 import { useWireframe } from '../../context/WireframeContext';
 import { ROLES } from '../../content/roles';
-import { Button, SegmentedControl } from '../../design-system';
-import type { DeviceType } from '../../design-system';
-import logoImg from '../../assets/logo_image.png';
+import { Button, SegmentedControl } from '../../shared/ui';
+import type { DeviceType } from '../../shared/ui';
+import logoImg from '../../shared/assets/logo_image.png';
 import './AppHeader.css';
 
 export const AppHeader: React.FC = () => {

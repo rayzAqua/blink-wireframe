@@ -12,7 +12,7 @@ import {
   X,
 } from 'lucide-react';
 import { useWireframe } from '../../context/WireframeContext';
-import { Badge } from '../../design-system';
+import { Badge } from '../../shared/ui';
 import './ScreenSpecPanel.css';
 
 export const ScreenSpecPanel: React.FC = () => {
