@@ -1,0 +1,34 @@
+.progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-family: var(--font-sans);
+}
+
+.progress__meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+.progress__label { color: var(--color-text-main); }
+.progress__value { color: var(--color-text-muted); }
+
+.progress__track {
+  height: 8px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface-active);
+  overflow: hidden;
+}
+
+.progress__bar {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width var(--transition-smooth);
+}
+
+.progress__bar--primary { background-color: var(--color-primary); }
+.progress__bar--success { background-color: var(--color-success); }
+.progress__bar--warning { background-color: var(--color-warning); }
+.progress__bar--danger { background-color: var(--color-danger); }
