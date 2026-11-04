@@ -1,4 +1,5 @@
 import type { Flow } from '../domain/types.ts';
+import { accountHome } from './karaoke-owner/account-home.ts';
 import { karaokePartnerRegistration } from './karaoke-owner/karaoke-partner-registration.ts';
 import { karaokeBranchCreation } from './karaoke-owner/karaoke-branch-creation.ts';
 import { karaokeFloors } from './karaoke-owner/karaoke-floors.ts';
@@ -17,6 +18,7 @@ import { adminAudit } from './blink-admin/admin-audit.ts';
 
 /** All flows, in sidebar order. */
 export const CATALOG: Flow[] = [
+  accountHome,
   karaokePartnerRegistration,
   karaokeBranchCreation,
   karaokeFloors,

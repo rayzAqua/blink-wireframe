@@ -216,3 +216,8 @@
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-xl);
 }
+
+/* Blocks keep their natural height; the column scrolls instead of squeezing them. */
+.blocks__scroll > * {
+  flex-shrink: 0;
+}
