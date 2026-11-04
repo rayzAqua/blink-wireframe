@@ -1,4 +1,4 @@
-import type { EnvironmentId, Flow, Screen } from './types.ts';
+import type { AccessKind, EnvironmentId, Flow, Screen } from './types.ts';
 
 export type DeviceKind = 'mobile' | 'browser' | 'admin';
 
@@ -10,6 +10,8 @@ export interface EnvironmentConfig {
   label: string;
   badgeVariant: EnvironmentBadgeVariant;
   deviceKind: DeviceKind;
+  access: AccessKind;
+  accessLabel: string;
   simulatedUrl: (flow: Flow, screen: Screen) => string;
 }
 
@@ -22,6 +24,8 @@ export const ENVIRONMENTS: Record<EnvironmentId, EnvironmentConfig> = {
     label: '📱 FLUTTER APP',
     badgeVariant: 'env-flutter',
     deviceKind: 'mobile',
+    access: 'app',
+    accessLabel: 'Trong ứng dụng — cần đăng nhập',
     simulatedUrl: appUrl,
   },
   REACT_PWA: {
@@ -29,6 +33,8 @@ export const ENVIRONMENTS: Record<EnvironmentId, EnvironmentConfig> = {
     label: '🖥️ REACT PWA',
     badgeVariant: 'env-react',
     deviceKind: 'mobile',
+    access: 'app',
+    accessLabel: 'Trong ứng dụng — cần đăng nhập',
     simulatedUrl: appUrl,
   },
   WEB_PUBLIC: {
@@ -36,6 +42,8 @@ export const ENVIRONMENTS: Record<EnvironmentId, EnvironmentConfig> = {
     label: '🌐 WEB CÔNG KHAI',
     badgeVariant: 'env-public',
     deviceKind: 'browser',
+    access: 'public-link',
+    accessLabel: 'Link công khai — mở được khi chưa đăng nhập',
     simulatedUrl: () => 'blink.nexlink.vn/invite/branch-karaoke#token-3days',
   },
   TRANSITION: {
@@ -43,6 +51,8 @@ export const ENVIRONMENTS: Record<EnvironmentId, EnvironmentConfig> = {
     label: '↗️ CHUYỂN TIẾP',
     badgeVariant: 'env-transition',
     deviceKind: 'browser',
+    access: 'transition',
+    accessLabel: 'Chuyển tiếp — từ link sang ứng dụng',
     simulatedUrl: appUrl,
   },
   ADMIN_UI: {
@@ -50,6 +60,8 @@ export const ENVIRONMENTS: Record<EnvironmentId, EnvironmentConfig> = {
     label: '🖥️ ADMIN UI',
     badgeVariant: 'env-admin',
     deviceKind: 'admin',
+    access: 'app',
+    accessLabel: 'Trang quản trị Blink',
     simulatedUrl: (flow) => `https://admin.blink.nexlink.vn/${flow.id}`,
   },
 };

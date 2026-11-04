@@ -1,4 +1,5 @@
-import type { Flow, Role, Screen } from './types.ts';
+import { isIconName } from './icons.ts';
+import type { Block, Flow, Role, Screen } from './types.ts';
 
 export interface ContentError {
   flowId: string;
@@ -9,6 +10,30 @@ export interface ContentError {
 const ID_PATTERN = '[A-Z]{2,6}-[A-Z0-9]+';
 const ARROW_TARGET = new RegExp(`→\\s*(${ID_PATTERN})`, 'g');
 const ID_TOKEN = new RegExp(ID_PATTERN, 'g');
+
+const BLOCK_TYPES = new Set([
+  'appBar',
+  'hero',
+  'heading',
+  'text',
+  'keyValue',
+  'listGroup',
+  'field',
+  'tabs',
+  'stepper',
+  'progress',
+  'cardList',
+  'table',
+  'alert',
+  'empty',
+  'skeleton',
+  'actions',
+  'bottomSheet',
+  'modal',
+  'toast',
+]);
+
+type Add = (flowId: string, message: string, screenId?: string) => void;
 
 const isBlank = (value: string | undefined): boolean =>
   value === undefined || value.trim() === '';
@@ -25,6 +50,7 @@ export function validateCatalog(flows: Flow[], roles: Role[]): ContentError[] {
 
   const roleIds = new Set(roles.map((r) => r.id));
   const flowIds = new Set<string>();
+  const flowsById = new Map(flows.map((f) => [f.id, f]));
 
   for (const flow of flows) {
     if (flowIds.has(flow.id)) add(flow.id, 'duplicate flow id');
@@ -48,6 +74,8 @@ export function validateCatalog(flows: Flow[], roles: Role[]): ContentError[] {
 
     for (const screen of flow.screens) {
       checkScreen(flow, screen, screenIds, add);
+      checkLayout(flow, screen, flowsById, add);
+      checkPublicExits(flow, screen, flowsById, add);
     }
   }
   return errors;
@@ -57,7 +85,7 @@ function checkScreen(
   flow: Flow,
   screen: Screen,
   screenIds: Set<string>,
-  add: (flowId: string, message: string, screenId?: string) => void,
+  add: Add,
 ): void {
   for (const field of [
     'id',
@@ -95,6 +123,126 @@ function checkScreen(
           screen.id,
         );
       }
+    }
+  }
+}
+
+/** Finds the screen a `goto` or `nextScreen` value names: same flow, or `flow-id/screen-id`. */
+function resolveTarget(
+  flow: Flow,
+  target: string,
+  flowsById: Map<string, Flow>,
+): Screen | undefined {
+  const slash = target.indexOf('/');
+  const targetFlow =
+    slash === -1 ? flow : flowsById.get(target.slice(0, slash));
+  const screenId = slash === -1 ? target : target.slice(slash + 1);
+  return targetFlow?.screens.find((s) => s.id === screenId);
+}
+
+/** Calls `visit` for every block, including blocks nested in sheets and modals. */
+function walkBlocks(blocks: Block[], visit: (block: Block) => void): void {
+  for (const block of blocks) {
+    visit(block);
+    if (block.type === 'bottomSheet' || block.type === 'modal')
+      walkBlocks(block.blocks, visit);
+  }
+}
+
+/** Every `goto` and icon name written in one block (not in nested blocks). */
+function blockRefs(block: Block): { gotos: string[]; icons: string[] } {
+  const gotos: string[] = [];
+  const icons: string[] = [];
+  const goto = (value?: string) => value && gotos.push(value);
+  const icon = (value?: string) => value && icons.push(value);
+  switch (block.type) {
+    case 'appBar':
+      block.actions?.forEach(icon);
+      break;
+    case 'hero':
+    case 'alert':
+      goto(block.goto);
+      break;
+    case 'empty':
+      icon(block.icon);
+      goto(block.goto);
+      break;
+    case 'listGroup':
+      block.rows.forEach((row) => {
+        icon(row.icon);
+        goto(row.goto);
+      });
+      break;
+    case 'cardList':
+      block.items.forEach((item) => {
+        icon(item.icon);
+        goto(item.goto);
+      });
+      break;
+    case 'actions':
+      block.buttons.forEach((button) => goto(button.goto));
+      break;
+    case 'modal':
+      block.buttons?.forEach((button) => goto(button.goto));
+      break;
+    default:
+      break;
+  }
+  return { gotos, icons };
+}
+
+function checkLayout(
+  flow: Flow,
+  screen: Screen,
+  flowsById: Map<string, Flow>,
+  add: Add,
+): void {
+  if (!screen.layout) return;
+  walkBlocks(screen.layout, (block) => {
+    if (!BLOCK_TYPES.has(block.type)) {
+      add(flow.id, `unknown block type "${block.type}"`, screen.id);
+      return;
+    }
+    const { gotos, icons } = blockRefs(block);
+    for (const name of icons) {
+      if (!isIconName(name)) add(flow.id, `unknown icon "${name}"`, screen.id);
+    }
+    for (const target of gotos) {
+      if (!resolveTarget(flow, target, flowsById)) {
+        add(flow.id, `goto "${target}" does not exist`, screen.id);
+      }
+    }
+  });
+}
+
+/** A public link page may only lead to other public pages or to a transition screen. */
+function checkPublicExits(
+  flow: Flow,
+  screen: Screen,
+  flowsById: Map<string, Flow>,
+  add: Add,
+): void {
+  if (screen.environment !== 'WEB_PUBLIC') return;
+  const targets: string[] = [];
+  for (const token of screen.nextScreen?.match(ID_TOKEN) ?? [])
+    targets.push(token);
+  if (screen.layout) {
+    walkBlocks(screen.layout, (block) => {
+      if (BLOCK_TYPES.has(block.type)) targets.push(...blockRefs(block).gotos);
+    });
+  }
+  for (const target of targets) {
+    const found = resolveTarget(flow, target, flowsById);
+    if (
+      found &&
+      found.environment !== 'WEB_PUBLIC' &&
+      found.environment !== 'TRANSITION'
+    ) {
+      add(
+        flow.id,
+        `public link screen leads straight to ${found.environment} screen ${found.id}; go through a transition screen`,
+        screen.id,
+      );
     }
   }
 }
