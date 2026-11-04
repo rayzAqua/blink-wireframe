@@ -8,6 +8,8 @@ export interface ContentError {
 
 const ARROW_TARGET = /→\s*([A-Z]{2,4}-\d{2})/g;
 
+const SCREEN_ID = /^[A-Z]{2,4}-[A-Z0-9]+$/;
+
 const isBlank = (value: string | undefined): boolean =>
   value === undefined || value.trim() === '';
 
@@ -39,7 +41,8 @@ export function validateCatalog(flows: Flow[], roles: Role[]): ContentError[] {
 
     const screenIds = new Set<string>();
     for (const screen of flow.screens) {
-      if (screenIds.has(screen.id)) add(flow.id, 'duplicate screen id', screen.id);
+      if (screenIds.has(screen.id))
+        add(flow.id, 'duplicate screen id', screen.id);
       screenIds.add(screen.id);
     }
 
@@ -56,12 +59,26 @@ function checkScreen(
   screenIds: Set<string>,
   add: (flowId: string, message: string, screenId?: string) => void,
 ): void {
-  for (const field of ['id', 'title', 'actor', 'entryPoint', 'objective', 'primaryAction'] as const) {
+  for (const field of [
+    'id',
+    'title',
+    'actor',
+    'entryPoint',
+    'objective',
+    'primaryAction',
+  ] as const) {
     if (isBlank(screen[field])) add(flow.id, `empty ${field}`, screen.id);
   }
-  if (screen.visibleData.length === 0) add(flow.id, 'empty visibleData', screen.id);
+  if (screen.visibleData.length === 0)
+    add(flow.id, 'empty visibleData', screen.id);
 
-  if (screen.nextScreen !== undefined && !screenIds.has(screen.nextScreen)) {
+  // nextScreen is either a screen id of this flow or free text for a destination outside
+  // the flow (for example "Trang chủ cơ sở"). Only a value shaped like an id must exist.
+  if (
+    screen.nextScreen !== undefined &&
+    SCREEN_ID.test(screen.nextScreen) &&
+    !screenIds.has(screen.nextScreen)
+  ) {
     add(flow.id, `nextScreen "${screen.nextScreen}" does not exist`, screen.id);
   }
 
@@ -69,7 +86,11 @@ function checkScreen(
   for (const text of actions) {
     for (const match of text.matchAll(ARROW_TARGET)) {
       if (!screenIds.has(match[1])) {
-        add(flow.id, `action "${text}" points to missing screen ${match[1]}`, screen.id);
+        add(
+          flow.id,
+          `action "${text}" points to missing screen ${match[1]}`,
+          screen.id,
+        );
       }
     }
   }

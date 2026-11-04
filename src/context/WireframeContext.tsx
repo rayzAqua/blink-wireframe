@@ -1,12 +1,12 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
-import type { WireframeInitiative, WireframeScreenSpec } from '../types/wireframe';
-import { WIREFRAME_INITIATIVES } from '../data/wireframe-registry';
+import type { Flow, Screen } from '../domain/types';
+import { CATALOG } from '../content';
 import type { DeviceType } from '../design-system';
 
 interface WireframeContextValue {
-  initiatives: WireframeInitiative[];
-  activeInitiative: WireframeInitiative;
-  activeScreen: WireframeScreenSpec;
+  initiatives: Flow[];
+  activeInitiative: Flow;
+  activeScreen: Screen;
   selectInitiative: (initiativeId: string) => void;
   selectScreen: (screenId: string) => void;
   deviceType: DeviceType;
@@ -90,8 +90,8 @@ export const WireframeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   // Find active initiative
   const activeInitiative = useMemo(() => {
     return (
-      WIREFRAME_INITIATIVES.find((i) => i.id === selectedInitiativeId) ||
-      WIREFRAME_INITIATIVES[0]
+      CATALOG.find((i) => i.id === selectedInitiativeId) ||
+      CATALOG[0]
     );
   }, [selectedInitiativeId]);
 
@@ -113,7 +113,7 @@ export const WireframeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
   const selectInitiative = (initiativeId: string) => {
     setSelectedInitiativeId(initiativeId);
-    const targetInit = WIREFRAME_INITIATIVES.find((i) => i.id === initiativeId);
+    const targetInit = CATALOG.find((i) => i.id === initiativeId);
     if (targetInit && targetInit.screens.length > 0) {
       setSelectedScreenId(targetInit.screens[0].id);
     }
@@ -135,7 +135,7 @@ export const WireframeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   return (
     <WireframeContext.Provider
       value={{
-        initiatives: WIREFRAME_INITIATIVES,
+        initiatives: CATALOG,
         activeInitiative,
         activeScreen,
         selectInitiative,

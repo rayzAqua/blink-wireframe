@@ -3,11 +3,7 @@ import type { EnvironmentId, Flow, Screen } from './types.ts';
 export type DeviceKind = 'mobile' | 'browser' | 'admin';
 
 export type EnvironmentBadgeVariant =
-  | 'env-flutter'
-  | 'env-react'
-  | 'env-public'
-  | 'env-admin'
-  | 'env-transition';
+  'env-flutter' | 'env-react' | 'env-public' | 'env-admin' | 'env-transition';
 
 export interface EnvironmentConfig {
   id: EnvironmentId;

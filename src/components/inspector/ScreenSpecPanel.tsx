@@ -181,7 +181,7 @@ export const ScreenSpecPanel: React.FC = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: 'var(--color-text-subtle)' }}>
             <FolderGit2 size={13} />
             <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-              {activeInitiative.folderPath}
+              {activeInitiative.source}
             </span>
           </div>
         </div>

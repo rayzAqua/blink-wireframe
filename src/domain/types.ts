@@ -1,9 +1,5 @@
 export type EnvironmentId =
-  | 'FLUTTER_APP'
-  | 'REACT_PWA'
-  | 'WEB_PUBLIC'
-  | 'TRANSITION'
-  | 'ADMIN_UI';
+  'FLUTTER_APP' | 'REACT_PWA' | 'WEB_PUBLIC' | 'TRANSITION' | 'ADMIN_UI';
 
 export type RoleId = 'karaoke-owner' | 'blink-admin';
 

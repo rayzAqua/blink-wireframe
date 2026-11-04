@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   Search,
   Building2,
-  Users,
   ShieldCheck,
   ChevronRight,
   FolderTree,
@@ -11,6 +10,8 @@ import {
   X,
 } from 'lucide-react';
 import { useWireframe } from '../../context/WireframeContext';
+import { ROLES } from '../../content/roles';
+import type { RoleId } from '../../domain/types';
 import './Sidebar.css';
 
 export const Sidebar: React.FC = () => {
@@ -27,36 +28,27 @@ export const Sidebar: React.FC = () => {
   } = useWireframe();
 
   // Accordion state: only 1 domain group and 1 flow/initiative open at a time
-  const [openGroupKey, setOpenGroupKey] = useState<string | null>(activeInitiative.category);
+  const [openGroupKey, setOpenGroupKey] = useState<string | null>(activeInitiative.role);
   const [openInitiativeId, setOpenInitiativeId] = useState<string | null>(activeInitiative.id);
   const [isAllExpanded, setIsAllExpanded] = useState<boolean>(false);
 
   // Sync open states when activeInitiative changes
   useEffect(() => {
-    setOpenGroupKey(activeInitiative.category);
+    setOpenGroupKey(activeInitiative.role);
     setOpenInitiativeId(activeInitiative.id);
-  }, [activeInitiative.id, activeInitiative.category]);
+  }, [activeInitiative.id, activeInitiative.role]);
 
-  const domainGroups = [
-    {
-      key: 'business-ops',
-      label: 'Cơ sở & Vận hành',
-      icon: <Building2 size={14} />,
-      items: initiatives.filter((i) => i.category === 'business-ops'),
-    },
-    {
-      key: 'human-resources',
-      label: 'Nhân sự & Phân quyền',
-      icon: <Users size={14} />,
-      items: initiatives.filter((i) => i.category === 'human-resources'),
-    },
-    {
-      key: 'admin-platform',
-      label: 'Quản trị Nền tảng (Admin)',
-      icon: <ShieldCheck size={14} />,
-      items: initiatives.filter((i) => i.category === 'admin-platform'),
-    },
-  ];
+  const ROLE_ICONS: Record<RoleId, React.ReactNode> = {
+    'karaoke-owner': <Building2 size={14} />,
+    'blink-admin': <ShieldCheck size={14} />,
+  };
+
+  const domainGroups = ROLES.map((role) => ({
+    key: role.id,
+    label: role.label,
+    icon: ROLE_ICONS[role.id],
+    items: initiatives.filter((i) => i.role === role.id),
+  }));
 
   // Accordion toggle for Domain Groups
   const handleGroupToggle = (groupKey: string) => {

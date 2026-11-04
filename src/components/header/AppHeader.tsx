@@ -12,6 +12,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { useWireframe } from '../../context/WireframeContext';
+import { ROLES } from '../../content/roles';
 import { Button, SegmentedControl } from '../../design-system';
 import type { DeviceType } from '../../design-system';
 import logoImg from '../../assets/logo_image.png';
@@ -67,7 +68,7 @@ export const AppHeader: React.FC = () => {
             <span className="app-header__title">Nexlink Blink</span>
             {viewMode === 'wireframes' && (
               <div className="app-header__breadcrumb">
-                <span className="app-header__bc-category">{activeInitiative.categoryLabel}</span>
+                <span className="app-header__bc-category">{ROLES.find((r) => r.id === activeInitiative.role)?.label}</span>
                 <span className="app-header__bc-sep">/</span>
                 <span className="app-header__bc-init">{activeInitiative.title}</span>
                 <span className="app-header__bc-sep">/</span>
