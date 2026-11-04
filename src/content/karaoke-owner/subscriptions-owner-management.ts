@@ -90,7 +90,7 @@ const screens: Screen[] = [
         variant: 'info',
         text: 'Gói mới áp dụng từ kỳ tiếp theo sau khi Admin xác nhận đã thu tiền. Ứng dụng không thanh toán trực tuyến.',
       },
-      planCards('SUB-04'),
+      planCards('SUB-04', undefined, ['Pro Max', 'Pro Ultra', 'Pro Ultra +']),
       {
         type: 'field',
         kind: 'radio',
@@ -103,6 +103,7 @@ const screens: Screen[] = [
         kind: 'radio',
         label: 'Cách trả khi mua theo năm',
         value: 'Trả theo tháng (12 kỳ × 5.000.000đ)',
+        helper: 'Ví dụ khi chọn gói Pro Max.',
         options: [
           'Trả cả năm một lần (60.000.000đ)',
           'Trả theo tháng (12 kỳ × 5.000.000đ)',

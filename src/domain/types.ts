@@ -83,6 +83,8 @@ export type Block =
       planTag?: string;
       lines?: string[];
       status?: string;
+      /** Colour of the status chip; defaults to success. */
+      statusTone?: Tone;
       cover?: boolean;
       logo?: boolean;
       goto?: string;

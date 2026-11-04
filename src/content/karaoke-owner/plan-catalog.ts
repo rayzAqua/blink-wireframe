@@ -51,13 +51,15 @@ export const PLANS: PlanFact[] = [
  * One card per plan with the monthly price, the yearly price, the staff limit and Max360.
  * Only plans named in `selectable` can be tapped (they lead to `goto`).
  */
+/** `only` limits the cards to the named plans, for example the plans above the current one. */
 export function planCards(
   goto: string,
   selectable: readonly string[] = PLANS.map((p) => p.name),
+  only: readonly string[] = PLANS.map((p) => p.name),
 ): Block {
   return {
     type: 'cardList',
-    items: PLANS.map((plan) => ({
+    items: PLANS.filter((plan) => only.includes(plan.name)).map((plan) => ({
       icon: 'wallet' as const,
       title: plan.name,
       subtitle: `Theo tháng: ${plan.monthly} · Theo năm: ${plan.yearly} · ${plan.staff} · ${plan.max360 ? 'Có Max360' : 'Không Max360'}`,

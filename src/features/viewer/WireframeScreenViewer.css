@@ -7,8 +7,13 @@
   padding: var(--space-6);
   overflow-y: auto;
   min-height: calc(100vh - 65px);
-  background: radial-gradient(circle at 50% 0%, var(--color-primary-glow) 0%, transparent 65%),
-              var(--color-bg-canvas);
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      var(--color-primary-glow) 0%,
+      transparent 65%
+    ),
+    var(--color-bg-canvas);
 }
 
 .screen-viewer__toolbar {

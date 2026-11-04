@@ -105,7 +105,10 @@ export function BlockView({
                 </p>
               ))}
               {block.status && (
-                <Badge variant="success" withDot>
+                <Badge
+                  variant={badgeVariant(block.statusTone ?? 'success')}
+                  withDot
+                >
                   {block.status}
                 </Badge>
               )}

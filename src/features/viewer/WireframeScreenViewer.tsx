@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Phone,
-  CheckCircle2,
-} from 'lucide-react';
+import { Phone, CheckCircle2 } from 'lucide-react';
 import { useSelection } from '../workspace';
 import { ENVIRONMENTS } from '../../domain/environments';
 import {
@@ -42,7 +39,14 @@ export const WireframeScreenViewer: React.FC = () => {
   // --------------------------------------------------------------------------
   const renderScreenMockup = () => {
     if (activeScreen.layout) {
-      return <BlocksRenderer blocks={activeScreen.layout} flow={activeFlow} screen={activeScreen} />;
+      return (
+        <BlocksRenderer
+          key={`${activeFlow.id}/${activeScreen.id}`}
+          blocks={activeScreen.layout}
+          flow={activeFlow}
+          screen={activeScreen}
+        />
+      );
     }
 
     const Custom = CUSTOM_MOCKUPS[activeScreen.id];
@@ -51,16 +55,39 @@ export const WireframeScreenViewer: React.FC = () => {
     // SPECIAL CASE 2: DESKTOP ADMIN UI SCREENS (SUB-01, AUD-01, etc.)
     if (activeScreen.environment === 'ADMIN_UI') {
       return (
-        <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div
+          style={{
+            padding: '24px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '20px',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div
+                style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+              >
                 <Badge variant="env-admin">🖥️ ADMIN UI</Badge>
-                <span style={{ fontSize: '12px', fontFamily: 'var(--font-mono)', color: 'var(--color-text-muted)' }}>
+                <span
+                  style={{
+                    fontSize: '12px',
+                    fontFamily: 'var(--font-mono)',
+                    color: 'var(--color-text-muted)',
+                  }}
+                >
                   Mã: {activeScreen.id}
                 </span>
               </div>
-              <h2 style={{ fontSize: '1.4rem', marginTop: '6px' }}>{activeScreen.title}</h2>
+              <h2 style={{ fontSize: '1.4rem', marginTop: '6px' }}>
+                {activeScreen.title}
+              </h2>
               <p style={{ fontSize: '0.85rem' }}>{activeScreen.objective}</p>
             </div>
 
@@ -68,7 +95,8 @@ export const WireframeScreenViewer: React.FC = () => {
               variant="primary"
               size="md"
               onClick={() => {
-                if (activeScreen.nextScreen) selectScreen(activeScreen.nextScreen);
+                if (activeScreen.nextScreen)
+                  selectScreen(activeScreen.nextScreen);
               }}
             >
               {activeScreen.primaryAction}
@@ -82,18 +110,29 @@ export const WireframeScreenViewer: React.FC = () => {
               <Badge variant="primary">{activeFlow.title}</Badge>
             </CardHeader>
             <CardBody>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '12px',
+                }}
+              >
                 {activeScreen.visibleData.map((item, idx) => (
-                  <div key={idx} style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '10px 14px',
-                    borderRadius: 'var(--radius-md)',
-                    backgroundColor: 'var(--color-surface-subtle)',
-                    border: '1px solid var(--color-border-subtle)',
-                  }}>
-                    <span style={{ fontSize: '13px', fontWeight: 500 }}>{item}</span>
+                  <div
+                    key={idx}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '10px 14px',
+                      borderRadius: 'var(--radius-md)',
+                      backgroundColor: 'var(--color-surface-subtle)',
+                      border: '1px solid var(--color-border-subtle)',
+                    }}
+                  >
+                    <span style={{ fontSize: '13px', fontWeight: 500 }}>
+                      {item}
+                    </span>
                     <Badge variant="success">Hoạt động</Badge>
                   </div>
                 ))}
@@ -110,7 +149,14 @@ export const WireframeScreenViewer: React.FC = () => {
         {/* Screen Top Bar */}
         <div className="mockup-header-nav">
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--color-primary)', fontWeight: 'bold' }}>
+            <span
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '12px',
+                color: 'var(--color-primary)',
+                fontWeight: 'bold',
+              }}
+            >
               {activeScreen.id}
             </span>
           </div>
@@ -126,13 +172,28 @@ export const WireframeScreenViewer: React.FC = () => {
         {/* User Input Section (if required for this screen) */}
         {activeScreen.userInput && activeScreen.userInput.length > 0 && (
           <Card highlightPrimary>
-            <CardBody style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-primary)' }}>
+            <CardBody
+              style={{
+                padding: '16px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px',
+              }}
+            >
+              <span
+                style={{
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  color: 'var(--color-primary)',
+                }}
+              >
                 Dữ Liệu Người Dùng Nhập
               </span>
 
               {activeScreen.userInput.map((field, idx) => {
-                const isPhone = field.toLowerCase().includes('số điện thoại') || field.toLowerCase().includes('sđt');
+                const isPhone =
+                  field.toLowerCase().includes('số điện thoại') ||
+                  field.toLowerCase().includes('sđt');
                 const isReason = field.toLowerCase().includes('lý do');
 
                 if (isPhone) {
@@ -181,14 +242,24 @@ export const WireframeScreenViewer: React.FC = () => {
         {activeScreen.visibleData && activeScreen.visibleData.length > 0 && (
           <Card variant="glass">
             <CardBody className="mockup-data-card" style={{ padding: '16px' }}>
-              <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text-muted)' }}>
+              <span
+                style={{
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  color: 'var(--color-text-muted)',
+                }}
+              >
                 Thông Tin Hiển Thị
               </span>
               {activeScreen.visibleData.map((data, idx) => (
                 <div key={idx} className="mockup-data-row">
                   <span className="mockup-data-label">{data}:</span>
                   <span className="mockup-data-value">
-                    {idx === 0 ? 'Karaoke Blink Sài Gòn' : idx === 1 ? '123 Nguyễn Thị Minh Khai' : 'Hợp lệ'}
+                    {idx === 0
+                      ? 'Karaoke Blink Sài Gòn'
+                      : idx === 1
+                        ? '123 Nguyễn Thị Minh Khai'
+                        : 'Hợp lệ'}
                   </span>
                 </div>
               ))}
@@ -213,26 +284,27 @@ export const WireframeScreenViewer: React.FC = () => {
             {activeScreen.primaryAction}
           </Button>
 
-          {activeScreen.secondaryActions && activeScreen.secondaryActions.length > 0 && (
-            <div style={{ display: 'flex', gap: '8px' }}>
-              {activeScreen.secondaryActions.map((sec, idx) => (
-                <Button
-                  key={idx}
-                  variant="secondary"
-                  size="sm"
-                  fullWidth
-                  onClick={() => {
-                    if (sec.includes('→')) {
-                      const nextId = sec.split('→')[1]?.trim();
-                      if (nextId) selectScreen(nextId);
-                    }
-                  }}
-                >
-                  {sec}
-                </Button>
-              ))}
-            </div>
-          )}
+          {activeScreen.secondaryActions &&
+            activeScreen.secondaryActions.length > 0 && (
+              <div style={{ display: 'flex', gap: '8px' }}>
+                {activeScreen.secondaryActions.map((sec, idx) => (
+                  <Button
+                    key={idx}
+                    variant="secondary"
+                    size="sm"
+                    fullWidth
+                    onClick={() => {
+                      if (sec.includes('→')) {
+                        const nextId = sec.split('→')[1]?.trim();
+                        if (nextId) selectScreen(nextId);
+                      }
+                    }}
+                  >
+                    {sec}
+                  </Button>
+                ))}
+              </div>
+            )}
         </div>
       </div>
     );
@@ -245,9 +317,21 @@ export const WireframeScreenViewer: React.FC = () => {
         <div className="screen-viewer__title-area">
           <span className="screen-viewer__badge">{activeScreen.id}</span>
           <div>
-            <h2 className="screen-viewer__screen-title">{activeScreen.title}</h2>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: 'var(--color-text-muted)' }}>
-              <span>Actor: <strong>{activeScreen.actor}</strong></span>
+            <h2 className="screen-viewer__screen-title">
+              {activeScreen.title}
+            </h2>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                fontSize: '12px',
+                color: 'var(--color-text-muted)',
+              }}
+            >
+              <span>
+                Actor: <strong>{activeScreen.actor}</strong>
+              </span>
               <span>•</span>
               <span>Điểm vào: {activeScreen.entryPoint}</span>
             </div>
@@ -281,7 +365,9 @@ export const WireframeScreenViewer: React.FC = () => {
             <Button
               variant="primary"
               onClick={() => {
-                alert(`Thao tác [${activeScreen.primaryAction}] đã được thực hiện an toàn!`);
+                alert(
+                  `Thao tác [${activeScreen.primaryAction}] đã được thực hiện an toàn!`,
+                );
                 setActiveModal(null);
               }}
               leftIcon={<CheckCircle2 size={16} />}
@@ -292,7 +378,9 @@ export const WireframeScreenViewer: React.FC = () => {
         }
       >
         <p style={{ fontSize: '0.9rem', color: 'var(--color-text-main)' }}>
-          Hệ thống sẽ thực hiện hành động: <strong>{activeScreen.primaryAction}</strong> theo đúng quy tắc nghiệp vụ wireframe.
+          Hệ thống sẽ thực hiện hành động:{' '}
+          <strong>{activeScreen.primaryAction}</strong> theo đúng quy tắc nghiệp
+          vụ wireframe.
         </p>
       </Modal>
     </main>

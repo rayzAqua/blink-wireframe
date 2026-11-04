@@ -9,7 +9,6 @@ export interface ContentError {
 
 const ID_PATTERN = '[A-Z]{2,6}-[A-Z0-9]+';
 const ARROW_TARGET = new RegExp(`→\\s*(${ID_PATTERN})`, 'g');
-const ID_TOKEN = new RegExp(ID_PATTERN, 'g');
 const NEXT_TARGET = new RegExp(`(?:([a-z0-9-]+)/)?(${ID_PATTERN})`, 'g');
 
 const BLOCK_TYPES = new Set([
@@ -234,8 +233,7 @@ function checkPublicExits(
 ): void {
   if (screen.environment !== 'WEB_PUBLIC') return;
   const targets: string[] = [];
-  for (const token of screen.nextScreen?.match(ID_TOKEN) ?? [])
-    targets.push(token);
+  targets.push(...nextScreenTargets(screen.nextScreen));
   if (screen.layout) {
     walkBlocks(screen.layout, (block) => {
       if (BLOCK_TYPES.has(block.type)) targets.push(...blockRefs(block).gotos);

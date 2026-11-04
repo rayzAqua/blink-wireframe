@@ -326,7 +326,7 @@ const screens: Screen[] = [
         title: 'Cơ sở đang bị hạn chế bởi Blink',
         text: 'Giờ mở cửa, ngân hàng, phòng và giá, cấu hình đặt phòng, quản lý Thu ngân đang bị khoá.',
       },
-      hero({ status: 'Hạn chế' }),
+      hero({ status: 'Hạn chế', statusTone: 'warning' }),
       ...menu,
     ],
   },
@@ -354,7 +354,12 @@ const screens: Screen[] = [
         actionLabel: 'Đổi chi nhánh',
         goto: 'ACC-02',
       },
-      hero({ status: 'Đã chấm dứt', verified: false, goto: undefined }),
+      hero({
+        status: 'Đã chấm dứt',
+        statusTone: 'neutral',
+        verified: false,
+        goto: undefined,
+      }),
       {
         type: 'listGroup',
         label: 'Vận hành quán',
