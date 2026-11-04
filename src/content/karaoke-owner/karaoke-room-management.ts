@@ -102,7 +102,8 @@ const roomForm = (
     type: 'field',
     kind: 'input',
     label: 'Ảnh phòng (tuỳ chọn)',
-    value: '2 ảnh',
+    value: '2/5 ảnh',
+    helper: 'Mỗi phòng tối đa 5 ảnh.',
   },
   {
     type: 'field',
@@ -147,7 +148,7 @@ const screens: Screen[] = [
       'Sức chứa (tuỳ chọn)',
       'Thứ tự ưu tiên',
       'Tầng (bắt buộc khi cơ sở dùng tầng)',
-      'Ảnh phòng',
+      'Ảnh phòng (tuỳ chọn, tối đa 5 ảnh mỗi phòng)',
       'Bảng giá theo khung giờ',
     ],
     userInput: ['Tên phòng', 'Sức chứa', 'Thứ tự', 'Tầng', 'Ảnh', 'Bảng giá'],
@@ -213,7 +214,12 @@ const screens: Screen[] = [
       {
         type: 'listGroup',
         rows: [
-          { icon: 'image', title: 'Quản lý ảnh', goto: 'ROOM-04' },
+          {
+            icon: 'image',
+            title: 'Quản lý ảnh',
+            description: '3/5 ảnh',
+            goto: 'ROOM-04',
+          },
           {
             icon: 'trash',
             title: 'Xoá phòng',
@@ -235,6 +241,7 @@ const screens: Screen[] = [
       'Danh sách ảnh và trạng thái xử lý',
       'Thứ tự ảnh',
       'Xem trước ảnh thường hoặc 360 độ',
+      'Số ảnh đã có trên tối đa 5 ảnh mỗi phòng (ví dụ 3/5)',
     ],
     primaryAction: 'Thêm ảnh rồi quay lại → ROOM-03',
     secondaryActions: ['Quay lại → ROOM-03'],
@@ -242,9 +249,12 @@ const screens: Screen[] = [
     errorsOrOutcomes: [
       'Ảnh lỗi hoặc chưa sẵn sàng: thay ảnh hoặc thử lại',
       'Xoá ảnh qua hộp xác nhận',
+      'Đủ 5 ảnh: khoá nút Thêm ảnh và báo giới hạn; xoá một ảnh mới thêm được ảnh khác',
+      'Chọn quá 5 ảnh cùng lúc: chỉ nhận 5 ảnh đầu và báo "Mỗi phòng tối đa 5 ảnh"',
     ],
     layout: [
       bar('Ảnh phòng 101'),
+      { type: 'keyValue', rows: [{ label: 'Số ảnh', value: '3/5' }] },
       {
         type: 'cardList',
         items: [
@@ -277,8 +287,13 @@ const screens: Screen[] = [
         title: 'Một ảnh không xử lý được',
         text: 'Thay ảnh khác hoặc thử tải lại.',
       },
+      {
+        type: 'alert',
+        variant: 'info',
+        text: 'Mỗi phòng tối đa 5 ảnh. Khi đủ 5 ảnh, xoá một ảnh để thêm ảnh khác.',
+      },
       buttons(
-        { label: 'Thêm ảnh' },
+        { label: 'Thêm ảnh (3/5)' },
         { label: 'Xong', variant: 'secondary', goto: 'ROOM-03' },
       ),
     ],
