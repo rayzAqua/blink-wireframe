@@ -9,7 +9,7 @@ import {
   ChevronsUpDown,
   X,
 } from 'lucide-react';
-import { useWireframe } from '../../context/WireframeContext';
+import { useWireframe } from '../workspace';
 import { ROLES } from '../../content/roles';
 import type { RoleId } from '../../domain/types';
 import './Sidebar.css';

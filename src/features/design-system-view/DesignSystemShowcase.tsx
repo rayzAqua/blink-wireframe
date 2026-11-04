@@ -35,7 +35,7 @@ import {
   EmptyState,
   Table,
 } from '../../shared/ui';
-import { useWireframe } from '../../context/WireframeContext';
+import { useWireframe } from '../workspace';
 
 export const DesignSystemShowcase: React.FC = () => {
   const { setViewMode } = useWireframe();

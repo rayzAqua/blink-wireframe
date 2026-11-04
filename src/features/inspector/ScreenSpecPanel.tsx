@@ -11,7 +11,7 @@ import {
   FolderGit2,
   X,
 } from 'lucide-react';
-import { useWireframe } from '../../context/WireframeContext';
+import { useWireframe } from '../workspace';
 import { Badge } from '../../shared/ui';
 import './ScreenSpecPanel.css';
 

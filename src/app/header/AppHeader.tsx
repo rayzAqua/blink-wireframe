@@ -11,7 +11,7 @@ import {
   PanelRightOpen,
   Sparkles,
 } from 'lucide-react';
-import { useWireframe } from '../../context/WireframeContext';
+import { useWireframe } from '../../features/workspace';
 import { ROLES } from '../../content/roles';
 import { Button, SegmentedControl } from '../../shared/ui';
 import type { DeviceType } from '../../shared/ui';

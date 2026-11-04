@@ -1,9 +1,9 @@
 import React from 'react';
-import { AppHeader } from '../components/header/AppHeader';
-import { Sidebar } from '../components/navigation/Sidebar';
-import { WireframeScreenViewer } from '../components/viewer/WireframeScreenViewer';
-import { ScreenSpecPanel } from '../components/inspector/ScreenSpecPanel';
-import { useWireframe } from '../context/WireframeContext';
+import { AppHeader } from './header/AppHeader';
+import { Sidebar } from '../features/navigation';
+import { WireframeScreenViewer } from '../features/viewer';
+import { ScreenSpecPanel } from '../features/inspector';
+import { useWireframe } from '../features/workspace';
 import './WireframeLayout.css';
 
 export const WireframeLayout: React.FC = () => {

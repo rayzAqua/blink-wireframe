@@ -4,7 +4,7 @@ import {
   CheckCircle2,
   ExternalLink,
 } from 'lucide-react';
-import { useWireframe } from '../../context/WireframeContext';
+import { useWireframe } from '../workspace';
 import {
   DeviceFrame,
   Button,
