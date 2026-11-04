@@ -174,7 +174,8 @@ const screens: Screen[] = [
       'Tạo tầng và phòng ban đầu hoặc bỏ qua để cấu hình sau. Bước cuối: bấm Tạo chi nhánh là tạo thành công ngay, không còn màn xác nhận riêng.',
     visibleData: [
       'Số tầng (tuỳ chọn)',
-      'Danh sách phòng ban đầu, ảnh và bảng giá từng phòng',
+      'Danh sách phòng ban đầu và bảng giá từng phòng',
+      'Ảnh phòng (tuỳ chọn): tối đa 5 ảnh mỗi phòng; đủ 5 ảnh thì khoá nút Thêm ảnh và báo giới hạn',
       'Không có loại phòng, trạng thái dọn phòng hay bảo trì',
       'Nút Tạo chi nhánh ở cuối bước',
     ],
@@ -186,6 +187,7 @@ const screens: Screen[] = [
       'Khoá nút khi đang gửi; gửi lại cùng thao tác trả về kết quả cũ thay vì tạo trùng',
       'Không tạo chi nhánh dở; thất bại thì không hiện trạng thái thành công',
       'Cấu trúc tầng, phòng hoặc giá sai: chỉ rõ mục cần sửa',
+      'Chọn quá 5 ảnh cho một phòng: chỉ nhận 5 ảnh đầu và báo "Mỗi phòng tối đa 5 ảnh"',
     ],
     layout: [
       bar('Tầng và phòng'),
@@ -197,12 +199,12 @@ const screens: Screen[] = [
           {
             icon: 'door-open',
             title: 'Phòng 101',
-            subtitle: 'Tầng 1 · sức chứa 10 · 250.000đ/giờ',
+            subtitle: 'Tầng 1 · sức chứa 10 · 250.000đ/giờ · ảnh 2/5',
           },
           {
             icon: 'door-open',
             title: 'Phòng 201',
-            subtitle: 'Tầng 2 · sức chứa 8 · 200.000đ/giờ',
+            subtitle: 'Tầng 2 · sức chứa 8 · 200.000đ/giờ · ảnh 5/5',
           },
         ],
       },

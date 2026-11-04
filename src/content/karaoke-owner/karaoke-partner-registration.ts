@@ -132,7 +132,8 @@ const screens: Screen[] = [
       'Có thể bỏ qua toàn bộ. Nếu nhập số tầng thì tạo danh sách tầng và gắn phòng vào tầng; nếu không thì phòng là danh sách thẳng. Bước cuối: bấm Tạo cơ sở là đăng ký thành công ngay, không còn màn xác nhận riêng.',
     visibleData: [
       'Số tầng (tuỳ chọn, tối đa 100)',
-      'Mỗi phòng: tên, sức chứa tuỳ chọn, ảnh tuỳ chọn, các khung giá',
+      'Mỗi phòng: tên, sức chứa tuỳ chọn, các khung giá',
+      'Ảnh phòng (tuỳ chọn): tối đa 5 ảnh mỗi phòng; đủ 5 ảnh thì khoá nút Thêm ảnh và báo giới hạn',
       'Không có loại phòng, trạng thái dọn phòng hay bảo trì',
       'Nút Tạo cơ sở ở cuối bước',
     ],
@@ -144,6 +145,7 @@ const screens: Screen[] = [
       'Khoá nút khi đang gửi; gửi lại do mất mạng trả đúng kết quả đã tạo, không tạo thêm cơ sở',
       'Một phần thất bại: không hiển thị cơ sở được tạo dở',
       'Cấu trúc tầng, phòng hoặc giá sai: chỉ rõ mục cần sửa',
+      'Chọn quá 5 ảnh cho một phòng: chỉ nhận 5 ảnh đầu và báo "Mỗi phòng tối đa 5 ảnh"',
     ],
     layout: [
       bar('Tầng và phòng'),
@@ -155,12 +157,12 @@ const screens: Screen[] = [
           {
             icon: 'door-open',
             title: 'Phòng 101',
-            subtitle: 'Tầng 1 · sức chứa 10 · 250.000đ/giờ',
+            subtitle: 'Tầng 1 · sức chứa 10 · 250.000đ/giờ · ảnh 2/5',
           },
           {
             icon: 'door-open',
             title: 'Phòng 201',
-            subtitle: 'Tầng 2 · sức chứa 8 · 200.000đ/giờ',
+            subtitle: 'Tầng 2 · sức chứa 8 · 200.000đ/giờ · ảnh 5/5',
           },
         ],
       },
