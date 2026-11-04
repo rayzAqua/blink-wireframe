@@ -188,8 +188,15 @@ const screens: Screen[] = [
         placeholder: '1 đến 500 ký tự',
       },
       { type: 'alert', variant: 'info', text: 'Thay đổi có hiệu lực ngay.' },
+      {
+        type: 'alert',
+        variant: 'danger',
+        title: 'Lỗi kết nối',
+        text: 'Lựa chọn và lý do vẫn được giữ. Bấm Thử lại để lưu.',
+      },
       buttons(
         { label: 'Lưu thay đổi', goto: 'PRM-05' },
+        { label: 'Thử lại', variant: 'ghost', goto: 'PRM-05' },
         { label: 'Quay lại chỉnh', variant: 'secondary', goto: 'PRM-03' },
       ),
     ],

@@ -45,7 +45,7 @@ const menu: Block[] = [
         title: 'Gói nhân sự',
         goto: 'subscriptions-owner-management/SUB-01',
       },
-      { icon: 'handshake', title: 'Cộng tác viên', chevron: true },
+      { icon: 'handshake', title: 'Cộng tác viên', goto: 'ACC-17' },
       { icon: 'qr-code', title: 'QR phòng', badge: 'Sắp có', goto: 'ACC-03' },
     ],
   },
@@ -53,8 +53,8 @@ const menu: Block[] = [
     type: 'listGroup',
     label: 'Khách hàng và kinh doanh',
     rows: [
-      { icon: 'handshake', title: 'Hợp tác đối tác', chevron: true },
-      { icon: 'book-user', title: 'Danh bạ khách hàng', chevron: true },
+      { icon: 'handshake', title: 'Hợp tác đối tác', goto: 'ACC-20' },
+      { icon: 'book-user', title: 'Danh bạ khách hàng', goto: 'ACC-24' },
       { icon: 'gift', title: 'Quà tặng', badge: 'Sắp có', goto: 'ACC-03' },
       { icon: 'mail', title: 'Lời mời phòng', badge: 'Sắp có', goto: 'ACC-03' },
     ],
@@ -63,7 +63,7 @@ const menu: Block[] = [
     type: 'listGroup',
     label: 'Cài đặt',
     rows: [
-      { icon: 'bell', title: 'Thông báo', chevron: true },
+      { icon: 'bell', title: 'Thông báo', goto: 'ACC-26' },
       {
         icon: 'help-circle',
         title: 'Trợ giúp & hỗ trợ',
@@ -77,7 +77,7 @@ const menu: Block[] = [
     label: 'Tài khoản',
     rows: [
       { icon: 'user', title: 'Cập nhật thông tin tài khoản', goto: 'ACC-12' },
-      { icon: 'lock', title: 'Phương thức đăng nhập', chevron: true },
+      { icon: 'lock', title: 'Phương thức đăng nhập', goto: 'ACC-27' },
       { icon: 'log-out', title: 'Đăng xuất', tone: 'danger', goto: 'ACC-04' },
     ],
   },
@@ -883,6 +883,580 @@ const screens: Screen[] = [
         buttons: [
           { label: 'Lưu', goto: 'ACC-15' },
           { label: 'Huỷ', variant: 'secondary', goto: 'ACC-15' },
+        ],
+      },
+    ],
+  },
+  {
+    ...common,
+    id: 'ACC-17',
+    title: 'Cộng tác viên của quán',
+    entryPoint: 'Vận hành quán → Cộng tác viên',
+    objective:
+      'Tạo lời mời đăng ký CTV gắn quán làm nguồn và xem các lời mời đã tạo. Xem, cập nhật và kết thúc quan hệ CTV tại quán chưa có.',
+    visibleData: [
+      'Danh sách lời mời CTV: trạng thái chờ dùng, đã dùng, hết hạn, thu hồi',
+      'Mỗi lời mời dùng một lần và hết hạn sau 7 ngày',
+      'Xem, cập nhật, kết thúc quan hệ CTV tại quán: sắp có',
+    ],
+    primaryAction: 'Tạo lời mời CTV → ACC-18',
+    secondaryActions: ['Mở lời mời → ACC-19', 'Quay lại → ACC-01'],
+    nextScreen: 'ACC-18',
+    errorsOrOutcomes: [
+      'Cần quyền mời CTV; quán phải là Karaoke đang hoạt động',
+    ],
+    layout: [
+      { type: 'appBar', title: 'Cộng tác viên', back: true },
+      {
+        type: 'alert',
+        variant: 'info',
+        text: 'Mỗi lời mời chỉ dùng một lần và hết hạn sau 7 ngày. CTV đăng ký xong sẽ tự có quan hệ hợp tác với quán.',
+      },
+      {
+        type: 'cardList',
+        items: [
+          {
+            icon: 'mail',
+            title: 'Lời mời CTV #1',
+            subtitle: 'Hết hạn 11/11/2026',
+            badge: 'Chờ dùng',
+            tone: 'warning',
+            goto: 'ACC-19',
+          },
+          {
+            icon: 'mail',
+            title: 'Lời mời CTV #2',
+            subtitle: 'Đã dùng 02/11/2026',
+            badge: 'Đã dùng',
+            tone: 'success',
+          },
+          {
+            icon: 'mail',
+            title: 'Lời mời CTV #3',
+            subtitle: 'Hết hạn 25/10/2026',
+            badge: 'Hết hạn',
+            tone: 'neutral',
+          },
+        ],
+      },
+      {
+        type: 'listGroup',
+        rows: [
+          {
+            icon: 'users',
+            title: 'Xem, cập nhật, kết thúc quan hệ CTV',
+            badge: 'Sắp có',
+          },
+        ],
+      },
+      {
+        type: 'actions',
+        buttons: [{ label: 'Tạo lời mời CTV', goto: 'ACC-18' }],
+      },
+    ],
+  },
+  {
+    ...common,
+    id: 'ACC-18',
+    title: 'Tạo lời mời CTV',
+    entryPoint: 'ACC-17 → Tạo lời mời CTV',
+    objective: 'Xác nhận tạo một lời mời đăng ký CTV gắn quán nguồn.',
+    visibleData: ['Quán nguồn', 'Hiệu lực 7 ngày, dùng một lần'],
+    primaryAction: 'Tạo lời mời → ACC-19',
+    secondaryActions: ['Huỷ → ACC-17'],
+    nextScreen: 'ACC-19',
+    errorsOrOutcomes: [
+      'Quán không còn hoạt động hoặc bị hạn chế: không tạo được',
+    ],
+    layout: [
+      { type: 'appBar', title: 'Tạo lời mời CTV', back: true },
+      {
+        type: 'hero',
+        title: 'Karaoke Blink Sài Gòn',
+        logo: true,
+        lines: ['Quán nguồn của CTV đăng ký bằng lời mời này'],
+      },
+      {
+        type: 'keyValue',
+        rows: [
+          { label: 'Hiệu lực', value: '7 ngày' },
+          { label: 'Số lần dùng', value: '1 lần' },
+        ],
+      },
+      {
+        type: 'actions',
+        buttons: [
+          { label: 'Tạo lời mời', goto: 'ACC-19' },
+          { label: 'Huỷ', variant: 'secondary', goto: 'ACC-17' },
+        ],
+      },
+    ],
+  },
+  {
+    ...common,
+    id: 'ACC-19',
+    title: 'Link và mã QR lời mời CTV',
+    entryPoint: 'Sau khi tạo, hoặc mở một lời mời còn chờ',
+    objective:
+      'Sao chép hoặc chia sẻ link và mã QR của lời mời. Người mở link sẽ vào luồng đăng ký CTV.',
+    visibleData: ['Link và mã QR', 'Hạn dùng', 'Sao chép, chia sẻ'],
+    primaryAction: 'Sao chép link',
+    secondaryActions: ['Chia sẻ', 'Về danh sách → ACC-17'],
+    nextScreen: 'ACC-17',
+    layout: [
+      { type: 'appBar', title: 'Lời mời CTV', back: true },
+      {
+        type: 'alert',
+        variant: 'success',
+        text: 'Đã tạo lời mời. Hạn dùng 7 ngày, dùng một lần.',
+      },
+      {
+        type: 'keyValue',
+        rows: [
+          { label: 'Link', value: 'blink.nexlink.vn/ctv#••••' },
+          { label: 'Hết hạn', value: '11/11/2026 09:00' },
+        ],
+      },
+      {
+        type: 'actions',
+        buttons: [
+          { label: 'Sao chép link' },
+          { label: 'Chia sẻ', variant: 'secondary' },
+          { label: 'Về danh sách', variant: 'ghost', goto: 'ACC-17' },
+        ],
+      },
+    ],
+  },
+  {
+    ...common,
+    id: 'ACC-20',
+    title: 'Hợp tác đối tác',
+    entryPoint: 'Khách hàng và kinh doanh → Hợp tác đối tác',
+    objective:
+      'Xem quan hệ hợp tác với nhà hàng (đang hợp tác, chờ, tạm dừng, đã kết thúc) và gửi yêu cầu mới. Quan hệ đang chờ hoặc đã kết thúc không được coi là đang hợp tác.',
+    visibleData: [
+      'Quan hệ theo trạng thái',
+      'Yêu cầu nhận được cần xử lý',
+      'Nút Gửi yêu cầu hợp tác',
+      'Tìm đối tác: sắp có (hiện gửi theo mã cơ sở)',
+    ],
+    primaryAction: 'Gửi yêu cầu hợp tác → ACC-21',
+    secondaryActions: [
+      'Xử lý yêu cầu nhận được → ACC-22',
+      'Chọn quan hệ → ACC-23',
+    ],
+    nextScreen: 'ACC-21',
+    layout: [
+      { type: 'appBar', title: 'Hợp tác đối tác', back: true },
+      {
+        type: 'tabs',
+        items: ['Đang hợp tác', 'Chờ xử lý', 'Đã kết thúc'],
+        active: 0,
+      },
+      {
+        type: 'cardList',
+        items: [
+          {
+            icon: 'handshake',
+            title: 'Nhà hàng Hương Việt',
+            subtitle: 'Hợp tác từ 01/10/2026',
+            badge: 'Đang hợp tác',
+            tone: 'success',
+            goto: 'ACC-23',
+          },
+          {
+            icon: 'handshake',
+            title: 'Nhà hàng Biển Xanh',
+            subtitle: 'Gửi bởi nhà hàng · cần bạn trả lời',
+            badge: 'Chờ bạn xử lý',
+            tone: 'warning',
+            goto: 'ACC-22',
+          },
+          {
+            icon: 'handshake',
+            title: 'Nhà hàng Sen Vàng',
+            subtitle: 'Bạn đã tạm dừng',
+            badge: 'Tạm dừng',
+            tone: 'neutral',
+            goto: 'ACC-23',
+          },
+        ],
+      },
+      {
+        type: 'actions',
+        buttons: [{ label: 'Gửi yêu cầu hợp tác', goto: 'ACC-21' }],
+      },
+    ],
+  },
+  {
+    ...common,
+    id: 'ACC-21',
+    title: 'Gửi yêu cầu hợp tác',
+    entryPoint: 'ACC-20 → Gửi yêu cầu hợp tác',
+    objective:
+      'Gửi yêu cầu tới một nhà hàng theo mã cơ sở đối tác. Hai cơ sở phải khác loại (Karaoke với nhà hàng).',
+    visibleData: [
+      'Ô nhập mã cơ sở đối tác',
+      'Thông tin cơ sở tìm được trước khi gửi',
+    ],
+    userInput: ['Mã cơ sở đối tác'],
+    primaryAction: 'Gửi yêu cầu → ACC-20',
+    secondaryActions: ['Huỷ → ACC-20'],
+    nextScreen: 'ACC-20',
+    errorsOrOutcomes: [
+      'Cùng loại cơ sở, bên kia đã gửi yêu cầu cho bạn đang chờ, hoặc một trong hai cơ sở không được phép hoạt động: không gửi được',
+      'Bên gửi không rút được yêu cầu đang chờ',
+    ],
+    layout: [
+      { type: 'appBar', title: 'Gửi yêu cầu hợp tác', back: true },
+      {
+        type: 'field',
+        kind: 'input',
+        label: 'Mã cơ sở đối tác',
+        value: 'NH-00123',
+      },
+      {
+        type: 'alert',
+        variant: 'danger',
+        text: 'Nhà hàng này đã gửi yêu cầu hợp tác cho bạn. Hãy trả lời yêu cầu đó.',
+      },
+      {
+        type: 'actions',
+        buttons: [
+          { label: 'Gửi yêu cầu', goto: 'ACC-20' },
+          { label: 'Huỷ', variant: 'secondary', goto: 'ACC-20' },
+        ],
+      },
+    ],
+  },
+  {
+    ...common,
+    id: 'ACC-22',
+    title: 'Trả lời yêu cầu hợp tác',
+    entryPoint: 'Yêu cầu do nhà hàng gửi tới',
+    objective: 'Chấp nhận hoặc từ chối. Từ chối phải nhập lý do.',
+    visibleData: [
+      'Thông tin nhà hàng gửi yêu cầu',
+      'Nút Chấp nhận và Từ chối',
+      'Ô lý do bắt buộc khi từ chối',
+    ],
+    userInput: ['Lý do từ chối'],
+    primaryAction: 'Chấp nhận → ACC-20',
+    secondaryActions: ['Từ chối → ACC-20'],
+    nextScreen: 'ACC-20',
+    errorsOrOutcomes: [
+      'Chỉ bên nhận được chấp nhận hoặc từ chối',
+      'Chấp nhận chỉ thành công khi cả hai cơ sở được phép hoạt động',
+    ],
+    layout: [
+      { type: 'appBar', title: 'Yêu cầu hợp tác', back: true },
+      {
+        type: 'hero',
+        title: 'Nhà hàng Biển Xanh',
+        logo: true,
+        lines: ['Gửi yêu cầu hợp tác cho Karaoke Blink Sài Gòn'],
+      },
+      {
+        type: 'field',
+        kind: 'textarea',
+        label: 'Lý do (bắt buộc khi từ chối)',
+        placeholder: 'Nhập lý do',
+      },
+      {
+        type: 'actions',
+        buttons: [
+          { label: 'Chấp nhận', goto: 'ACC-20' },
+          { label: 'Từ chối', variant: 'danger', goto: 'ACC-20' },
+        ],
+      },
+    ],
+  },
+  {
+    ...common,
+    id: 'ACC-23',
+    title: 'Chi tiết quan hệ hợp tác',
+    entryPoint: 'Chọn một quan hệ ở ACC-20',
+    objective:
+      'Xem quan hệ và kết thúc hoặc khôi phục. Khôi phục chỉ dành cho bên đã tạm dừng; cơ sở không tự gỡ quyết định tạm dừng của Admin.',
+    visibleData: [
+      'Thông tin nhà hàng và trạng thái quan hệ',
+      'Kết thúc hợp tác',
+      'Khôi phục khi chính cơ sở đã tạm dừng',
+      'Tạm dừng bởi Blink Admin: không gỡ được',
+    ],
+    primaryAction: 'Kết thúc hợp tác → ACC-20',
+    secondaryActions: ['Khôi phục → ACC-20'],
+    nextScreen: 'ACC-20',
+    errorsOrOutcomes: [
+      'Tạm dừng và kết thúc vẫn làm được khi cơ sở bị hạn chế; khôi phục cần cả hai cơ sở được phép hoạt động',
+    ],
+    layout: [
+      { type: 'appBar', title: 'Nhà hàng Sen Vàng', back: true },
+      {
+        type: 'keyValue',
+        rows: [
+          { label: 'Trạng thái', value: 'Tạm dừng bởi bạn' },
+          { label: 'Hợp tác từ', value: '15/09/2026' },
+        ],
+      },
+      {
+        type: 'alert',
+        variant: 'warning',
+        text: 'Nếu Blink Admin tạm dừng quan hệ, cơ sở không tự khôi phục được.',
+      },
+      {
+        type: 'actions',
+        buttons: [
+          { label: 'Khôi phục', goto: 'ACC-20' },
+          { label: 'Kết thúc hợp tác', variant: 'danger', goto: 'ACC-20' },
+        ],
+      },
+    ],
+  },
+  {
+    ...common,
+    id: 'ACC-24',
+    title: 'Danh bạ khách hàng',
+    entryPoint: 'Khách hàng và kinh doanh → Danh bạ khách hàng',
+    objective:
+      'Tìm khách theo tên hoặc số điện thoại. Owner xem được danh bạ của người khác trong cơ sở nhưng chỉ sửa, xoá và dùng liên hệ của chính mình.',
+    visibleData: [
+      'Ô tìm theo tên hoặc số điện thoại',
+      'Liên hệ của tôi và liên hệ của người khác trong cơ sở (chỉ xem)',
+      'Số lần dùng và lần dùng gần nhất',
+      'Xem lịch sử khách: sắp có',
+    ],
+    primaryAction: 'Thêm liên hệ → ACC-25',
+    secondaryActions: ['Chọn liên hệ của tôi → ACC-25'],
+    nextScreen: 'ACC-25',
+    layout: [
+      {
+        type: 'appBar',
+        title: 'Danh bạ khách hàng',
+        back: true,
+        actions: ['search'],
+      },
+      { type: 'tabs', items: ['Của tôi', 'Của người khác'], active: 0 },
+      {
+        type: 'cardList',
+        items: [
+          {
+            icon: 'book-user',
+            title: 'Nguyễn Thị Hoa',
+            subtitle: '0912 345 678 · dùng 3 lần',
+            goto: 'ACC-25',
+          },
+          {
+            icon: 'book-user',
+            title: 'Lê Văn Nam',
+            subtitle: '0987 654 321 · dùng 1 lần',
+            goto: 'ACC-25',
+          },
+        ],
+      },
+      {
+        type: 'text',
+        text: 'Liên hệ của người khác trong cơ sở chỉ để xem, không sửa hay xoá được.',
+        muted: true,
+      },
+      { type: 'actions', buttons: [{ label: 'Thêm liên hệ', goto: 'ACC-25' }] },
+    ],
+  },
+  {
+    ...common,
+    id: 'ACC-25',
+    title: 'Thêm hoặc sửa liên hệ',
+    entryPoint: 'ACC-24 → Thêm liên hệ hoặc chọn liên hệ của tôi',
+    objective:
+      'Nhập tên, số điện thoại và ghi chú; có thể xoá liên hệ của chính mình.',
+    visibleData: [
+      'Tên (tối đa 120 ký tự)',
+      'Số điện thoại theo định dạng quốc tế',
+      'Ghi chú (tối đa 2000 ký tự)',
+      'Xoá liên hệ (chỉ liên hệ của tôi)',
+    ],
+    userInput: ['Tên', 'Số điện thoại', 'Ghi chú'],
+    primaryAction: 'Lưu → ACC-24',
+    secondaryActions: ['Xoá liên hệ → ACC-24', 'Huỷ → ACC-24'],
+    nextScreen: 'ACC-24',
+    errorsOrOutcomes: ['Số điện thoại sai định dạng: báo tại ô nhập'],
+    layout: [
+      { type: 'appBar', title: 'Liên hệ', back: true },
+      { type: 'field', kind: 'input', label: 'Tên', value: 'Nguyễn Thị Hoa' },
+      {
+        type: 'field',
+        kind: 'input',
+        label: 'Số điện thoại',
+        value: '0912 345',
+        error: 'Số điện thoại chưa đúng định dạng.',
+      },
+      {
+        type: 'field',
+        kind: 'textarea',
+        label: 'Ghi chú',
+        placeholder: 'Tối đa 2000 ký tự',
+      },
+      {
+        type: 'actions',
+        buttons: [
+          { label: 'Lưu', goto: 'ACC-24' },
+          { label: 'Xoá liên hệ', variant: 'danger', goto: 'ACC-24' },
+          { label: 'Huỷ', variant: 'secondary', goto: 'ACC-24' },
+        ],
+      },
+    ],
+  },
+  {
+    ...common,
+    id: 'ACC-26',
+    title: 'Thông báo',
+    entryPoint: 'Cài đặt → Thông báo',
+    objective:
+      'Bật hoặc tắt nhận thông báo đẩy trên thiết bị và xem trung tâm thông báo: đánh dấu đã đọc, xoá. Mở thông báo đưa tới đúng nội dung và kiểm tra lại quyền.',
+    visibleData: [
+      'Công tắc nhận thông báo đẩy trên thiết bị',
+      'Danh sách thông báo kèm tên cơ sở',
+      'Đánh dấu đã đọc, xoá',
+      'Tuỳ chọn theo từng loại thông báo: chưa có',
+    ],
+    primaryAction: 'Mở một thông báo → đúng nội dung',
+    secondaryActions: ['Quay lại → ACC-01'],
+    nextScreen: 'ACC-01',
+    errorsOrOutcomes: [
+      'Nội dung thông báo đẩy là câu chung "Bạn có thông báo mới. Mở Blink để xem chi tiết."',
+      'Đăng xuất: thiết bị ngừng nhận thông báo của tài khoản cũ',
+    ],
+    layout: [
+      { type: 'appBar', title: 'Thông báo', back: true },
+      {
+        type: 'field',
+        kind: 'switch',
+        label: 'Nhận thông báo đẩy trên thiết bị này',
+        checked: true,
+        helper: 'Nội dung đẩy chỉ là "Bạn có thông báo mới".',
+      },
+      {
+        type: 'cardList',
+        items: [
+          {
+            icon: 'bell',
+            title: 'Yêu cầu bổ sung hồ sơ',
+            subtitle: 'Karaoke Blink Sài Gòn · 09:30',
+            badge: 'Mới',
+            tone: 'info',
+          },
+          {
+            icon: 'bell',
+            title: 'Lời mời Quản lý được chấp nhận',
+            subtitle: 'Karaoke Blink Quận 7 · hôm qua',
+          },
+        ],
+      },
+      {
+        type: 'actions',
+        buttons: [{ label: 'Đánh dấu tất cả đã đọc', variant: 'secondary' }],
+      },
+    ],
+  },
+  {
+    ...common,
+    id: 'ACC-27',
+    title: 'Phương thức đăng nhập',
+    entryPoint: 'Tài khoản → Phương thức đăng nhập',
+    objective:
+      'Xem các cách đăng nhập của tài khoản và quản lý: mật khẩu, số điện thoại, Google, Apple.',
+    visibleData: [
+      'Mật khẩu: đổi mật khẩu',
+      'Số điện thoại đã xác minh',
+      'Google và Apple: liên kết hoặc huỷ liên kết',
+      'Thu hồi các phiên đăng nhập khác',
+    ],
+    primaryAction: 'Đổi mật khẩu → ACC-28',
+    secondaryActions: ['Quay lại → ACC-01'],
+    nextScreen: 'ACC-28',
+    layout: [
+      { type: 'appBar', title: 'Phương thức đăng nhập', back: true },
+      {
+        type: 'listGroup',
+        label: 'Đăng nhập',
+        rows: [
+          {
+            icon: 'lock',
+            title: 'Mật khẩu',
+            description: 'Đổi lần cuối 01/10/2026',
+            goto: 'ACC-28',
+          },
+          {
+            icon: 'phone',
+            title: 'Số điện thoại',
+            description: '0912 ••• 678 · đã xác minh',
+          },
+          {
+            icon: 'globe',
+            title: 'Google',
+            description: 'Chưa liên kết',
+            badge: 'Liên kết',
+          },
+          {
+            icon: 'smartphone',
+            title: 'Apple',
+            description: 'Đã liên kết',
+            badge: 'Huỷ liên kết',
+          },
+        ],
+      },
+      {
+        type: 'listGroup',
+        rows: [
+          {
+            icon: 'log-out',
+            title: 'Đăng xuất các thiết bị khác',
+            tone: 'danger',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    ...common,
+    id: 'ACC-28',
+    title: 'Đổi mật khẩu',
+    entryPoint: 'ACC-27 → Mật khẩu',
+    objective: 'Nhập mật khẩu hiện tại và mật khẩu mới để đổi mật khẩu.',
+    visibleData: ['Mật khẩu hiện tại', 'Mật khẩu mới', 'Nhập lại mật khẩu mới'],
+    userInput: ['Mật khẩu hiện tại', 'Mật khẩu mới', 'Nhập lại mật khẩu mới'],
+    primaryAction: 'Lưu → ACC-27',
+    secondaryActions: ['Huỷ → ACC-27'],
+    nextScreen: 'ACC-27',
+    errorsOrOutcomes: [
+      'Sai mật khẩu hiện tại hoặc mật khẩu mới không khớp: báo tại ô nhập',
+    ],
+    layout: [
+      { type: 'appBar', title: 'Đổi mật khẩu', back: true },
+      {
+        type: 'field',
+        kind: 'input',
+        label: 'Mật khẩu hiện tại',
+        placeholder: '••••••••',
+      },
+      {
+        type: 'field',
+        kind: 'input',
+        label: 'Mật khẩu mới',
+        placeholder: '••••••••',
+      },
+      {
+        type: 'field',
+        kind: 'input',
+        label: 'Nhập lại mật khẩu mới',
+        placeholder: '••••••••',
+        error: 'Mật khẩu nhập lại chưa khớp.',
+      },
+      {
+        type: 'actions',
+        buttons: [
+          { label: 'Lưu', goto: 'ACC-27' },
+          { label: 'Huỷ', variant: 'secondary', goto: 'ACC-27' },
         ],
       },
     ],

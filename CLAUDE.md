@@ -169,7 +169,7 @@ component.
 
 ## Known gaps
 
-- Only the Owner Karaoke flows (15 flows, 154 screens with the Admin ones) are drawn as layouts and
+- Only the Owner Karaoke flows (15 flows, with the Admin ones) are drawn as layouts and
   cover their documents. The other roles (staff, cashier, collaborator, restaurant, common) are not
   in the app yet; the Blink Admin flows still use the generic mockup.
 - The three Admin screens of `subscriptions-owner-management` (`ADM-01` to `ADM-03`) use the
@@ -187,6 +187,10 @@ component.
   images with floors and rooms. The wireframe has three steps (information and images, plan, floors
   and rooms) and creates the branch when the last step is submitted; update the document in the
   backend repository.
+- The Account screen links to screens `ACC-17` to `ACC-28` (collaborator invites, partner restaurants,
+  customer contacts, notifications, login methods). Backend `account-home.md` does not describe them yet.
+- Some state and error screens (for example `ACC-06`, `ROOM-06`) are reached by a condition, not by a
+  link, so they have no incoming `goto`.
 - `CUSTOM_MOCKUPS` is empty; no screen needs a hand-built mockup now.
 
 ## Git
