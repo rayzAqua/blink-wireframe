@@ -12,6 +12,7 @@ import {
   X,
 } from 'lucide-react';
 import { useSelection, useWorkspace } from '../workspace';
+import { ENVIRONMENTS } from '../../domain/environments';
 import { Badge } from '../../shared/ui';
 import './ScreenSpecPanel.css';
 
@@ -21,20 +22,7 @@ export const ScreenSpecPanel: React.FC = () => {
 
   if (!isSpecOpen) return null;
 
-  const getEnvBadge = (env: string) => {
-    switch (env) {
-      case 'FLUTTER_APP':
-        return <Badge variant="env-flutter" withDot>📱 FLUTTER APP</Badge>;
-      case 'REACT_PWA':
-        return <Badge variant="env-react" withDot>🖥️ REACT PWA</Badge>;
-      case 'WEB_PUBLIC':
-        return <Badge variant="env-public" withDot>🌐 WEB CÔNG KHAI</Badge>;
-      case 'ADMIN_UI':
-        return <Badge variant="env-admin" withDot>🖥️ ADMIN UI</Badge>;
-      default:
-        return <Badge variant="env-transition" withDot>↗️ CHUYỂN TIẾP</Badge>;
-    }
-  };
+  const env = ENVIRONMENTS[activeScreen.environment];
 
   return (
     <aside className="spec-panel" aria-label="Bảng thông số wireframe">
@@ -64,7 +52,7 @@ export const ScreenSpecPanel: React.FC = () => {
             <span style={{ fontSize: '11px', fontFamily: 'var(--font-mono)', color: 'var(--color-primary)' }}>
               {activeScreen.id}
             </span>
-            {getEnvBadge(activeScreen.environment)}
+            <Badge variant={env.badgeVariant} withDot>{env.label}</Badge>
           </div>
           <h3 style={{ fontSize: '1.05rem', lineHeight: 1.25 }}>{activeScreen.title}</h3>
         </div>
