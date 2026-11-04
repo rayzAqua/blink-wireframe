@@ -183,6 +183,10 @@ component.
 - `karaoke-partner-registration.md` in `docs/wireframes/` still lists six steps with a separate
   confirmation. The wireframe has three steps (plan, information and images, floors and rooms) and
   creates the facility when the last step is submitted; update the document in the backend repository.
+- `karaoke-branch-creation.md` in `docs/wireframes/` still lists a separate confirmation and keeps
+  images with floors and rooms. The wireframe has three steps (information and images, plan, floors
+  and rooms) and creates the branch when the last step is submitted; update the document in the
+  backend repository.
 - `CUSTOM_MOCKUPS` is empty; no screen needs a hand-built mockup now.
 
 ## Git

@@ -3,6 +3,7 @@ import { bar, buttons, inApp } from '../helpers.ts';
 import { planCards } from './plan-catalog.ts';
 
 const actor = 'Owner Karaoke';
+const steps = ['Thông tin và ảnh', 'Gói', 'Tầng và phòng'];
 
 const screens: Screen[] = [
   {
@@ -19,7 +20,7 @@ const screens: Screen[] = [
     primaryAction: 'Tạo chi nhánh → BR-02',
     secondaryActions: [
       'Chọn cơ sở → trang quản lý của cơ sở',
-      'Không có quyền → BR-07',
+      'Không có quyền → BR-06',
     ],
     nextScreen: 'BR-02',
     errorsOrOutcomes: ['Thiếu quyền: không cho bắt đầu'],
@@ -55,27 +56,29 @@ const screens: Screen[] = [
   {
     ...inApp(actor),
     id: 'BR-02',
-    title: 'Thông tin chi nhánh',
+    title: 'Thông tin chi nhánh và hình ảnh',
     entryPoint: 'BR-01 → Tạo chi nhánh',
-    objective: 'Nhập tên, địa chỉ, hotline tuỳ chọn và giờ mở cửa.',
+    objective:
+      'Nhập thông tin chi nhánh và tải logo, ảnh bìa trong cùng một bước.',
     visibleData: [
       'Tên chi nhánh (bắt buộc)',
       'Địa chỉ (bắt buộc)',
       'Giờ mở cửa (bắt buộc; giờ đóng cửa là cùng giờ đó của ngày hôm sau)',
       'Hotline riêng (tuỳ chọn, duy nhất nếu nhập)',
+      'Logo và ảnh bìa (tuỳ chọn): chưa chọn, đang xử lý, sẵn sàng',
     ],
-    userInput: ['Tên', 'Địa chỉ', 'Hotline', 'Giờ mở cửa'],
+    userInput: ['Tên', 'Địa chỉ', 'Hotline', 'Giờ mở cửa', 'Logo', 'Ảnh bìa'],
     primaryAction: 'Tiếp tục → BR-03',
     secondaryActions: ['Huỷ → BR-01'],
     nextScreen: 'BR-03',
-    errorsOrOutcomes: ['Trùng hotline hoặc dữ liệu sai: giữ biểu mẫu để sửa'],
+    errorsOrOutcomes: [
+      'Trùng hotline hoặc dữ liệu sai: giữ biểu mẫu để sửa',
+      'Ảnh đang xử lý hoặc lỗi: thay ảnh hoặc chờ xử lý xong',
+    ],
     layout: [
       bar('Thông tin chi nhánh'),
-      {
-        type: 'stepper',
-        steps: ['Thông tin', 'Gói', 'Ảnh và phòng', 'Xác nhận'],
-        current: 0,
-      },
+      { type: 'stepper', steps, current: 0 },
+      { type: 'heading', text: 'Thông tin chi nhánh' },
       {
         type: 'field',
         kind: 'input',
@@ -101,6 +104,19 @@ const screens: Screen[] = [
         label: 'Giờ mở cửa',
         value: '11:00',
         helper: 'Giờ đóng cửa là 11:00 ngày hôm sau.',
+      },
+      { type: 'heading', text: 'Hình ảnh (tuỳ chọn)' },
+      {
+        type: 'keyValue',
+        rows: [
+          { label: 'Logo', value: 'Sẵn sàng · có thể thay hoặc xoá' },
+          { label: 'Ảnh bìa', value: 'Đang xử lý' },
+        ],
+      },
+      {
+        type: 'alert',
+        variant: 'warning',
+        text: 'Ảnh bìa chưa xử lý xong. Chờ hoặc thay ảnh trước khi tiếp tục.',
       },
       buttons(
         { label: 'Tiếp tục', goto: 'BR-03' },
@@ -129,11 +145,7 @@ const screens: Screen[] = [
     ],
     layout: [
       bar('Chọn gói'),
-      {
-        type: 'stepper',
-        steps: ['Thông tin', 'Gói', 'Ảnh và phòng', 'Xác nhận'],
-        current: 1,
-      },
+      { type: 'stepper', steps, current: 1 },
       {
         type: 'alert',
         variant: 'info',
@@ -156,95 +168,60 @@ const screens: Screen[] = [
   {
     ...inApp(actor),
     id: 'BR-04',
-    title: 'Hình ảnh, tầng và phòng',
+    title: 'Tầng và phòng ban đầu',
     entryPoint: 'BR-03 → Chọn gói',
     objective:
-      'Tải logo, ảnh bìa; tạo tầng và phòng ban đầu hoặc bỏ qua để cấu hình sau.',
+      'Tạo tầng và phòng ban đầu hoặc bỏ qua để cấu hình sau. Bước cuối: bấm Tạo chi nhánh là tạo thành công ngay, không còn màn xác nhận riêng.',
     visibleData: [
-      'Logo, ảnh bìa (trạng thái chưa chọn, đang xử lý, sẵn sàng)',
       'Số tầng (tuỳ chọn)',
       'Danh sách phòng ban đầu, ảnh và bảng giá từng phòng',
       'Không có loại phòng, trạng thái dọn phòng hay bảo trì',
+      'Nút Tạo chi nhánh ở cuối bước',
     ],
-    userInput: ['Logo', 'Ảnh bìa', 'Số tầng', 'Phòng'],
-    primaryAction: 'Tiếp tục → BR-05',
-    secondaryActions: ['Bỏ qua → BR-05'],
+    userInput: ['Số tầng', 'Phòng'],
+    primaryAction: 'Tạo chi nhánh → BR-05',
+    secondaryActions: ['Quay lại → BR-03', 'Dữ liệu đã đổi → BR-06'],
     nextScreen: 'BR-05',
-    errorsOrOutcomes: ['Ảnh hoặc cấu trúc sai: chỉ rõ mục cần sửa'],
+    errorsOrOutcomes: [
+      'Khoá nút khi đang gửi; gửi lại cùng thao tác trả về kết quả cũ thay vì tạo trùng',
+      'Không tạo chi nhánh dở; thất bại thì không hiện trạng thái thành công',
+      'Cấu trúc tầng, phòng hoặc giá sai: chỉ rõ mục cần sửa',
+    ],
     layout: [
-      bar('Hình ảnh, tầng và phòng'),
-      {
-        type: 'stepper',
-        steps: ['Thông tin', 'Gói', 'Ảnh và phòng', 'Xác nhận'],
-        current: 2,
-      },
-      {
-        type: 'keyValue',
-        rows: [
-          { label: 'Logo', value: 'Đã chọn · Sẵn sàng' },
-          { label: 'Ảnh bìa', value: 'Đang xử lý' },
-        ],
-      },
+      bar('Tầng và phòng'),
+      { type: 'stepper', steps, current: 2 },
       { type: 'field', kind: 'input', label: 'Số tầng (tuỳ chọn)', value: '2' },
       {
-        type: 'field',
-        kind: 'input',
-        label: 'Phòng ban đầu',
-        value: '3 phòng',
-        helper: 'Có thể tạo danh sách phòng thẳng nếu không dùng tầng.',
+        type: 'cardList',
+        items: [
+          {
+            icon: 'door-open',
+            title: 'Phòng 101',
+            subtitle: 'Tầng 1 · sức chứa 10 · 250.000đ/giờ',
+          },
+          {
+            icon: 'door-open',
+            title: 'Phòng 201',
+            subtitle: 'Tầng 2 · sức chứa 8 · 200.000đ/giờ',
+          },
+        ],
       },
       {
-        type: 'alert',
-        variant: 'warning',
-        text: 'Ảnh bìa chưa xử lý xong. Chờ hoặc thay ảnh trước khi tiếp tục.',
+        type: 'text',
+        text: 'Có thể bỏ qua và cấu hình phòng sau trong Thiết lập quán.',
+        muted: true,
       },
       buttons(
-        { label: 'Tiếp tục', goto: 'BR-05' },
-        { label: 'Bỏ qua', variant: 'secondary', goto: 'BR-05' },
+        { label: 'Tạo chi nhánh', goto: 'BR-05' },
+        { label: 'Quay lại', variant: 'secondary', goto: 'BR-03' },
       ),
     ],
   },
   {
     ...inApp(actor),
     id: 'BR-05',
-    title: 'Xác nhận tạo chi nhánh',
-    entryPoint: 'BR-04 → Tiếp tục hoặc Bỏ qua',
-    objective:
-      'Xem tóm tắt toàn bộ chi nhánh rồi gửi. Nút bị khoá khi gửi; gửi lại cùng thao tác trả về kết quả cũ thay vì tạo trùng.',
-    visibleData: ['Chi nhánh, gói, hình ảnh, tầng, phòng'],
-    primaryAction: 'Tạo chi nhánh → BR-06',
-    secondaryActions: ['Chỉnh sửa → BR-02', 'Dữ liệu đã đổi → BR-07'],
-    nextScreen: 'BR-06',
-    errorsOrOutcomes: [
-      'Không tạo chi nhánh dở; thất bại thì không hiện trạng thái thành công',
-    ],
-    layout: [
-      bar('Xác nhận'),
-      {
-        type: 'stepper',
-        steps: ['Thông tin', 'Gói', 'Ảnh và phòng', 'Xác nhận'],
-        current: 3,
-      },
-      {
-        type: 'keyValue',
-        rows: [
-          { label: 'Chi nhánh', value: 'Karaoke Blink Thủ Đức' },
-          { label: 'Giờ mở cửa', value: '11:00' },
-          { label: 'Gói', value: 'BASIC · Miễn phí · 5 nhân sự' },
-          { label: 'Tầng và phòng', value: '2 tầng · 3 phòng' },
-        ],
-      },
-      buttons(
-        { label: 'Tạo chi nhánh', goto: 'BR-06' },
-        { label: 'Chỉnh sửa', variant: 'secondary', goto: 'BR-02' },
-      ),
-    ],
-  },
-  {
-    ...inApp(actor),
-    id: 'BR-06',
     title: 'Chi nhánh đã được tạo',
-    entryPoint: 'Tạo chi nhánh thành công',
+    entryPoint: 'Bấm Tạo chi nhánh ở BR-04 thành công',
     objective:
       'Báo chi nhánh đang hoạt động và chờ Blink hậu kiểm; gợi ý cấu hình phần đã bỏ qua. Không tự tạo Manager, nhân sự hay tài khoản Thu ngân.',
     visibleData: [
@@ -253,7 +230,7 @@ const screens: Screen[] = [
       'Gợi ý cấu hình phần đã bỏ qua',
     ],
     primaryAction: 'Vào quản lý chi nhánh',
-    nextScreen: 'Trang quản lý chi nhánh',
+    nextScreen: 'account-home/ACC-01',
     layout: [
       bar('Đã tạo chi nhánh', false),
       {
@@ -267,12 +244,12 @@ const screens: Screen[] = [
         variant: 'info',
         text: 'Bạn đã bỏ qua phần phòng. Hãy cấu hình phòng và giá trong Thiết lập quán.',
       },
-      buttons({ label: 'Vào quản lý chi nhánh' }),
+      buttons({ label: 'Vào quản lý chi nhánh', goto: 'account-home/ACC-01' }),
     ],
   },
   {
     ...inApp(actor),
-    id: 'BR-07',
+    id: 'BR-06',
     title: 'Lỗi khi tạo chi nhánh',
     entryPoint:
       'Thiếu quyền, gói ngừng cung cấp, trùng hotline hoặc dữ liệu đã đổi',
@@ -283,7 +260,7 @@ const screens: Screen[] = [
       'Hotline bị trùng',
       'Ảnh chưa sẵn sàng',
       'Dữ liệu tầng, phòng hoặc giá không hợp lệ',
-      'Dữ liệu đã đổi trong lúc xác nhận: tải lại trước khi gửi',
+      'Dữ liệu đã đổi trong lúc tạo: tải lại trước khi gửi',
     ],
     primaryAction: 'Quay lại → BR-01',
     nextScreen: 'BR-01',
@@ -317,7 +294,7 @@ export const karaokeBranchCreation: Flow = {
   role: 'karaoke-owner',
   section: 'branch-plan',
   summary:
-    'Owner tạo thêm một chi nhánh độc lập: thông tin, gói riêng, hình ảnh, tầng và phòng tuỳ chọn, xác nhận và chờ hậu kiểm.',
+    'Owner tạo thêm một chi nhánh độc lập qua ba bước: thông tin và ảnh, gói riêng, tầng và phòng tuỳ chọn. Bấm Tạo chi nhánh là tạo thành công ngay; chi nhánh hoạt động và chờ hậu kiểm.',
   actors: ['Owner Karaoke'],
   environments: ['FLUTTER_APP'],
   screens,
