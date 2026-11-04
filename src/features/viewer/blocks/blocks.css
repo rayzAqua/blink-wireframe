@@ -274,3 +274,11 @@
   flex-shrink: 0;
   color: var(--color-text-subtle);
 }
+
+.blocks__plan-tag {
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+}

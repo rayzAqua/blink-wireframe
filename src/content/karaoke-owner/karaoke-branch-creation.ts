@@ -14,12 +14,12 @@ const screens: Screen[] = [
     objective:
       'Xem chuỗi và các chi nhánh cùng cấp; chỉ Owner đang hoạt động có quyền tạo chi nhánh mới thấy hành động Tạo chi nhánh.',
     visibleData: [
-      'Các chi nhánh cùng cấp của Owner (không vẽ quan hệ cha con)',
+      'Các chi nhánh cùng cấp của Owner (không vẽ quan hệ cha con), mỗi chi nhánh kèm logo, trạng thái và Manager hiện tại',
       'Nút Tạo chi nhánh',
     ],
     primaryAction: 'Tạo chi nhánh → BR-02',
     secondaryActions: [
-      'Chọn cơ sở → trang quản lý của cơ sở',
+      'Chọn chi nhánh để quản lý Manager (luồng Bổ nhiệm Quản lý chi nhánh)',
       'Không có quyền → BR-06',
     ],
     nextScreen: 'BR-02',
@@ -32,14 +32,16 @@ const screens: Screen[] = [
           {
             icon: 'building',
             title: 'Karaoke Blink Sài Gòn',
-            subtitle: 'Quận 1',
+            subtitle: 'Quận 1 · Quản lý: Trần Quản Lý',
+            goto: 'karaoke-manager-appointments/OWN-01',
             badge: 'Đang hoạt động',
             tone: 'success',
           },
           {
             icon: 'building',
             title: 'Karaoke Blink Quận 7',
-            subtitle: 'Quận 7',
+            subtitle: 'Quận 7 · Chưa có Quản lý',
+            goto: 'karaoke-manager-appointments/OWN-01',
             badge: 'Đang hoạt động',
             tone: 'success',
           },

@@ -96,9 +96,21 @@ export function BlockView({
                   </span>
                 )}
               </h3>
-              {block.planTag && (
-                <Badge variant="neutral">{block.planTag}</Badge>
-              )}
+              {block.planTag &&
+                (block.planGoto ? (
+                  <button
+                    type="button"
+                    className="blocks__plan-tag"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      ctx.go(block.planGoto as string);
+                    }}
+                  >
+                    <Badge variant="neutral">{block.planTag}</Badge>
+                  </button>
+                ) : (
+                  <Badge variant="neutral">{block.planTag}</Badge>
+                ))}
               {block.lines?.map((line) => (
                 <p key={line} className="blocks__muted">
                   {line}
@@ -119,13 +131,17 @@ export function BlockView({
       return (
         <div className="blocks__hero">
           {block.goto ? (
-            <button
-              type="button"
+            <div
+              role="button"
+              tabIndex={0}
               className="blocks__hero-main blocks__hero-main--tap"
               onClick={() => ctx.go(block.goto as string)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') ctx.go(block.goto as string);
+              }}
             >
               {main}
-            </button>
+            </div>
           ) : (
             <div className="blocks__hero-main">{main}</div>
           )}

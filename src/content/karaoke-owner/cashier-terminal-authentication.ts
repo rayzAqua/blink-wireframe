@@ -153,9 +153,9 @@ const screens: Screen[] = [
       'Cảnh báo vô hiệu hoá và thu hồi phiên',
       'Xác minh lại tài khoản quản lý',
     ],
-    primaryAction: 'Xác minh và vô hiệu hoá → CSH-01',
+    primaryAction: 'Xác minh và vô hiệu hoá → CSH-06',
     secondaryActions: ['Giữ hoạt động → CSH-01'],
-    nextScreen: 'CSH-01',
+    nextScreen: 'CSH-06',
     errorsOrOutcomes: ['Thất bại: thông tin đăng nhập giữ trạng thái cũ'],
     layout: [
       bar('Vô hiệu hoá Thu ngân'),
@@ -179,7 +179,7 @@ const screens: Screen[] = [
           {
             label: 'Xác minh và vô hiệu hoá',
             variant: 'danger',
-            goto: 'CSH-01',
+            goto: 'CSH-06',
           },
           { label: 'Giữ hoạt động', variant: 'secondary', goto: 'CSH-01' },
         ],
@@ -220,6 +220,44 @@ const screens: Screen[] = [
         text: 'Mã xác minh sai, hết hạn hoặc đã dùng. Hãy xác minh lại.',
       },
       buttons({ label: 'Quay lại', goto: 'CSH-01' }),
+    ],
+  },
+  {
+    ...inApp('Owner, Manager hoặc Vice Manager theo quyền'),
+    id: 'CSH-06',
+    title: 'Tài khoản Thu ngân đã vô hiệu hoá',
+    entryPoint: 'Sau khi vô hiệu hoá thành công',
+    objective:
+      'Màn tổng quan chuyển sang Đã vô hiệu hoá. Đặt lại mật khẩu sẽ tạo mật khẩu mới và kích hoạt lại tài khoản.',
+    visibleData: [
+      'Trạng thái Đã vô hiệu hoá',
+      'Thu ngân của cơ sở không đăng nhập được, các phiên đang lưu đã bị thu hồi',
+      'Nút Đặt lại mật khẩu để kích hoạt lại',
+    ],
+    primaryAction: 'Đặt lại mật khẩu → CSH-03',
+    secondaryActions: ['Về tổng quan → CSH-01'],
+    nextScreen: 'CSH-03',
+    layout: [
+      bar('Thông tin đăng nhập Thu ngân'),
+      {
+        type: 'hero',
+        title: 'Karaoke Blink Sài Gòn',
+        lines: ['123 Nguyễn Thị Minh Khai, Quận 1'],
+        status: 'Đã vô hiệu hoá',
+        statusTone: 'neutral',
+      },
+      {
+        type: 'alert',
+        variant: 'warning',
+        text: 'Thu ngân của cơ sở không đăng nhập được. Đặt lại mật khẩu sẽ tạo mật khẩu mới và kích hoạt lại tài khoản.',
+      },
+      {
+        type: 'actions',
+        buttons: [
+          { label: 'Đặt lại mật khẩu', goto: 'CSH-03' },
+          { label: 'Về tổng quan', variant: 'secondary', goto: 'CSH-01' },
+        ],
+      },
     ],
   },
 ];

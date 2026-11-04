@@ -5,6 +5,7 @@ const hero = (extra?: Partial<Extract<Block, { type: 'hero' }>>): Block => ({
   title: 'Karaoke Blink Sài Gòn',
   verified: true,
   planTag: 'Gói Pro',
+  planGoto: 'subscriptions-owner-management/SUB-01',
   cover: true,
   logo: true,
   lines: [
@@ -541,7 +542,7 @@ const screens: Screen[] = [
             title: 'Cấu hình đặt phòng',
             description:
               'Thời gian giữ chỗ, hạn nhận phòng, thời lượng mặc định',
-            chevron: true,
+            goto: 'ACC-14',
           },
           {
             icon: 'tag',
@@ -553,7 +554,7 @@ const screens: Screen[] = [
             icon: 'percent',
             title: 'Hoa hồng',
             description: 'Tỷ lệ hoa hồng phòng và món, tối đa 50%',
-            chevron: true,
+            goto: 'ACC-15',
           },
           { icon: 'landmark', title: 'Tài khoản ngân hàng', goto: 'ACC-10' },
         ],
@@ -639,6 +640,249 @@ const screens: Screen[] = [
         buttons: [
           { label: 'Lưu', goto: 'ACC-01' },
           { label: 'Huỷ', variant: 'secondary', goto: 'ACC-01' },
+        ],
+      },
+    ],
+  },
+  {
+    ...common,
+    id: 'ACC-13',
+    title: 'Trạng thái hậu kiểm cạnh tên cơ sở',
+    entryPoint:
+      'Chi nhánh đang chọn đang được Blink kiểm tra, không đạt hoặc đã gửi bổ sung',
+    objective:
+      'Cho Owner biết kết quả hậu kiểm bằng chữ ngay cạnh tên cơ sở. Chưa kiểm tra và Đạt (tích xanh) đã có ở màn chính; màn này vẽ ba trường hợp còn lại.',
+    visibleData: [
+      'Đang kiểm tra: không có tích xanh, nhãn "Blink đang kiểm tra"',
+      'Không đạt: không có tích xanh, nhãn "Chưa đạt kiểm tra" và nội dung Blink nêu',
+      'Đã gửi bổ sung: banner "Đã gửi — đang chờ Blink kiểm tra", không còn nút',
+      'Kết quả hậu kiểm không làm cơ sở ngừng hoạt động; các nút bên dưới vẫn dùng đầy đủ',
+    ],
+    primaryAction: 'Chạm nhãn kết quả → xem giải thích ngắn',
+    secondaryActions: ['Cập nhật hồ sơ → ACC-10', 'Quay lại → ACC-01'],
+    nextScreen: 'ACC-10',
+    layout: [
+      appBar,
+      profile,
+      hero({
+        verified: false,
+        status: 'Blink đang kiểm tra',
+        statusTone: 'info',
+      }),
+      { type: 'heading', text: 'Không đạt' },
+      hero({
+        verified: false,
+        status: 'Chưa đạt kiểm tra',
+        statusTone: 'danger',
+        action: undefined,
+      }),
+      {
+        type: 'alert',
+        variant: 'danger',
+        title: 'Nội dung Blink nêu',
+        text: 'Địa chỉ chi nhánh chưa khớp với thực tế. Hãy cập nhật hồ sơ.',
+        actionLabel: 'Cập nhật hồ sơ',
+        goto: 'ACC-10',
+      },
+      { type: 'heading', text: 'Đã gửi bổ sung' },
+      {
+        type: 'alert',
+        variant: 'info',
+        title: 'Đã gửi — đang chờ Blink kiểm tra',
+      },
+    ],
+  },
+  {
+    ...common,
+    id: 'ACC-14',
+    title: 'Cấu hình đặt phòng',
+    entryPoint: 'Thiết lập quán → Cấu hình đặt phòng',
+    objective:
+      'Chỉnh thời gian giữ chỗ, hạn nhận phòng, thời lượng mặc định và việc mở phòng khi đơn còn chờ xác nhận. Khoảng đệm 60 phút giữa hai lượt đặt là cố định, chỉ hiển thị để biết.',
+    visibleData: [
+      'Thời gian giữ chỗ chờ khách xác nhận: 5 đến 120 phút, mặc định 15',
+      'Hạn nhận phòng sau giờ hẹn: 15 đến 240 phút, mặc định 60',
+      'Thời lượng chơi mặc định (khách đến trực tiếp): 30 đến 720 phút, mặc định 120',
+      'Cho phép mở phòng khi đơn còn chờ xác nhận: bật hoặc tắt, mặc định tắt',
+      'Khoảng đệm 60 phút giữa hai lượt đặt: cố định, không chỉnh được',
+    ],
+    userInput: [
+      'Thời gian giữ chỗ',
+      'Hạn nhận phòng',
+      'Thời lượng mặc định',
+      'Cho phép mở phòng khi chờ xác nhận',
+    ],
+    primaryAction: 'Lưu → ACC-11',
+    secondaryActions: ['Huỷ → ACC-11'],
+    nextScreen: 'ACC-11',
+    errorsOrOutcomes: [
+      'Giá trị ngoài khoảng cho phép: báo ngay tại ô nhập và giữ nguyên dữ liệu',
+      'Cấu hình vừa được đổi ở thiết bị khác: báo và tải lại, không ghi đè',
+      'Hạn nhận phòng áp dụng cả cho đơn đã xác nhận trước đó; thời gian giữ chỗ chỉ áp dụng cho đơn tạo sau khi đổi',
+      'Cơ sở bị Blink hạn chế: các ô bị khoá kèm giải thích',
+    ],
+    layout: [
+      { type: 'appBar', title: 'Cấu hình đặt phòng', back: true },
+      {
+        type: 'field',
+        kind: 'input',
+        label: 'Thời gian giữ chỗ chờ khách xác nhận (phút)',
+        value: '15',
+        helper: 'Từ 5 đến 120 phút. Chỉ áp dụng cho đơn tạo sau khi đổi.',
+      },
+      {
+        type: 'field',
+        kind: 'input',
+        label: 'Hạn nhận phòng sau giờ hẹn (phút)',
+        value: '300',
+        error: 'Chỉ được từ 15 đến 240 phút.',
+      },
+      {
+        type: 'field',
+        kind: 'input',
+        label: 'Thời lượng chơi mặc định cho khách đến trực tiếp (phút)',
+        value: '120',
+        helper: 'Từ 30 đến 720 phút.',
+      },
+      {
+        type: 'field',
+        kind: 'switch',
+        label: 'Cho phép mở phòng khi đơn còn chờ xác nhận',
+        checked: false,
+      },
+      {
+        type: 'keyValue',
+        rows: [
+          { label: 'Khoảng đệm giữa hai lượt đặt', value: '60 phút (cố định)' },
+        ],
+      },
+      {
+        type: 'alert',
+        variant: 'warning',
+        title: 'Cấu hình vừa được đổi ở thiết bị khác',
+        text: 'Tải lại để xem bản mới nhất rồi lưu lại.',
+      },
+      {
+        type: 'actions',
+        buttons: [
+          { label: 'Lưu', goto: 'ACC-11' },
+          { label: 'Huỷ', variant: 'secondary', goto: 'ACC-11' },
+        ],
+      },
+    ],
+  },
+  {
+    ...common,
+    id: 'ACC-15',
+    title: 'Hoa hồng',
+    entryPoint: 'Thiết lập quán → Hoa hồng',
+    objective:
+      'Xem tỷ lệ hoa hồng phòng và hoa hồng món của từng nhân sự và mở để chỉnh. Mỗi loại tối đa 50%. Owner không có tỷ lệ riêng vì Owner không phải nhân sự.',
+    visibleData: [
+      'Danh sách nhân sự chưa nghỉ việc (đang làm hoặc đang tạm dừng) kèm tỷ lệ phòng và món',
+      'Tỷ lệ chưa cấu hình hiển thị 0%',
+      'Mức hoa hồng chung của cơ sở (tối đa 50%): sắp có',
+    ],
+    primaryAction: 'Chọn nhân sự → ACC-16',
+    secondaryActions: ['Quay lại → ACC-11'],
+    nextScreen: 'ACC-16',
+    errorsOrOutcomes: [
+      'Hoa hồng chỉ được ghi khi đơn hoàn thành thanh toán; phần ghi nhận và chi trả chưa triển khai',
+    ],
+    layout: [
+      { type: 'appBar', title: 'Hoa hồng', back: true },
+      {
+        type: 'alert',
+        variant: 'info',
+        text: 'Mỗi loại tối đa 50%. Hoa hồng chỉ được ghi khi đơn hoàn thành thanh toán.',
+      },
+      {
+        type: 'listGroup',
+        label: 'Mức chung của cơ sở',
+        rows: [
+          {
+            icon: 'percent',
+            title: 'Hoa hồng phòng và món chung của cơ sở',
+            description: 'Tối đa 50% mỗi loại',
+            badge: 'Sắp có',
+          },
+        ],
+      },
+      {
+        type: 'cardList',
+        items: [
+          {
+            icon: 'user',
+            title: 'An Booking · 01',
+            subtitle: 'Phòng 10% · Món 5%',
+            goto: 'ACC-16',
+          },
+          {
+            icon: 'user',
+            title: 'Bình Lễ tân · 02',
+            subtitle: 'Phòng 0% · Món 0%',
+            badge: 'Đang tạm dừng',
+            tone: 'warning',
+            goto: 'ACC-16',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    ...common,
+    id: 'ACC-16',
+    title: 'Chỉnh hoa hồng của nhân sự',
+    entryPoint: 'ACC-15 → chọn một nhân sự',
+    objective:
+      'Đặt tỷ lệ hoa hồng phòng và hoa hồng món cho một nhân sự. Mỗi lần lưu phải gửi đủ cả hai loại.',
+    visibleData: [
+      'Nhân sự và vị trí',
+      'Hoa hồng phòng (0% đến 50%, tối đa 2 chữ số thập phân)',
+      'Hoa hồng món (0% đến 50%, tối đa 2 chữ số thập phân)',
+    ],
+    userInput: ['Hoa hồng phòng', 'Hoa hồng món'],
+    primaryAction: 'Lưu → ACC-15',
+    secondaryActions: ['Huỷ → ACC-15'],
+    nextScreen: 'ACC-15',
+    errorsOrOutcomes: [
+      'Vượt 50% hoặc nhiều hơn 2 chữ số thập phân: báo tại ô nhập',
+      'Chỉ nhân sự chưa nghỉ việc mới chỉnh được',
+      'Đơn nguồn Booking lưu tỷ lệ hoa hồng phòng của người tạo tại thời điểm tạo đơn',
+    ],
+    layout: [
+      { type: 'appBar', title: 'An Booking', back: true },
+      {
+        type: 'keyValue',
+        rows: [
+          { label: 'Vị trí', value: 'Booking' },
+          { label: 'Mã nhân sự', value: '01' },
+        ],
+      },
+      {
+        type: 'field',
+        kind: 'input',
+        label: 'Hoa hồng phòng (%)',
+        value: '10',
+        helper: 'Từ 0 đến 50, tối đa 2 chữ số thập phân.',
+      },
+      {
+        type: 'field',
+        kind: 'input',
+        label: 'Hoa hồng món (%)',
+        value: '55',
+        error: 'Tối đa 50%.',
+      },
+      {
+        type: 'text',
+        text: 'Mỗi lần lưu cần có đủ hoa hồng phòng và hoa hồng món.',
+        muted: true,
+      },
+      {
+        type: 'actions',
+        buttons: [
+          { label: 'Lưu', goto: 'ACC-15' },
+          { label: 'Huỷ', variant: 'secondary', goto: 'ACC-15' },
         ],
       },
     ],

@@ -81,6 +81,8 @@ export type Block =
       title: string;
       verified?: boolean;
       planTag?: string;
+      /** Tapping the plan tag opens this screen. */
+      planGoto?: string;
       lines?: string[];
       status?: string;
       /** Colour of the status chip; defaults to success. */
