@@ -180,6 +180,9 @@ component.
 - `account-home.md` in `docs/wireframes/` does not describe the Owner account card (avatar and full
   name at the top of the Account screen, opening the account update screen `ACC-12`). The wireframe
   has it; update the document in the backend repository.
+- `karaoke-partner-registration.md` in `docs/wireframes/` still lists six steps with a separate
+  confirmation. The wireframe has three steps (plan, information and images, floors and rooms) and
+  creates the facility when the last step is submitted; update the document in the backend repository.
 - `CUSTOM_MOCKUPS` is empty; no screen needs a hand-built mockup now.
 
 ## Git

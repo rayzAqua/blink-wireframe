@@ -3,7 +3,7 @@ import { bar, buttons, inApp } from '../helpers.ts';
 import { planCards } from './plan-catalog.ts';
 
 const actor = 'Người đăng ký làm Owner';
-const steps = ['Gói', 'Thông tin', 'Ảnh', 'Tầng và phòng', 'Xác nhận'];
+const steps = ['Gói', 'Thông tin và ảnh', 'Tầng và phòng'];
 
 const screens: Screen[] = [
   {
@@ -20,7 +20,7 @@ const screens: Screen[] = [
       'Khi chưa có thanh toán, môi trường thật chỉ cho tiếp tục với lựa chọn có giá cuối bằng 0 đồng',
     ],
     primaryAction: 'Chọn gói → REG-02',
-    secondaryActions: ['Huỷ → trang trước', 'Lỗi đủ điều kiện → REG-07'],
+    secondaryActions: ['Huỷ → trang trước', 'Lỗi đủ điều kiện → REG-05'],
     nextScreen: 'REG-02',
     errorsOrOutcomes: ['Gói ngừng bán: tải lại danh mục'],
     layout: [
@@ -48,24 +48,36 @@ const screens: Screen[] = [
   {
     ...inApp(actor),
     id: 'REG-02',
-    title: 'Thông tin cơ sở Karaoke',
+    title: 'Thông tin cơ sở và hình ảnh',
     entryPoint: 'REG-01 → Chọn gói',
     objective:
-      'Nhập tên, địa chỉ, hotline tuỳ chọn và một giờ mở cửa. Số điện thoại Owner không dùng làm hotline cơ sở.',
+      'Nhập thông tin cơ sở và tải logo, ảnh bìa trong cùng một bước. Số điện thoại Owner không dùng làm hotline cơ sở.',
     visibleData: [
       'Tên cơ sở (bắt buộc)',
       'Địa chỉ (bắt buộc)',
       'Giờ mở cửa (một mốc; giờ đóng cửa là cùng giờ đó của ngày hôm sau)',
       'Hotline (tuỳ chọn, duy nhất nếu nhập)',
+      'Logo và ảnh bìa (tuỳ chọn): chưa chọn, đang xử lý, sẵn sàng, có ảnh xem trước và nút thay hoặc xoá',
     ],
-    userInput: ['Tên cơ sở', 'Địa chỉ', 'Hotline', 'Giờ mở cửa'],
+    userInput: [
+      'Tên cơ sở',
+      'Địa chỉ',
+      'Hotline',
+      'Giờ mở cửa',
+      'Logo',
+      'Ảnh bìa',
+    ],
     primaryAction: 'Tiếp tục → REG-03',
     secondaryActions: ['Quay lại → REG-01'],
     nextScreen: 'REG-03',
-    errorsOrOutcomes: ['Trùng hotline hoặc dữ liệu sai: giữ biểu mẫu để sửa'],
+    errorsOrOutcomes: [
+      'Trùng hotline hoặc dữ liệu sai: giữ biểu mẫu để sửa',
+      'Ảnh đang xử lý hoặc lỗi: không cho tiếp tục; thay ảnh hoặc chờ xử lý xong',
+    ],
     layout: [
-      bar('Thông tin cơ sở'),
+      bar('Thông tin và hình ảnh'),
       { type: 'stepper', steps, current: 1 },
+      { type: 'heading', text: 'Thông tin cơ sở' },
       {
         type: 'field',
         kind: 'input',
@@ -92,6 +104,19 @@ const screens: Screen[] = [
         value: '11:00',
         helper: 'Giờ đóng cửa là 11:00 ngày hôm sau.',
       },
+      { type: 'heading', text: 'Hình ảnh (tuỳ chọn)' },
+      {
+        type: 'keyValue',
+        rows: [
+          { label: 'Logo', value: 'Sẵn sàng · có thể thay hoặc xoá' },
+          { label: 'Ảnh bìa', value: 'Đang xử lý' },
+        ],
+      },
+      {
+        type: 'alert',
+        variant: 'warning',
+        text: 'Ảnh bìa chưa xử lý xong. Chờ hoặc thay ảnh trước khi tiếp tục.',
+      },
       buttons(
         { label: 'Tiếp tục', goto: 'REG-03' },
         { label: 'Quay lại', variant: 'secondary', goto: 'REG-01' },
@@ -101,59 +126,28 @@ const screens: Screen[] = [
   {
     ...inApp(actor),
     id: 'REG-03',
-    title: 'Logo và ảnh bìa',
+    title: 'Tầng và phòng ban đầu',
     entryPoint: 'REG-02 → Tiếp tục',
     objective:
-      'Tải logo và ảnh bìa; mỗi vùng ảnh có ba trạng thái: chưa chọn, đang tải hoặc xử lý, sẵn sàng. Không gửi khi ảnh còn xử lý hoặc lỗi.',
-    visibleData: [
-      'Vùng chọn ảnh logo và ảnh bìa',
-      'Trạng thái chưa chọn, đang xử lý, sẵn sàng; ảnh xem trước; nút thay hoặc xoá',
-    ],
-    primaryAction: 'Tiếp tục → REG-04',
-    secondaryActions: ['Bỏ qua → REG-04'],
-    nextScreen: 'REG-04',
-    errorsOrOutcomes: ['Ảnh lỗi hoặc chưa sẵn sàng: thay ảnh hoặc chờ xử lý'],
-    layout: [
-      bar('Logo và ảnh bìa'),
-      { type: 'stepper', steps, current: 2 },
-      {
-        type: 'keyValue',
-        rows: [
-          { label: 'Logo', value: 'Sẵn sàng' },
-          { label: 'Ảnh bìa', value: 'Đang xử lý' },
-        ],
-      },
-      {
-        type: 'alert',
-        variant: 'warning',
-        text: 'Ảnh bìa chưa xử lý xong. Chờ hoặc thay ảnh trước khi gửi đăng ký.',
-      },
-      buttons(
-        { label: 'Tiếp tục', goto: 'REG-04' },
-        { label: 'Bỏ qua', variant: 'secondary', goto: 'REG-04' },
-      ),
-    ],
-  },
-  {
-    ...inApp(actor),
-    id: 'REG-04',
-    title: 'Tầng và phòng ban đầu',
-    entryPoint: 'REG-03 → Tiếp tục hoặc Bỏ qua',
-    objective:
-      'Có thể bỏ qua toàn bộ. Nếu nhập số tầng thì tạo danh sách tầng và gắn phòng vào tầng; nếu không thì phòng là danh sách thẳng.',
+      'Có thể bỏ qua toàn bộ. Nếu nhập số tầng thì tạo danh sách tầng và gắn phòng vào tầng; nếu không thì phòng là danh sách thẳng. Bước cuối: bấm Tạo cơ sở là đăng ký thành công ngay, không còn màn xác nhận riêng.',
     visibleData: [
       'Số tầng (tuỳ chọn, tối đa 100)',
       'Mỗi phòng: tên, sức chứa tuỳ chọn, ảnh tuỳ chọn, các khung giá',
       'Không có loại phòng, trạng thái dọn phòng hay bảo trì',
+      'Nút Tạo cơ sở ở cuối bước',
     ],
     userInput: ['Số tầng', 'Phòng'],
-    primaryAction: 'Tiếp tục → REG-05',
-    secondaryActions: ['Quay lại → REG-03'],
-    nextScreen: 'REG-05',
-    errorsOrOutcomes: ['Cấu trúc tầng, phòng hoặc giá sai: chỉ rõ mục cần sửa'],
+    primaryAction: 'Tạo cơ sở → REG-04',
+    secondaryActions: ['Quay lại → REG-02'],
+    nextScreen: 'REG-04',
+    errorsOrOutcomes: [
+      'Khoá nút khi đang gửi; gửi lại do mất mạng trả đúng kết quả đã tạo, không tạo thêm cơ sở',
+      'Một phần thất bại: không hiển thị cơ sở được tạo dở',
+      'Cấu trúc tầng, phòng hoặc giá sai: chỉ rõ mục cần sửa',
+    ],
     layout: [
       bar('Tầng và phòng'),
-      { type: 'stepper', steps, current: 3 },
+      { type: 'stepper', steps, current: 2 },
       { type: 'field', kind: 'input', label: 'Số tầng (tuỳ chọn)', value: '2' },
       {
         type: 'cardList',
@@ -176,54 +170,16 @@ const screens: Screen[] = [
         text: 'Bảng giá của Phòng 201 chưa phủ đủ 24 giờ. Hãy bổ sung khung giờ còn thiếu.',
       },
       buttons(
-        { label: 'Tiếp tục', goto: 'REG-05' },
-        { label: 'Quay lại', variant: 'secondary', goto: 'REG-03' },
+        { label: 'Tạo cơ sở', goto: 'REG-04' },
+        { label: 'Quay lại', variant: 'secondary', goto: 'REG-02' },
       ),
     ],
   },
   {
     ...inApp(actor),
-    id: 'REG-05',
-    title: 'Xác nhận tạo cơ sở',
-    entryPoint: 'REG-04 → Tiếp tục',
-    objective:
-      'Xem tóm tắt bốn khối: gói, thông tin cơ sở, hình ảnh, tầng và phòng; mỗi khối có nút quay lại chỉnh sửa. Khoá nút khi gửi; gửi lại do mất mạng trả đúng kết quả đã tạo.',
-    visibleData: [
-      'Gói đã chọn',
-      'Thông tin cơ sở',
-      'Hình ảnh',
-      'Tầng và phòng',
-    ],
-    primaryAction: 'Tạo cơ sở → REG-06',
-    secondaryActions: ['Chỉnh sửa → REG-02'],
-    nextScreen: 'REG-06',
-    errorsOrOutcomes: [
-      'Mất mạng: gửi lại an toàn, không tạo cơ sở dở',
-      'Một phần thất bại: không hiển thị cơ sở được tạo dở',
-    ],
-    layout: [
-      bar('Xác nhận'),
-      { type: 'stepper', steps, current: 4 },
-      {
-        type: 'keyValue',
-        rows: [
-          { label: 'Gói', value: 'BASIC · Miễn phí · 5 nhân sự' },
-          { label: 'Cơ sở', value: 'Karaoke Blink Sài Gòn · mở cửa 11:00' },
-          { label: 'Hình ảnh', value: 'Logo, ảnh bìa' },
-          { label: 'Tầng và phòng', value: '2 tầng · 2 phòng' },
-        ],
-      },
-      buttons(
-        { label: 'Tạo cơ sở', goto: 'REG-06' },
-        { label: 'Chỉnh sửa', variant: 'secondary', goto: 'REG-02' },
-      ),
-    ],
-  },
-  {
-    ...inApp(actor),
-    id: 'REG-06',
+    id: 'REG-04',
     title: 'Cơ sở đã được tạo',
-    entryPoint: 'Tạo cơ sở thành công',
+    entryPoint: 'Bấm Tạo cơ sở ở REG-03 thành công',
     objective:
       'Báo cơ sở đang hoạt động và chờ Blink hậu kiểm; không có bước chờ Admin duyệt trước khi sử dụng.',
     visibleData: [
@@ -252,7 +208,7 @@ const screens: Screen[] = [
   },
   {
     ...inApp(actor),
-    id: 'REG-07',
+    id: 'REG-05',
     title: 'Lỗi chính khi đăng ký',
     entryPoint: 'Tài khoản chưa đủ điều kiện hoặc dữ liệu không hợp lệ',
     objective: 'Báo các lỗi chính và hướng xử lý.',
@@ -299,7 +255,7 @@ export const karaokePartnerRegistration: Flow = {
   role: 'karaoke-owner',
   section: 'start',
   summary:
-    'Người dùng đã đăng nhập đăng ký cơ sở Karaoke đầu tiên và trở thành Owner: chọn gói, nhập thông tin, ảnh, tầng và phòng, xác nhận. Cơ sở hoạt động ngay và chờ hậu kiểm.',
+    'Người dùng đã đăng nhập đăng ký cơ sở Karaoke đầu tiên và trở thành Owner qua ba bước: chọn gói, nhập thông tin và ảnh, tầng và phòng. Bấm Tạo cơ sở là đăng ký thành công ngay; cơ sở hoạt động và chờ hậu kiểm.',
   actors: ['Người đăng ký làm Owner'],
   environments: ['FLUTTER_APP'],
   screens,
