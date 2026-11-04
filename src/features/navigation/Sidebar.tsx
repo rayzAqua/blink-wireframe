@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Search,
   Building2,
@@ -6,22 +6,55 @@ import {
   ChevronRight,
   FolderTree,
   FoldVertical,
+  ArrowRightLeft,
   ChevronsUpDown,
+  Globe,
   X,
-} from 'lucide-react';
-import { useSelection, useWorkspace } from '../workspace';
-import { ROLES } from '../../content/roles';
-import type { RoleId } from '../../domain/types';
-import './Sidebar.css';
+} from "lucide-react";
+import { useSelection, useWorkspace } from "../workspace";
+import { ROLES } from "../../content/roles";
+import { ENVIRONMENTS } from "../../domain/environments";
+import type { Flow, RoleId, Screen } from "../../domain/types";
+import "./Sidebar.css";
+
+const publicCount = (flow: Flow) =>
+  flow.screens.filter(
+    (s) => ENVIRONMENTS[s.environment].access === "public-link",
+  ).length;
+
+/** Globe for a public link page, arrows for the step from a link into the app. */
+const AccessIcon: React.FC<{ screen: Screen }> = ({ screen }) => {
+  const { access, accessLabel } = ENVIRONMENTS[screen.environment];
+  if (access === "public-link") {
+    return (
+      <span className="wireframe-sidebar__access" title={accessLabel}>
+        <Globe size={12} />
+      </span>
+    );
+  }
+  if (access === "transition") {
+    return (
+      <span className="wireframe-sidebar__access" title={accessLabel}>
+        <ArrowRightLeft size={12} />
+      </span>
+    );
+  }
+  return null;
+};
 
 export const Sidebar: React.FC = () => {
-  const { flows, activeFlow, activeScreen, selectFlow, selectScreen } = useSelection();
+  const { flows, activeFlow, activeScreen, selectFlow, selectScreen } =
+    useSelection();
   const { isSidebarOpen, setIsSidebarOpen } = useWorkspace();
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   // Accordion state: only 1 domain group and 1 flow/initiative open at a time
-  const [openGroupKey, setOpenGroupKey] = useState<string | null>(activeFlow.role);
-  const [openInitiativeId, setOpenInitiativeId] = useState<string | null>(activeFlow.id);
+  const [openGroupKey, setOpenGroupKey] = useState<string | null>(
+    activeFlow.role,
+  );
+  const [openInitiativeId, setOpenInitiativeId] = useState<string | null>(
+    activeFlow.id,
+  );
   const [isAllExpanded, setIsAllExpanded] = useState<boolean>(false);
 
   // Sync open states when activeFlow changes
@@ -31,8 +64,8 @@ export const Sidebar: React.FC = () => {
   }, [activeFlow.id, activeFlow.role]);
 
   const ROLE_ICONS: Record<RoleId, React.ReactNode> = {
-    'karaoke-owner': <Building2 size={14} />,
-    'blink-admin': <ShieldCheck size={14} />,
+    "karaoke-owner": <Building2 size={14} />,
+    "blink-admin": <ShieldCheck size={14} />,
   };
 
   const domainGroups = ROLES.map((role) => ({
@@ -86,32 +119,41 @@ export const Sidebar: React.FC = () => {
       return (
         item.title.toLowerCase().includes(q) ||
         item.id.toLowerCase().includes(q) ||
-        item.screens.some((s) => s.id.toLowerCase().includes(q) || s.title.toLowerCase().includes(q))
+        item.screens.some(
+          (s) =>
+            s.id.toLowerCase().includes(q) || s.title.toLowerCase().includes(q),
+        )
       );
     }),
   }));
 
   return (
     <aside
-      className={`wireframe-sidebar ${isSidebarOpen ? 'wireframe-sidebar--open' : 'wireframe-sidebar--closed'}`}
+      className={`wireframe-sidebar ${isSidebarOpen ? "wireframe-sidebar--open" : "wireframe-sidebar--closed"}`}
       aria-label="Danh mục luồng nghiệp vụ"
     >
       {/* Sidebar Header: Compact title & accordion controls */}
       <div className="wireframe-sidebar__header">
         <div className="wireframe-sidebar__header-left">
-          <FolderTree size={14} style={{ color: 'var(--color-primary)' }} />
-          <span className="wireframe-sidebar__header-title">Danh Sách Luồng</span>
+          <FolderTree size={14} style={{ color: "var(--color-primary)" }} />
+          <span className="wireframe-sidebar__header-title">
+            Danh Sách Luồng
+          </span>
         </div>
         <div className="wireframe-sidebar__header-right">
           <button
             type="button"
             className="wireframe-sidebar__action-btn"
             onClick={handleToggleAll}
-            title={isAllExpanded ? 'Thu gọn tất cả' : 'Mở rộng tất cả'}
-            aria-label={isAllExpanded ? 'Thu gọn tất cả' : 'Mở rộng tất cả'}
+            title={isAllExpanded ? "Thu gọn tất cả" : "Mở rộng tất cả"}
+            aria-label={isAllExpanded ? "Thu gọn tất cả" : "Mở rộng tất cả"}
           >
-            {isAllExpanded ? <FoldVertical size={13} /> : <ChevronsUpDown size={13} />}
-            <span>{isAllExpanded ? 'Thu gọn' : 'Tất cả'}</span>
+            {isAllExpanded ? (
+              <FoldVertical size={13} />
+            ) : (
+              <ChevronsUpDown size={13} />
+            )}
+            <span>{isAllExpanded ? "Thu gọn" : "Tất cả"}</span>
           </button>
           <button
             type="button"
@@ -128,7 +170,10 @@ export const Sidebar: React.FC = () => {
       {/* Search Bar */}
       <div className="wireframe-sidebar__search">
         <div className="wireframe-sidebar__search-inner">
-          <Search size={14} style={{ color: 'var(--color-text-muted)', flexShrink: 0 }} />
+          <Search
+            size={14}
+            style={{ color: "var(--color-text-muted)", flexShrink: 0 }}
+          />
           <input
             type="text"
             value={searchQuery}
@@ -144,24 +189,27 @@ export const Sidebar: React.FC = () => {
         {filteredGroups.map((group) => {
           if (group.items.length === 0) return null;
           const isSearching = !!searchQuery.trim();
-          const isGroupOpen = isSearching || isAllExpanded || openGroupKey === group.key;
+          const isGroupOpen =
+            isSearching || isAllExpanded || openGroupKey === group.key;
 
           return (
             <div key={group.key} className="wireframe-sidebar__group">
               {/* Group Category Header */}
               <button
                 type="button"
-                className={`wireframe-sidebar__group-title ${isGroupOpen ? 'wireframe-sidebar__group-title--open' : ''}`}
+                className={`wireframe-sidebar__group-title ${isGroupOpen ? "wireframe-sidebar__group-title--open" : ""}`}
                 onClick={() => handleGroupToggle(group.key)}
                 title="Nhấn để đóng/mở nhóm luồng này"
               >
                 <span className="wireframe-sidebar__group-label">
-                  <span className="wireframe-sidebar__group-icon">{group.icon}</span>
+                  <span className="wireframe-sidebar__group-icon">
+                    {group.icon}
+                  </span>
                   <span>{group.label}</span>
                 </span>
                 <ChevronRight
                   size={13}
-                  className={`wireframe-sidebar__group-chevron ${isGroupOpen ? 'wireframe-sidebar__group-chevron--open' : ''}`}
+                  className={`wireframe-sidebar__group-chevron ${isGroupOpen ? "wireframe-sidebar__group-chevron--open" : ""}`}
                 />
               </button>
 
@@ -169,27 +217,50 @@ export const Sidebar: React.FC = () => {
               {isGroupOpen && (
                 <div className="wireframe-sidebar__init-list">
                   {group.items.map((init) => {
-                    const isCardOpen = isSearching || isAllExpanded || openInitiativeId === init.id;
+                    const isCardOpen =
+                      isSearching ||
+                      isAllExpanded ||
+                      openInitiativeId === init.id;
                     const isSelected = activeFlow.id === init.id;
-                    const flowIndex = flows.findIndex((i) => i.id === init.id) + 1;
-                    const formattedIndex = String(flowIndex).padStart(2, '0');
+                    const flowIndex =
+                      flows.findIndex((i) => i.id === init.id) + 1;
+                    const formattedIndex = String(flowIndex).padStart(2, "0");
 
                     return (
-                      <div key={init.id} className="wireframe-sidebar__init-card">
+                      <div
+                        key={init.id}
+                        className="wireframe-sidebar__init-card"
+                      >
                         {/* Flow Item - Displays numbered index and flow title */}
                         <button
                           type="button"
-                          className={`wireframe-sidebar__init-item ${isSelected ? 'wireframe-sidebar__init-item--active' : ''}`}
-                          onClick={() => handleInitiativeToggle(init.id, group.key)}
+                          className={`wireframe-sidebar__init-item ${isSelected ? "wireframe-sidebar__init-item--active" : ""}`}
+                          onClick={() =>
+                            handleInitiativeToggle(init.id, group.key)
+                          }
                           title={`Luồng ${formattedIndex}: ${init.title}`}
                         >
                           <div className="wireframe-sidebar__init-title-group">
-                            <span className="wireframe-sidebar__init-index">{formattedIndex}</span>
-                            <span className="wireframe-sidebar__init-title">{init.title}</span>
+                            <span className="wireframe-sidebar__init-index">
+                              {formattedIndex}
+                            </span>
+                            <span className="wireframe-sidebar__init-text">
+                              <span className="wireframe-sidebar__init-title">
+                                {init.title}
+                              </span>
+                              {publicCount(init) > 0 && (
+                                <span
+                                  className="wireframe-sidebar__access-count"
+                                  title="Số màn hình mở được bằng link công khai"
+                                >
+                                  {publicCount(init)} link công khai
+                                </span>
+                              )}
+                            </span>
                           </div>
                           <ChevronRight
                             size={14}
-                            className={`wireframe-sidebar__init-chevron ${isCardOpen ? 'wireframe-sidebar__init-chevron--open' : ''}`}
+                            className={`wireframe-sidebar__init-chevron ${isCardOpen ? "wireframe-sidebar__init-chevron--open" : ""}`}
                           />
                         </button>
 
@@ -197,12 +268,13 @@ export const Sidebar: React.FC = () => {
                         {isCardOpen && (
                           <div className="wireframe-sidebar__screens">
                             {init.screens.map((screen) => {
-                              const isScreenActive = activeScreen.id === screen.id;
+                              const isScreenActive =
+                                activeScreen.id === screen.id;
                               return (
                                 <button
                                   key={screen.id}
                                   type="button"
-                                  className={`wireframe-sidebar__screen-item ${isScreenActive ? 'wireframe-sidebar__screen-item--active' : ''}`}
+                                  className={`wireframe-sidebar__screen-item ${isScreenActive ? "wireframe-sidebar__screen-item--active" : ""}`}
                                   onClick={() => {
                                     if (init.id === activeFlow.id) {
                                       selectScreen(screen.id);
@@ -216,10 +288,13 @@ export const Sidebar: React.FC = () => {
                                   }}
                                   title={`${screen.id} • ${screen.title}`}
                                 >
-                                  <span className="wireframe-sidebar__screen-code">{screen.id}</span>
+                                  <span className="wireframe-sidebar__screen-code">
+                                    {screen.id}
+                                  </span>
                                   <span className="wireframe-sidebar__screen-title">
                                     {screen.title}
                                   </span>
+                                  <AccessIcon screen={screen} />
                                 </button>
                               );
                             })}

@@ -457,3 +457,24 @@
     max-width: 88vw;
   }
 }
+
+.wireframe-sidebar__access {
+  display: inline-flex;
+  flex-shrink: 0;
+  margin-left: auto;
+  color: var(--color-info);
+}
+
+.wireframe-sidebar__access-count {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.6875rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-info);
+}
+
+.wireframe-sidebar__init-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}

@@ -57,6 +57,14 @@ export const ScreenSpecPanel: React.FC = () => {
           <h3 style={{ fontSize: '1.05rem', lineHeight: 1.25 }}>{activeScreen.title}</h3>
         </div>
 
+        {/* Access: public link page or in-app screen */}
+        <div className="spec-block">
+          <div className="spec-block__label">Truy cập</div>
+          <div className="spec-block__value" style={{ fontWeight: 600 }}>
+            {env.accessLabel}
+          </div>
+        </div>
+
         {/* Actor */}
         <div className="spec-block">
           <div className="spec-block__label" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
