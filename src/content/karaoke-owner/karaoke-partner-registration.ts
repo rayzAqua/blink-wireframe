@@ -171,6 +171,13 @@ const screens: Screen[] = [
         variant: 'danger',
         text: 'Bảng giá của Phòng 201 chưa phủ đủ 24 giờ. Hãy bổ sung khung giờ còn thiếu.',
       },
+      {
+        type: 'field',
+        kind: 'input',
+        label: 'Ảnh phòng 201',
+        value: '5/5 ảnh',
+        helper: 'Mỗi phòng tối đa 5 ảnh. Xoá một ảnh để thêm ảnh khác.',
+      },
       buttons(
         { label: 'Tạo cơ sở', goto: 'REG-04' },
         { label: 'Quay lại', variant: 'secondary', goto: 'REG-02' },

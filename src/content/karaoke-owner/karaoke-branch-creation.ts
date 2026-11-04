@@ -213,6 +213,13 @@ const screens: Screen[] = [
         text: 'Có thể bỏ qua và cấu hình phòng sau trong Thiết lập quán.',
         muted: true,
       },
+      {
+        type: 'field',
+        kind: 'input',
+        label: 'Ảnh phòng 201',
+        value: '5/5 ảnh',
+        helper: 'Mỗi phòng tối đa 5 ảnh. Xoá một ảnh để thêm ảnh khác.',
+      },
       buttons(
         { label: 'Tạo chi nhánh', goto: 'BR-05' },
         { label: 'Quay lại', variant: 'secondary', goto: 'BR-03' },
