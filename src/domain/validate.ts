@@ -6,9 +6,9 @@ export interface ContentError {
   message: string;
 }
 
-const ARROW_TARGET = /→\s*([A-Z]{2,4}-\d{2})/g;
-
-const SCREEN_ID = /^[A-Z]{2,4}-[A-Z0-9]+$/;
+const ID_PATTERN = '[A-Z]{2,6}-[A-Z0-9]+';
+const ARROW_TARGET = new RegExp(`→\\s*(${ID_PATTERN})`, 'g');
+const ID_TOKEN = new RegExp(ID_PATTERN, 'g');
 
 const isBlank = (value: string | undefined): boolean =>
   value === undefined || value.trim() === '';
@@ -72,14 +72,17 @@ function checkScreen(
   if (screen.visibleData.length === 0)
     add(flow.id, 'empty visibleData', screen.id);
 
-  // nextScreen is either a screen id of this flow or free text for a destination outside
-  // the flow (for example "Trang chủ cơ sở"). Only a value shaped like an id must exist.
-  if (
-    screen.nextScreen !== undefined &&
-    SCREEN_ID.test(screen.nextScreen) &&
-    !screenIds.has(screen.nextScreen)
-  ) {
-    add(flow.id, `nextScreen "${screen.nextScreen}" does not exist`, screen.id);
+  // nextScreen is a screen id of this flow, or free text naming a destination outside the flow
+  // (for example "Trang chủ cơ sở"). Every id-shaped token in it must exist, so
+  // "REC-02 hoặc REC-04" is checked too.
+  for (const token of screen.nextScreen?.match(ID_TOKEN) ?? []) {
+    if (!screenIds.has(token)) {
+      add(
+        flow.id,
+        `nextScreen "${screen.nextScreen}" refers to missing screen ${token}`,
+        screen.id,
+      );
+    }
   }
 
   const actions = [screen.primaryAction, ...(screen.secondaryActions ?? [])];

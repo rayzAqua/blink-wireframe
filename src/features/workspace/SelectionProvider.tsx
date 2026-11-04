@@ -42,11 +42,13 @@ export const SelectionProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       flows: CATALOG,
       activeFlow,
       activeScreen,
-      selectFlow: (id) => {
+      selectFlow: (id, targetScreenId) => {
         const flow = CATALOG.find((f) => f.id === id);
         if (!flow) return;
+        const target = flow.screens.find((s) => s.id === targetScreenId);
         setFlowId(flow.id);
-        setScreenId(flow.screens[0]?.id);
+        setScreenId((target ?? flow.screens[0])?.id);
+        if (target && window.innerWidth < SIDEBAR_BREAKPOINT) setIsSidebarOpen(false);
       },
       selectScreen: (id) => {
         if (!activeFlow.screens.some((s) => s.id === id)) return;

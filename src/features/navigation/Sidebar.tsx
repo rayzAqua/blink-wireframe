@@ -204,11 +204,14 @@ export const Sidebar: React.FC = () => {
                                   type="button"
                                   className={`wireframe-sidebar__screen-item ${isScreenActive ? 'wireframe-sidebar__screen-item--active' : ''}`}
                                   onClick={() => {
-                                    selectScreen(screen.id);
+                                    if (init.id === activeFlow.id) {
+                                      selectScreen(screen.id);
+                                    } else {
+                                      selectFlow(init.id, screen.id);
+                                    }
                                     if (openInitiativeId !== init.id) {
                                       setOpenInitiativeId(init.id);
                                       setOpenGroupKey(group.key);
-                                      selectFlow(init.id);
                                     }
                                   }}
                                   title={`${screen.id} • ${screen.title}`}

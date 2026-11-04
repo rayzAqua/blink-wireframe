@@ -17,7 +17,7 @@ export const PublicInviteMockup: React.FC<MockupProps> = ({ selectScreen }) => (
           height: '64px',
           borderRadius: '18px',
           background: 'linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-active) 100%)',
-          color: '#fff',
+          color: 'var(--color-primary-contrast)',
           display: 'grid',
           placeItems: 'center',
           margin: '0 auto 12px',

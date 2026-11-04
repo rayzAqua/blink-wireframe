@@ -6,7 +6,8 @@ export interface SelectionValue {
   flows: Flow[];
   activeFlow: Flow;
   activeScreen: Screen;
-  selectFlow: (flowId: string) => void;
+  /** Opens a flow on the given screen, or on its first screen when none is given. */
+  selectFlow: (flowId: string, screenId?: string) => void;
   /** Ignores ids that are not a screen of the active flow. */
   selectScreen: (screenId: string) => void;
   deviceType: DeviceType;
