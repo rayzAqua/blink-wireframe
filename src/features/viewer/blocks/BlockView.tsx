@@ -80,7 +80,7 @@ export function BlockView({
       );
     }
     case 'hero': {
-      const content = (
+      const main = (
         <>
           {block.cover && <div className="blocks__hero-cover" />}
           <div className="blocks__hero-body">
@@ -116,16 +116,32 @@ export function BlockView({
           </div>
         </>
       );
-      return block.goto ? (
-        <button
-          type="button"
-          className="blocks__hero blocks__hero--tap"
-          onClick={() => ctx.go(block.goto as string)}
-        >
-          {content}
-        </button>
-      ) : (
-        <div className="blocks__hero">{content}</div>
+      return (
+        <div className="blocks__hero">
+          {block.goto ? (
+            <button
+              type="button"
+              className="blocks__hero-main blocks__hero-main--tap"
+              onClick={() => ctx.go(block.goto as string)}
+            >
+              {main}
+            </button>
+          ) : (
+            <div className="blocks__hero-main">{main}</div>
+          )}
+          {block.action && (
+            <div className="blocks__hero-action">
+              <Button
+                size="sm"
+                variant="secondary"
+                leftIcon={renderIcon('git-branch', 14)}
+                onClick={() => ctx.go(block.action!.goto)}
+              >
+                {block.action.label}
+              </Button>
+            </div>
+          )}
+        </div>
       );
     }
     case 'profile': {

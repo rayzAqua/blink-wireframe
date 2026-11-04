@@ -13,6 +13,7 @@ const hero = (extra?: Partial<Extract<Block, { type: 'hero' }>>): Block => ({
   ],
   status: 'Đang hoạt động',
   goto: 'ACC-10',
+  action: { label: 'Đổi chi nhánh', goto: 'ACC-02' },
   ...extra,
 });
 

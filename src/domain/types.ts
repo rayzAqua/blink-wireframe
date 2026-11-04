@@ -85,6 +85,8 @@ export type Block =
       status?: string;
       /** Colour of the status chip; defaults to success. */
       statusTone?: Tone;
+      /** Extra button under the card, for example "Đổi chi nhánh". */
+      action?: { label: string; goto: string };
       cover?: boolean;
       logo?: boolean;
       goto?: string;

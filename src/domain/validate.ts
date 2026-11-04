@@ -170,6 +170,9 @@ function blockRefs(block: Block): { gotos: string[]; icons: string[] } {
       block.actions?.forEach(icon);
       break;
     case 'hero':
+      goto(block.goto);
+      goto(block.action?.goto);
+      break;
     case 'profile':
     case 'alert':
       goto(block.goto);

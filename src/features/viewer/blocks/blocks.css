@@ -54,12 +54,29 @@
   color: var(--color-text-main);
 }
 
-.blocks__hero--tap {
+.blocks__hero-main {
+  display: block;
+  width: 100%;
+  padding: 0;
+  text-align: left;
+  background: transparent;
+  border: none;
+  font: inherit;
+  color: inherit;
+}
+
+.blocks__hero-main--tap {
   cursor: pointer;
 }
 
-.blocks__hero--tap:hover {
+.blocks__hero-main--tap:hover {
   background-color: var(--color-surface-hover);
+}
+
+.blocks__hero-action {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 var(--space-4) var(--space-3);
 }
 
 .blocks__hero-cover {
